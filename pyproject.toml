@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "asyncio-for-robotics"
+version = "0.0.0"
+description = "Asyncio interface for ROS 2, Zenoh, and other robotics middleware."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+  { name = "Elian", email = "no@no.com" }
+]
+requires-python = ">=3.8"
+keywords = ["asyncio", "robotics", "ros2", "zenoh", "publisher", "subcriber"]
+
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: POSIX :: Linux",
+  "Topic :: Scientific/Engineering :: Robotics",
+  "Framework :: AsyncIO",
+  "License :: OSI Approved :: MIT License"
+]
+
+# Dependencies only for the core library
+dependencies = [
+]
+
+[project.optional-dependencies]
+# users can install extras as needed
+ros2 = ["rclpy>=0.7"]
+zenoh = ["zenoh>=1.0.0"]
+dev = ["colorama", "pytest", "pytest-async"]
+
+[project.urls]
+Homepage = "https://github.com/2lian/asyncio-for-robotics"
+Repository = "https://github.com/2lian/asyncio-for-robotics"
+Issues = "https://github.com/yourusername/asyncio-for-robotics/issues"
+
