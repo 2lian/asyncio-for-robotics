@@ -29,7 +29,7 @@ dependencies = [
 [project.optional-dependencies]
 # users can install extras as needed
 ros2 = ["rclpy>=0.7"]
-zenoh = ["zenoh>=1.0.0"]
+zenoh = ["eclipse-zenoh>=1.0.0"]
 dev = ["colorama", "pytest", "pytest-async"]
 
 [project.urls]

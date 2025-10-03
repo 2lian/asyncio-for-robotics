@@ -1,37 +1,46 @@
 import logging
-from typing import Callable, Dict, Generic, Optional, Type, TypeVar
+from typing import Callable, Dict, Generic, Optional, Type, TypeVar, Union
 
 import zenoh
 
-from .core.sub import BaseSub
+from ..core.sub import BaseSub
+from .session import auto_session
 
 logger = logging.getLogger(__name__)
 
 
-class RawSub(BaseSub[zenoh.Sample]):
+class Sub(BaseSub[zenoh.Sample]):
     def __init__(
         self,
-        key_expr: str,
+        key_expr: Union[zenoh.KeyExpr, str],
         session: Optional[zenoh.Session] = None,
         buff_size: int = 10,
     ) -> None:
+        """
+        Simple implementation of a Zenoh subscriber.
+
+        Args:
+            key_expr:
+            session:
+            buff_size:
+        """
         self.session = self._resolve_session(session)
         self.sub = self._resolve_sub(key_expr)
         super().__init__(buff_size)
 
     @property
     def name(self) -> str:
-        return f"raw-{self.sub.key_expr}"
+        return f"zenoh-{self.sub.key_expr}"
 
     def _resolve_session(self, session: Optional[zenoh.Session]) -> zenoh.Session:
         return auto_session(session)
 
-    def _resolve_sub(self, key_expr: str):
+    def _resolve_sub(self, key_expr: Union[zenoh.KeyExpr, str]):
         return self.session.declare_subscriber(
-            key_expr=key_expr, handler=self._unsafe_input_callback
+            key_expr=key_expr, handler=self.callback_for_zenoh_sub
         )
 
-    def _unsafe_input_callback(self, sample: zenoh.Sample):
+    def callback_for_zenoh_sub(self, sample: zenoh.Sample):
         try:
             healty = self.input_data(sample)
             if not healty:
