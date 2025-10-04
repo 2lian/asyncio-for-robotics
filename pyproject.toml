@@ -1,13 +1,15 @@
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+# [build-system]
+# requires = ["setuptools>=61.0"]
+# build-backend = "setuptools.build_meta"
+[tool.setuptools]
+packages = ["asyncio_for_robotics"]
 
 [project]
 name = "asyncio_for_robotics"
-version = "0.0.0"
+version = "0.0.1"
 description = "Asyncio interface for ROS 2, Zenoh, and other robotics middleware."
 readme = "README.md"
-license = { text = "MIT" }
+license = "MIT"
 authors = [
   { name = "Elian", email = "no@no.com" }
 ]
@@ -18,8 +20,6 @@ classifiers = [
   "Programming Language :: Python :: 3",
   "Operating System :: POSIX :: Linux",
   "Topic :: Scientific/Engineering :: Robotics",
-  "Framework :: AsyncIO",
-  "License :: OSI Approved :: MIT License"
 ]
 
 dependencies = [
@@ -34,11 +34,4 @@ dev = ["colorama", "pytest", "pytest-async"]
 Homepage = "https://github.com/2lian/asyncio-for-robotics"
 Repository = "https://github.com/2lian/asyncio-for-robotics"
 Issues = "https://github.com/yourusername/asyncio-for-robotics/issues"
-
-[dependency-groups]
-dev = [
-    "colorama", 
-    "pytest", 
-    "pytest-async",
-]
 

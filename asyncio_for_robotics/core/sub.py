@@ -19,25 +19,7 @@ from typing import (
 
 logger = logging.getLogger(__name__)
 
-_T = TypeVar("_T")
 _MsgType = TypeVar("_MsgType")
-
-
-async def soft_wait_for(coro: Awaitable[_T], timeout: float) -> _T | TimeoutError:
-    """Awaits a coroutine with a timeout,
-    if timeout occurs returns TimeoutError but does not raise it.
-
-    Args:
-        coro: coroutine to await
-        timeout: timeout in seconds
-
-    Returns:
-        coroutine result or TimeoutError
-    """
-    try:
-        return await asyncio.wait_for(coro, timeout=timeout)
-    except TimeoutError as e:
-        return e
 
 
 class BaseSub(Generic[_MsgType], ABC):
@@ -86,7 +68,7 @@ class BaseSub(Generic[_MsgType], ABC):
         assert self._value is not None
         return self._value
 
-    async def wait_for_new(self) -> _MsgType:
+    def wait_for_new(self) -> Awaitable[_MsgType]:
         """Awaits a new value.
 
         Only ensure that the data is new. See wait_for_next to be sure the data
@@ -95,13 +77,17 @@ class BaseSub(Generic[_MsgType], ABC):
         Returns:
             Later, with a value more recent than the one at time of the call
         """
-        async with self.new_value_cond:
-            last_count = self.msg_count
-            await self.new_value_cond.wait_for(lambda: self.msg_count > last_count)
-        assert self._value is not None
-        return self._value
+        last_count = self.msg_count
 
-    async def wait_for_next(self) -> _MsgType:
+        async def func() -> _MsgType:
+            async with self.new_value_cond:
+                await self.new_value_cond.wait_for(lambda: self.msg_count > last_count)
+            assert self._value is not None
+            return self._value
+
+        return func()
+
+    def wait_for_next(self) -> Awaitable[_MsgType]:
         """Reliably awaits the next arriving value.
 
         If several awaits start waiting for this simultaneously,  they will wake up
@@ -111,21 +97,30 @@ class BaseSub(Generic[_MsgType], ABC):
             Later, with the exact next value received after the call is made
         """
         q: asyncio.Queue[_MsgType] = asyncio.LifoQueue(maxsize=2)
-        try:
-            self._dyncamic_queues.add(q)
-            val_top = await q.get()
-            if q.empty():
-                val_deep = val_top
-            else:
-                val_deep = q.get_nowait()
-            return val_deep
-        finally:
-            self._dyncamic_queues.discard(q)
+        self._dyncamic_queues.add(q)
 
-    async def listen(self, fresh=False) -> AsyncGenerator[_MsgType, None]:
+        async def func() -> _MsgType:
+            try:
+                val_top = await q.get()
+                if q.empty():
+                    val_deep = val_top
+                else:
+                    val_deep = q.get_nowait()
+                return val_deep
+            finally:
+                self._dyncamic_queues.discard(q)
+
+        return func()
+
+    def listen(self, fresh=False) -> AsyncGenerator[_MsgType, None]:
         """Async generator used to coninuously get new values.
 
         Messages might be skipped as this is not a queue.
+
+        .. Note:
+            The listening starts the moment this function is called, not when
+            the generator is awaited
+
 
         Args:
             fresh: If false, first yield can be the latest value
@@ -133,10 +128,7 @@ class BaseSub(Generic[_MsgType], ABC):
         Yields:
             awaits data then awaits newer data
         """
-        if fresh:
-            yield await self.wait_for_value()
-        while 1:
-            yield await self.wait_for_new()
+        return self.listen_reliable(fresh, 1, False)
 
     def listen_reliable(
         self, fresh=False, queue_size: int = 10, lifo=False
@@ -145,7 +137,7 @@ class BaseSub(Generic[_MsgType], ABC):
 
         .. Note:
             The listening starts the moment this function is called, not when
-            this function is awaited
+            the generator is awaited
 
         Implements a fifo queue that gets destroyed with this generator.
 
@@ -163,7 +155,7 @@ class BaseSub(Generic[_MsgType], ABC):
             q: asyncio.Queue[_MsgType] = asyncio.LifoQueue(maxsize=queue_size)
         self._dyncamic_queues.add(q)
         logger.debug("Reliable listener primed %s", self.name)
-        if self._value_flag.is_set() and fresh:
+        if self._value_flag.is_set() and not fresh:
             assert self._value is not None, "impossible if flag set"
             q.put_nowait(self._value)
         return self._unprimed_listen_reliable(q)
@@ -171,7 +163,7 @@ class BaseSub(Generic[_MsgType], ABC):
     async def _unprimed_listen_reliable(
         self, queue: asyncio.Queue
     ) -> AsyncGenerator[_MsgType, None]:
-        logger.debug("Reliable listener called %s", self.name)
+        logger.debug("Reliable listener first iter %s", self.name)
         try:
             while True:
                 # logger.debug("Reliable listener waiting data %s", self.name)
@@ -181,7 +173,7 @@ class BaseSub(Generic[_MsgType], ABC):
                 # logger.debug("Reliable listener yielded data %s", self.name)
         finally:
             self._dyncamic_queues.discard(queue)
-            logger.debug("Reliable listener exited %s", self.name)
+            logger.debug("Reliable listener closed %s", self.name)
 
     @abstractmethod
     def callback_for_sub(self, *args, **kwargs):
@@ -230,7 +222,8 @@ class BaseSub(Generic[_MsgType], ABC):
             f(msg)
         for q in self._dyncamic_queues:
             if q.full():
-                logger.warning("Queue full on %s", self.name)
+                if q.qsize() > 2:
+                    logger.warning("Queue full on %s", self.name)
                 q.get_nowait()
             q.put_nowait(msg)
         self.buffer.append(msg)

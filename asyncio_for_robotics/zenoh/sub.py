@@ -1,3 +1,4 @@
+from contextlib import suppress
 import logging
 from typing import Callable, Dict, Generic, Optional, Type, TypeVar, Union
 
@@ -49,4 +50,8 @@ class Sub(BaseSub[zenoh.Sample]):
             logger.error(e)
 
     def close(self):
-        self.sub.undeclare()
+        logger.debug("Closing ", self.name)
+        if not self.session.is_closed():
+            self.sub.undeclare()
+        else:
+            logger.debug("Zenoh session already closed for ", self.name)

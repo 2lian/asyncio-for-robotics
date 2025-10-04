@@ -1,0 +1,42 @@
+[36mI[0m| [36mGlobal zenoh session: Starting[0m
+[36mI[0m| [36mGlobal zenoh session: Running[0m
+[34mD[0m| [34mcreated sub zenoh-test/**[0m
+[34mD[0m| [34mzenoh-test/** is receiving data[0m
+[34mD[0m| [34mcreated sub zenoh-test/**[0m
+[34mD[0m| [34mzenoh-test/** is receiving data[0m
+[34mD[0m| [34mcreated sub zenoh-test/**[0m
+[34mD[0m| [34mzenoh-test/** is receiving data[0m
+[34mD[0m| [34mcreated sub zenoh-test/**[0m
+[34mD[0m| [34mReliable listener primed zenoh-test/**[0m
+[34mD[0m| [34mReliable listener first iter zenoh-test/**[0m
+[34mD[0m| [34mzenoh-test/** is receiving data[0m
+[34mD[0m| [34mReliable listener closed zenoh-test/**[0m
+[34mD[0m| [34mcreated sub zenoh-test/**[0m
+[34mD[0m| [34mzenoh-test/** is receiving data[0m
+[34mD[0m| [34mReliable listener primed zenoh-test/**[0m
+[34mD[0m| [34mReliable listener first iter zenoh-test/**[0m
+[34mD[0m| [34mReliable listener closed zenoh-test/**[0m
+[34mD[0m| [34mcreated sub zenoh-test/**[0m
+[34mD[0m| [34mReliable listener primed zenoh-test/**[0m
+[34mD[0m| [34mReliable listener first iter zenoh-test/**[0m
+[34mD[0m| [34mzenoh-test/** is receiving data[0m
+[34mD[0m| [34mReliable listener closed zenoh-test/**[0m
+[34mD[0m| [34mcreated sub zenoh-test/**[0m
+[34mD[0m| [34mReliable listener primed zenoh-test/**[0m
+[34mD[0m| [34mzenoh-test/** is receiving data[0m
+[34mD[0m| [34mReliable listener first iter zenoh-test/**[0m
+[34mD[0m| [34mReliable listener closed zenoh-test/**[0m
+[34mD[0m| [34mcreated sub zenoh-test/**[0m
+[34mD[0m| [34mzenoh-test/** is receiving data[0m
+[34mD[0m| [34mReliable listener primed zenoh-test/**[0m
+[34mD[0m| [34mReliable listener first iter zenoh-test/**[0m
+[34mD[0m| [34mReliable listener primed zenoh-test/**[0m
+[34mD[0m| [34mReliable listener first iter zenoh-test/**[0m
+[34mD[0m| [34mReliable listener primed zenoh-test/**[0m
+[34mD[0m| [34mReliable listener first iter zenoh-test/**[0m
+[34mD[0m| [34mReliable listener closed zenoh-test/**[0m
+[34mD[0m| [34mReliable listener closed zenoh-test/**[0m
+[34mD[0m| [34mReliable listener closed zenoh-test/**[0m
+[34mD[0m| [34mReliable listener primed zenoh-test/**[0m
+[34mD[0m| [34mReliable listener first iter zenoh-test/**[0m
+[34mD[0m| [34mReliable listener closed zenoh-test/**[0m
