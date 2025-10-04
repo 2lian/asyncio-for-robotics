@@ -1,22 +1,23 @@
 # Asyncio For Robotics (WIP)
 
-ROS2, Zenoh, and other robotic communication systems through asyncio python.
+The Asyncio For Robotics (AFoR) library makes asyncio usable with ROS 2, Zenoh and more, letting you write linear, testable, and non-blocking Python code.
 
 - Make your code linear, easy to write, easy to follow.
 - No gigantic spaghetti of callback and future.
 - Nobody responsible for spinning an executor.
-- Fantastic for software testing where many small tasks and checks need to be
-  written and run.
+- Fantastic for software testing with many small tasks and checks to be
+  maintained and run.
 - Ability to `asyncio.sleep` while other tasks are continuing.
-- No dependencies, just native python with great support.
+- No dependencies, light weight, just native python.
 
 *Will this make my code slower?* No.
 
-*Will this make my code faster?* No. But I am sure that `asyncio` will help you understand you code better, and you will make it faster.
+*Will this make my code faster?* No. However `asyncio` will help YOU write
+better, faster code.
 
 ## Install
 
-### For ROS2
+### For ROS 2
 
 ```bash
 pip install git+https://github.com/2lian/asyncio-for-robotics.git[ros2]
@@ -30,7 +31,7 @@ pip install git+https://github.com/2lian/asyncio-for-robotics.git[zenoh]
 
 ## Code sample
 
-Syntax is identical between ROS2 and Zenoh.
+Syntax is identical between ROS 2 and Zenoh.
 
 ### Wait for messages one by one
 
@@ -77,15 +78,17 @@ async for msg in sub.listen_reliable():
 
 Application:
 - Test if the system is responding as expected
-- Run small tasks with small and local code 
+- Run small tasks with small and local code
 
 ```python
 # Listen with a timeout
 data = await soft_wait_for(sub.wait_for_new(), timeout=1)
-assert not isinstance(data, TimeoutError), f"Failed to get new data in under 1 second"
+if isinstance(data, TimeoutError):
+    pytest.fail(f"Failed to get new data in under 1 second")
+
 
 # Process a codeblock with a timeout
-async with soft_timeout(1) as did_timeout:
+async with soft_timeout(1):
     sum = 0
     total = 0
     async for msg in sub.listen_reliable():
@@ -94,4 +97,5 @@ async with soft_timeout(1) as did_timeout:
         total += 1
 
 last_second_average = sum/total
+assert last_second_average == pytest.approx(expected_average)
 ```
