@@ -184,7 +184,7 @@ class BaseSub(Generic[_MsgType], ABC):
             logger.debug("Reliable listener exited %s", self.name)
 
     @abstractmethod
-    def _unsafe_input_callback(self, *args, **kwargs):
+    def callback_for_sub(self, *args, **kwargs):
         """Use this as a callback to your data stream (you subscriber, listener...).
         Once your data is processed call self.input_data with your data.
 

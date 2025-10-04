@@ -37,10 +37,10 @@ class Sub(BaseSub[zenoh.Sample]):
 
     def _resolve_sub(self, key_expr: Union[zenoh.KeyExpr, str]):
         return self.session.declare_subscriber(
-            key_expr=key_expr, handler=self.callback_for_zenoh_sub
+            key_expr=key_expr, handler=self.callback_for_sub
         )
 
-    def callback_for_zenoh_sub(self, sample: zenoh.Sample):
+    def callback_for_sub(self, sample: zenoh.Sample):
         try:
             healty = self.input_data(sample)
             if not healty:
