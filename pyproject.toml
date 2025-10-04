@@ -26,12 +26,14 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-ros2 = []
+jazzy = []
 zenoh = ["eclipse-zenoh>=1.0.0"]
-dev = ["colorama", "pytest", "pytest-async"]
+dev = ["colorama", "pytest", "pytest-asyncio"]
 
 [project.urls]
 Homepage = "https://github.com/2lian/asyncio-for-robotics"
 Repository = "https://github.com/2lian/asyncio-for-robotics"
 Issues = "https://github.com/yourusername/asyncio-for-robotics/issues"
 
+[tool.setuptools.package-data]
+"asyncio_for_robotics" = ["py.typed"]

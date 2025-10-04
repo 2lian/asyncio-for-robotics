@@ -5,7 +5,8 @@ from rclpy.qos import QoSProfile
 from rclpy.subscription import Subscription
 
 from ..core.sub import BaseSub
-from .session import RosSession, TopicInfo, _MsgType, auto_session
+from .session import RosSession, auto_session
+from .utils import QOS_DEFAULT, TopicInfo, _MsgType
 
 logger = logging.getLogger(__name__)
 
@@ -13,9 +14,9 @@ logger = logging.getLogger(__name__)
 class Sub(BaseSub[_MsgType]):
     def __init__(
         self,
-        topic: str,
         msg_type: _MsgType,
-        qos: QoSProfile,
+        topic: str,
+        qos_profile: QoSProfile = QOS_DEFAULT,
         session: Optional[RosSession] = None,
         buff_size: int = 10,
     ) -> None:
@@ -28,7 +29,7 @@ class Sub(BaseSub[_MsgType]):
             buff_size:
         """
         self.session = self._resolve_session(session)
-        self.topic_info = TopicInfo(topic, msg_type, qos)
+        self.topic_info = TopicInfo(topic=topic, msg_type=msg_type, qos=qos_profile)
         self.sub = self._resolve_sub(self.topic_info)
         super().__init__(buff_size)
 
@@ -42,10 +43,8 @@ class Sub(BaseSub[_MsgType]):
     def _resolve_sub(self, topic_info: TopicInfo) -> Subscription:
         with self.session.lock() as node:
             return node.create_subscription(
-                topic_info.msg_type,
-                topic_info.name,
-                self.callback_for_sub,
-                topic_info.qos,
+                **topic_info.as_kwarg(),
+                callback=self.callback_for_sub,
             )
 
     def callback_for_sub(self, sample: _MsgType):

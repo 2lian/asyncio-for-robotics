@@ -1,6 +1,6 @@
 # Asyncio For Robotics (WIP)
 
-The Asyncio For Robotics (AFoR) library makes asyncio usable with ROS 2, Zenoh and more, letting you write linear, testable, and non-blocking Python code.
+The Asyncio For Robotics library makes asyncio usable with ROS 2, Zenoh and more, letting you write linear, testable, and non-blocking Python code.
 
 - Make your code linear, easy to write, easy to follow.
 - No gigantic spaghetti of callback and future.
@@ -20,7 +20,7 @@ better, faster code.
 ### For ROS 2
 
 ```bash
-pip install git+https://github.com/2lian/asyncio-for-robotics.git[ros2]
+pip install git+https://github.com/2lian/asyncio-for-robotics.git[jazzy]
 ```
 
 ### For Zenoh
@@ -42,7 +42,7 @@ Application:
 - Wait for system to be operational
 
 ```python
-sub = Sub("afr/example")
+sub = Sub("afor/example")
 
 # get the latest message
 latest = await sub.wait_for_value()

@@ -37,36 +37,10 @@ from rclpy.qos import (
 )
 from rclpy.task import Future as FutureRos
 
-logger = logging.getLogger("artefacts." + __name__)
+from .utils import TopicInfo
 
-#: Default qos
-QOS_DEFAULT: Final = qos_profile_system_default
+logger = logging.getLogger(__name__)
 
-#: "always available" qos
-QOS_TRANSIENT: Final = QoSProfile(
-    reliability=ReliabilityPolicy.RELIABLE,
-    history=HistoryPolicy.KEEP_LAST,
-    depth=10,
-    durability=DurabilityPolicy.TRANSIENT_LOCAL,
-)
-
-
-_T = TypeVar("_T")
-_MsgType = TypeVar("_MsgType")
-
-
-class TopicInfo(NamedTuple, Generic[_MsgType]):
-    """Precisely describes a ROS2 topic
-
-    Attributes:
-        name:
-        msg_type:
-        qos:
-    """
-
-    name: str
-    msg_type: _MsgType
-    qos: QoSProfile = field(default_factory=lambda: QOS_DEFAULT)
 
 
 class ThreadedSession:
@@ -89,6 +63,7 @@ class ThreadedSession:
         Args:
             name: name of the node, None will give it a UUID
         """
+        logger.debug("Initializing Threaded ROS Sessions")
         name = f"ThreadedNode{uuid.uuid4()}".replace("-", "_")
         if isinstance(node, str):
             name = node
@@ -103,15 +78,17 @@ class ThreadedSession:
         self._stop_event = threading.Event()
         self._lock = threading.Lock()
         self._can_spin_event = threading.Event()
-        self._node.create_timer(0.1, self._ros_pause_check)
+        self._node.create_timer(0.01, self._ros_pause_check)
         if make_global:
             self.set_global_session(self)
+        logger.debug("Initialized Threaded ROS Sessions")
 
     @classmethod
     def auto_session(cls, session: Optional[Self] = None) -> Self:
         if session is not None:
             return session
         if cls._global_node is None:
+            logger.debug("Global Threaded Ros Session set")
             inst = cls()
             cls.set_global_session(inst)
             # cls._global_node: Self
@@ -155,9 +132,10 @@ class ThreadedSession:
 
     def start(self):
         """Starts spinning the ros2 node in its thread"""
-        logger.debug("RosNode thread started")
-        self._resume()
-        self.thread.start()
+        if not self.thread.is_alive():
+            logger.debug("RosNode thread started")
+            self._resume()
+            self.thread.start()
 
     def stop(self):
         """Stops spinning the ros2 node, destroys it and joins the thread"""
@@ -167,6 +145,9 @@ class ThreadedSession:
             self._node.destroy_node()
         self.thread.join()
         logger.debug("RosNode thread stoped")
+
+    def close(self):
+        self.stop()
 
     def _spin_thread(self):
         """(thrd 2) Executes in a second thread to spin the node"""
@@ -202,7 +183,7 @@ class ThreadedSession:
                 if self.pause_fut.done():
                     return
                 self.pause_fut.set_result(None)
-                logger.debug("Pause future triggered")
+                logger.debug("Rclpy pause set")
         except Exception as e:
             print(e)
             logger.critical(e)
@@ -283,6 +264,9 @@ class AsyncioSession:
         self.node.destroy_node()
         logger.debug("RosNode asyncio stoped")
 
+    def close(self):
+        self.stop()
+
 
 RosSession = Union[ThreadedSession, AsyncioSession]
 DEFAULT_SESSION_TYPE: Union[type[ThreadedSession], type[AsyncioSession]] = (
@@ -293,4 +277,6 @@ DEFAULT_SESSION_TYPE: Union[type[ThreadedSession], type[AsyncioSession]] = (
 def auto_session(session: Optional[RosSession] = None) -> RosSession:
     if session is not None:
         return session
-    return DEFAULT_SESSION_TYPE.auto_session()
+    ses= DEFAULT_SESSION_TYPE.auto_session()
+    ses.start()
+    return ses

@@ -1,3 +1,168 @@
+[36mI[0m| [36mStarting rclpy and session[0m
+[34mD[0m| [34mGlobal Threaded Ros Session set[0m
+[34mD[0m| [34mInitializing Threaded ROS Sessions[0m
+[34mD[0m| [34mInitialized Threaded ROS Sessions[0m
+[34mD[0m| [34mRosNode thread started[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mcreated sub ROS2-/test/something[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[36mI[0m| [36mentered test[0m
+[36mI[0m| [36mpublishing[0m
+[36mI[0m| [36mawaiting data[0m
+[34mD[0m| [34mROS2-/test/something is receiving data[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mcreated sub ROS2-/test/something[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mROS2-/test/something is receiving data[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mcreated sub ROS2-/test/something[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mROS2-/test/something is receiving data[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mcreated sub ROS2-/test/something[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mReliable listener primed ROS2-/test/something[0m
+[34mD[0m| [34mReliable listener first iter ROS2-/test/something[0m
+[34mD[0m| [34mROS2-/test/something is receiving data[0m
+[34mD[0m| [34mReliable listener closed ROS2-/test/something[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mcreated sub ROS2-/test/something[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mROS2-/test/something is receiving data[0m
+[34mD[0m| [34mReliable listener primed ROS2-/test/something[0m
+[34mD[0m| [34mReliable listener first iter ROS2-/test/something[0m
+[34mD[0m| [34mReliable listener closed ROS2-/test/something[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mcreated sub ROS2-/test/something[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mReliable listener primed ROS2-/test/something[0m
+[34mD[0m| [34mReliable listener first iter ROS2-/test/something[0m
+[34mD[0m| [34mROS2-/test/something is receiving data[0m
+[34mD[0m| [34mReliable listener closed ROS2-/test/something[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mcreated sub ROS2-/test/something[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mReliable listener primed ROS2-/test/something[0m
+[34mD[0m| [34mROS2-/test/something is receiving data[0m
+[34mD[0m| [34mReliable listener first iter ROS2-/test/something[0m
+[34mD[0m| [34mReliable listener closed ROS2-/test/something[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mcreated sub ROS2-/test/something[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
+[34mD[0m| [34mROS2-/test/something is receiving data[0m
+[34mD[0m| [34mReliable listener primed ROS2-/test/something[0m
+[34mD[0m| [34mReliable listener first iter ROS2-/test/something[0m
+[34mD[0m| [34mReliable listener closed ROS2-/test/something[0m
+[34mD[0m| [34mReliable listener primed ROS2-/test/something[0m
+[34mD[0m| [34mReliable listener first iter ROS2-/test/something[0m
+[34mD[0m| [34mReliable listener closed ROS2-/test/something[0m
+[34mD[0m| [34mReliable listener primed ROS2-/test/something[0m
+[34mD[0m| [34mReliable listener first iter ROS2-/test/something[0m
+[34mD[0m| [34mReliable listener closed ROS2-/test/something[0m
+[34mD[0m| [34mReliable listener primed ROS2-/test/something[0m
+[34mD[0m| [34mReliable listener first iter ROS2-/test/something[0m
+[34mD[0m| [34mReliable listener closed ROS2-/test/something[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mROS waiting for lock[0m
+[34mD[0m| [34mROS has lock and is spinning[0m
 [36mI[0m| [36mGlobal zenoh session: Starting[0m
 [36mI[0m| [36mGlobal zenoh session: Running[0m
 [34mD[0m| [34mcreated sub zenoh-test/**[0m
@@ -30,13 +195,18 @@
 [34mD[0m| [34mzenoh-test/** is receiving data[0m
 [34mD[0m| [34mReliable listener primed zenoh-test/**[0m
 [34mD[0m| [34mReliable listener first iter zenoh-test/**[0m
-[34mD[0m| [34mReliable listener primed zenoh-test/**[0m
-[34mD[0m| [34mReliable listener first iter zenoh-test/**[0m
-[34mD[0m| [34mReliable listener primed zenoh-test/**[0m
-[34mD[0m| [34mReliable listener first iter zenoh-test/**[0m
-[34mD[0m| [34mReliable listener closed zenoh-test/**[0m
-[34mD[0m| [34mReliable listener closed zenoh-test/**[0m
 [34mD[0m| [34mReliable listener closed zenoh-test/**[0m
 [34mD[0m| [34mReliable listener primed zenoh-test/**[0m
 [34mD[0m| [34mReliable listener first iter zenoh-test/**[0m
 [34mD[0m| [34mReliable listener closed zenoh-test/**[0m
+[34mD[0m| [34mReliable listener primed zenoh-test/**[0m
+[34mD[0m| [34mReliable listener first iter zenoh-test/**[0m
+[34mD[0m| [34mReliable listener closed zenoh-test/**[0m
+[34mD[0m| [34mReliable listener primed zenoh-test/**[0m
+[34mD[0m| [34mReliable listener first iter zenoh-test/**[0m
+[34mD[0m| [34mReliable listener closed zenoh-test/**[0m
+[36mI[0m| [36mclosing rclpy and session[0m
+[34mD[0m| [34mRclpy pause set[0m
+[34mD[0m| [34mROS stopped spinning[0m
+[34mD[0m| [34mROS released lock[0m
+[34mD[0m| [34mRosNode thread stoped[0m
