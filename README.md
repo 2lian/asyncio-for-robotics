@@ -128,3 +128,5 @@ The inevitable question: *“But isn’t this slower than the ROS 2 executor? RO
 - Asyncio for Robotics adds ~0.1 ms overhead to a ROS pub+sup operation: negligible compared to the above, plus ROS' native 0.1 ms overhead.
 - Zenoh benchmarks show this is not `asyncio` being slow: the bottleneck is ROS 2’s executor and its Python interface. Getting data in/out the ROS executor takes ~0.1 ms.
 - With `asyncio` (and `uvloop`), callbacks and task scheduling can be **much faster** than ROS 2’s scheduler.
+
+In short: It is not slower than `rclpy`. If you find it slow, `rclpy` is your problem and should use C++ or Zenoh.
