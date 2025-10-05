@@ -1,6 +1,6 @@
 .venv
 Session.vim
 asyncio_for_robotics.egg-info
-asyncio_for_robotics/__pycache__
+**/__pycache__
 build/
 uv.lock

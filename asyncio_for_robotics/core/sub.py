@@ -3,11 +3,13 @@ import logging
 from abc import ABC, abstractmethod
 from asyncio.queues import Queue
 from collections import deque
+from types import CoroutineType
 from typing import (
     Any,
     AsyncGenerator,
     Awaitable,
     Callable,
+    Coroutine,
     Deque,
     Final,
     Generic,
@@ -68,7 +70,7 @@ class BaseSub(Generic[_MsgType], ABC):
         assert self._value is not None
         return self._value
 
-    def wait_for_new(self) -> Awaitable[_MsgType]:
+    def wait_for_new(self) -> Coroutine[Any, Any, _MsgType]:
         """Awaits a new value.
 
         Only ensure that the data is new. See wait_for_next to be sure the data

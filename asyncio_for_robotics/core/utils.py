@@ -45,3 +45,5 @@ async def soft_timeout(duration: float):
             yield lambda: timed_out
     except asyncio.CancelledError:
         timed_out = True
+    except asyncio.TimeoutError:
+        timed_out = True
