@@ -46,7 +46,7 @@ python3 -m colcon build
 
 ## Making an application
 
-You do not need to create a ROS 2 package, nor need to use `ros2 run ...` `ros2 launch ...`. But it you want you can. The ROS 2 run process is the same is just python. You specify your entry-point in your `setup.py`, and python will execute the entry-point function.
+You do not need to create a ROS 2 package, nor need to use `ros2 run ...` `ros2 launch ...`. But if you want you can. The ROS 2 run process is the same is just python. You specify your entry-point in your `setup.py`, and python will execute the entry-point function.
 
 ## Using the node as usual while also using asyncio-for-robotics
 
