@@ -1,9 +1,0 @@
-{"time": "2025-10-05T21:12:13.860034", "level": "INFO", "logger": "asyncio_for_robotics.zenoh.session", "message": "Global zenoh session: Starting", "module": "session", "funcName": "auto_session", "line": 20}
-{"time": "2025-10-05T21:12:14.361892", "level": "INFO", "logger": "asyncio_for_robotics.zenoh.session", "message": "Global zenoh session: Running", "module": "session", "funcName": "auto_session", "line": 23}
-{"time": "2025-10-05T21:12:14.363762", "level": "DEBUG", "logger": "asyncio_for_robotics.core.sub", "message": "created sub zenoh-bench/hello", "module": "sub", "funcName": "__init__", "line": 55}
-{"time": "2025-10-05T21:12:14.364984", "level": "DEBUG", "logger": "asyncio_for_robotics.core.sub", "message": "created sub zenoh-bench/world", "module": "sub", "funcName": "__init__", "line": 55}
-{"time": "2025-10-05T21:12:14.365638", "level": "DEBUG", "logger": "asyncio_for_robotics.core.sub", "message": "Reliable listener primed zenoh-bench/world", "module": "sub", "funcName": "listen_reliable", "line": 159}
-{"time": "2025-10-05T21:12:14.365908", "level": "DEBUG", "logger": "asyncio_for_robotics.core.sub", "message": "Reliable listener first iter zenoh-bench/world", "module": "sub", "funcName": "_unprimed_listen_reliable", "line": 168}
-{"time": "2025-10-05T21:12:14.366170", "level": "DEBUG", "logger": "asyncio_for_robotics.core.sub", "message": "zenoh-bench/hello is receiving data", "module": "sub", "funcName": "_new_message_cbk", "line": 237}
-{"time": "2025-10-05T21:12:14.366591", "level": "DEBUG", "logger": "asyncio_for_robotics.core.sub", "message": "zenoh-bench/world is receiving data", "module": "sub", "funcName": "_new_message_cbk", "line": 237}
-{"time": "2025-10-05T21:12:19.472185", "level": "DEBUG", "logger": "asyncio_for_robotics.core.sub", "message": "Reliable listener closed zenoh-bench/world", "module": "sub", "funcName": "_unprimed_listen_reliable", "line": 178}
