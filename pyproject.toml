@@ -6,7 +6,7 @@ packages = ["asyncio_for_robotics"]
 
 [project]
 name = "asyncio_for_robotics"
-version = "0.0.1"
+version = "0.0.2"
 description = "Asyncio interface for ROS 2, Zenoh, and other robotics middleware."
 readme = "README.md"
 license = "MIT"

@@ -19,8 +19,10 @@ better, faster code.
 
 ### For ROS 2
 
+Compatible with: `jazzy`, `humble` and newer. This library is pure python, without dependencies so it easily installs anywhere.
+
 ```bash
-pip install git+https://github.com/2lian/asyncio-for-robotics.git[jazzy]
+pip install git+https://github.com/2lian/asyncio-for-robotics.git
 ```
 
 ### For Zenoh
@@ -28,6 +30,12 @@ pip install git+https://github.com/2lian/asyncio-for-robotics.git[jazzy]
 ```bash
 pip install git+https://github.com/2lian/asyncio-for-robotics.git[zenoh]
 ```
+
+## Read more
+
+- [Usage with other ROS 2 tooling](./using_with_ros.md)
+- [Detailed examples](./asyncio_for_robotics/example)
+- [Usage for software testing](./tests)
 
 ## Code sample
 
