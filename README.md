@@ -114,12 +114,12 @@ The inevitable question: *“But isn’t this slower than the ROS 2 executor? RO
 
 - We’re in Python, time-critical processes should not live here.  
 - `sleep` is accurate within ~1–5 ms, whether ROS 2 is involved or not.  
-- Benchmarks on localhost (`./tests/bench/`) show:  
-  - Pure ROS 2 + SingleThreaded executor → latency: **0.1 ms **  
-  - Asyncio for Robotics + ROS 2 + SingleThreaded executor → latency: **0.2 ms **  
-  - Pure ROS 2 + MultiThreaded executor → latency: **0.4 ms **  
-  - Asyncio for Robotics + ROS 2 + MultiThreaded executor → latency: **0.4 ms **  
-- The nail on the coffin: **Asyncio for Robotics with Zenoh is 10× faster**  
+- Benchmarks on localhost (`./tests/bench/`) show:
+  - Pure ROS 2 + SingleThreaded executor → latency: **0.1 ms**
+  - Asyncio for Robotics + ROS 2 + SingleThreaded executor → latency: **0.2 ms**
+  - Pure ROS 2 + MultiThreaded executor → latency: **0.4 ms**
+  - Asyncio for Robotics + ROS 2 + MultiThreaded executor → latency: **0.4 ms**
+- The nail on the coffin: **Asyncio for Robotics with Zenoh is 10× faster**
   - → latency: **0.01 ms**
 
 ### Conclusion
