@@ -1,0 +1,9 @@
+[36mI[0m| [36mGlobal zenoh session: Starting[0m
+[36mI[0m| [36mGlobal zenoh session: Running[0m
+[34mD[0m| [34mcreated sub zenoh-bench/hello[0m
+[34mD[0m| [34mcreated sub zenoh-bench/world[0m
+[34mD[0m| [34mReliable listener primed zenoh-bench/world[0m
+[34mD[0m| [34mReliable listener first iter zenoh-bench/world[0m
+[34mD[0m| [34mzenoh-bench/hello is receiving data[0m
+[34mD[0m| [34mzenoh-bench/world is receiving data[0m
+[34mD[0m| [34mReliable listener closed zenoh-bench/world[0m

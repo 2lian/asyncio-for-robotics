@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class Sub(BaseSub[_MsgType]):
     def __init__(
         self,
-        msg_type: _MsgType,
+        msg_type: type[_MsgType],
         topic: str,
         qos_profile: QoSProfile = QOS_DEFAULT,
         session: Optional[RosSession] = None,

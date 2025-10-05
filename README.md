@@ -107,3 +107,24 @@ async with soft_timeout(1):
 last_second_average = sum/total
 assert last_second_average == pytest.approx(expected_average)
 ```
+
+## About Speed
+
+The inevitable question: *“But isn’t this slower than the ROS 2 executor? ROS 2 is the best!”*
+
+- We’re in Python, time-critical processes should not live here.  
+- `sleep` is accurate within ~1–5 ms, whether ROS 2 is involved or not.  
+- Benchmarks on localhost (`./tests/bench/`) show:  
+  - Pure ROS 2 + SingleThreaded executor → latency: **0.1 ms **  
+  - Asyncio for Robotics + ROS 2 + SingleThreaded executor → latency: **0.2 ms **  
+  - Pure ROS 2 + MultiThreaded executor → latency: **0.4 ms **  
+  - Asyncio for Robotics + ROS 2 + MultiThreaded executor → latency: **0.4 ms **  
+- The nail on the coffin: **Asyncio for Robotics with Zenoh is 10× faster**  
+  - → latency: **0.01 ms**
+
+### Conclusion
+- If you’re using the MultiThreaded executor: Stop it, get some help.
+- Never run ROS 2 Python above 1 kHz (and realistically, not above 100 Hz).  
+- Asyncio for Robotics adds ~0.1 ms overhead to ROS 2 pub or sub: negligible compared to the above, plus ROS' native 0.1 ms overhead.
+- Zenoh benchmarks show this is not `asyncio` being slow: the bottleneck is ROS 2’s executor and its Python interface. Getting data in/out the ROS executor takes ~0.1 ms.
+- With `asyncio` (and `uvloop`), callbacks and task scheduling could be **much faster** than ROS 2’s scheduler.
