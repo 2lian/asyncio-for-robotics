@@ -10,7 +10,7 @@ The Asyncio For Robotics library makes asyncio usable with ROS 2, Zenoh and more
 - Ability to `asyncio.sleep` while other tasks are continuing.
 - No dependencies, light weight, just native python.
 
-*Will this make my code slower?* No.
+*Will this make my code slower?*[ No.](https://github.com/2lian/asyncio-for-robotics/tree/main?tab=readme-ov-file#about-speed)
 
 *Will this make my code faster?* No. However `asyncio` will help YOU write
 better, faster code.
