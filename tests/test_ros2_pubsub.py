@@ -33,11 +33,13 @@ topic = aros.TopicInfo("test/something", String, QoSProfile(
     ))
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def pub(session: aros.RosSession) -> Generator[Publisher, Any, Any]:
     with session.lock() as node:
         p: Publisher = node.create_publisher(**topic.as_kwarg())
     yield p
+    with session.lock() as node:
+        node.destroy_publisher(p)
 
 
 @pytest.fixture

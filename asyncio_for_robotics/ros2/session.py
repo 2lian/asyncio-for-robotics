@@ -99,6 +99,8 @@ class ThreadedSession:
 
         When exiting this context, the internal _lock is freed and executor resumed.
         """
+        # yield self._node
+        # return
         was_running = self._can_spin_event.is_set()
         try:
             self._pause()
@@ -119,7 +121,7 @@ class ThreadedSession:
         """Stops spinning the ros2 node, destroys it and joins the thread"""
         self._pause()
         self._stop_event.set()
-        with self.lock():
+        with self._lock:
             self._node.destroy_node()
         self.thread.join()
         logger.debug("RosNode thread stoped")

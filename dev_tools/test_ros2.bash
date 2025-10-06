@@ -8,8 +8,8 @@ uv pip install -e .[jazzy,dev,zenoh]
 . .venv/bin/activate
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 python3 -m pytest ./tests \
-    # -v \
-    # -x \
+    -v \
+    -x \
     # -m only \
     # -s \
 
