@@ -1,12 +1,12 @@
 # Asyncio For Robotics --- For Testing Applications
 
-The tests in `asyncio_for_robotics` provide practical inspiration for setting up
+The tests in `asyncio_for_robotics` provide practical exemple for setting up
 similar tests in your ROS 2 or Zenoh applications.
 
 You can install the dependencies required to run the tests with:
 
 ```bash
-pip install git+https://github.com/2lian/asyncio-for-robotics.git[jazzy,zenoh,dev]
+pip install git+https://github.com/2lian/asyncio-for-robotics.git[zenoh,dev]
 ```
 
 Important notes:
