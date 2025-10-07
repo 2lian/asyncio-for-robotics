@@ -1,6 +1,6 @@
 # Asyncio For Robotics (WIP)
 
-The Asyncio For Robotics library makes asyncio usable with ROS 2, Zenoh and more, letting you write linear, testable, and non-blocking Python code.
+The Asyncio For Robotics (`afor`) library makes asyncio usable with ROS 2, Zenoh and more, letting you write linear, testable, and non-blocking Python code.
 
 - Make your code linear, easy to write, easy to follow.
 - No gigantic spaghetti of callback and future.
@@ -114,7 +114,7 @@ The inevitable question: *“But isn’t this slower than the ROS 2 executor? RO
 
 Benchmark code is available in (`./tests/bench/`)[tests/bench/], it consists in two pairs of pub/sub infinitely echoing a message (using one single node). The messaging rate, thus measures the request to response latency. 
 
-| With AfoR  | Transport | Executor                          | Frequency (kHz) | Latency (ms) |
+| With `afor`  | Transport | Executor                          | Frequency (kHz) | Latency (ms) |
 |:----------:|:----------|:----------------------------------|---------:|---------:|
 | ✅         | Zenoh     | None                              | **95** | **0.01** |
 | ✅         | ROS 2     | Experimental Asyncio              | **17** | **0.06** |
@@ -130,7 +130,7 @@ In short: `rclpy`'s executor is the bottleneck. If you find it slow, you should 
 Analysis and details:
 - `uvloop` was used, replacing asyncio executor (more or less doubles the performances)
 - Zenoh is extremely fast, proving that `afor` is not the bottleneck.
-- The experimental `AsyncioExecutor` PR on ros rolling by nadavelkabets is incredible (https://github.com/ros2/rclpy/pull/1399)[https://github.com/ros2/rclpy/pull/1399]. (maybe I will add support for it when I have time)
+- The experimental `AsyncioExecutor` PR on ros rolling by nadavelkabets is incredible [https://github.com/ros2/rclpy/pull/1399](https://github.com/ros2/rclpy/pull/1399). (maybe I will add support for it when I am bored, but not many will want to use an unmerged experimental PR of ROS 2 rolling)
 - This `AsyncioExecutor` having better perf when using `afor` is interesting, because `afor` does not bypass code.
   - I think this is due to `AsyncioExecutor` having some overhead that affects its own callback.
   - Without `afor` the ROS 2 callback executes some code and publishes.
