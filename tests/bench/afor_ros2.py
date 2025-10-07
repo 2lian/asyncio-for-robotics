@@ -21,11 +21,8 @@ TOPIC_WORLD = TopicInfo(msg_type=Int64, topic="bench/world")
 
 async def increase_from_to(sub: Sub[Int64], pub: Publisher):
     async for msg in sub.listen_reliable():
-        pub.publish(
-            Int64(
-                data=msg.data + 1,
-            )
-        )
+        pub.publish(Int64(data=msg.data + 1))
+
         if msg.data % 500 == 0:
             print(f"message count: {msg.data:_}")
 
@@ -51,7 +48,7 @@ async def main(hello: bool, world: bool):
     pub_hello.publish(Int64(data=0))
     await asyncio.sleep(0.1)
     await sub_world.wait_for_value()
-    await sub_hello.wait_for_new()
+    start = await sub_hello.wait_for_new()
 
     test_timeout = 5
 
@@ -61,8 +58,8 @@ async def main(hello: bool, world: bool):
 
     score = (
         max(
-            (await sub_world.wait_for_value()).data,
-            (await sub_hello.wait_for_value()).data,
+            (await sub_world.wait_for_value()).data - start.data,
+            (await sub_hello.wait_for_value()).data - start.data,
         )
         / test_timeout
     )

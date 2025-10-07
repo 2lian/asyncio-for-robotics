@@ -62,24 +62,22 @@ async def main(hello: bool, world: bool):
     pub_hello.publish(Int64(data=0))
     await asyncio.sleep(0.1)
     await sub_world.wait_for_value()
-    await sub_hello.wait_for_new()
+    start = await sub_hello.wait_for_new()
 
     test_timeout = 5
 
     await asyncio.sleep(test_timeout)
     print("test done")
-    with auto_session().lock() as node:
-        await asyncio.sleep(1)
 
-        score = (
-            max(
-                (await sub_world.wait_for_value()).data,
-                (await sub_hello.wait_for_value()).data,
-            )
-            / test_timeout
+    score = (
+        max(
+        (await sub_world.wait_for_value()).data - start.data,
+        (await sub_hello.wait_for_value()).data - start.data,
         )
-        print(f"\n{score=:_} Hz")
-        print(pyfiglet.figlet_format(f"score :\n{score:_.0f} Hz".replace("_", ", ")))
+        / test_timeout
+    )
+    print(f"\n{score=:_} Hz")
+    print(pyfiglet.figlet_format(f"score :\n{score:_.0f} Hz".replace("_", ", ")))
     auto_session().close()
 
 

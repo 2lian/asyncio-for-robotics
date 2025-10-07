@@ -119,16 +119,15 @@ Benchmark code is available in [`./tests/bench/`](tests/bench/), it consists in 
 | ✅         | Zenoh     | None                              | **95** | **0.01** |
 | ✅         | ROS 2     | Experimental Asyncio              | **17** | **0.06** |
 | ❌         | ROS 2     | Experimental Asyncio              | **13** | **0.08** |
-| ❌         | ROS 2     | SingleThreaded                    | **10** | **0.10** |
-| ✅         | ROS 2     | SingleThreaded                    | **6**  | **0.17** |
+| ❌         | ROS 2     | SingleThreaded                    | **9** | **0.11** |
+| ✅         | ROS 2     | SingleThreaded                    | **7**  | **0.15** |
 | ❌         | ROS 2     | MultiThreaded                     | **3**  | **0.3** |
 | ✅         | ROS 2     | MultiThreaded                     | **3**  | **0.3** |
 
 
 In short: `rclpy`'s executor is the bottleneck. If you find it slow, you should use C++ or Zenoh (or contribute to this repo?).
 
-Analysis and details:
-- `uvloop` was used, replacing asyncio executor (more or less doubles the performances)
+Analysis:
 - Zenoh is extremely fast, proving that `afor` is not the bottleneck.
 - The experimental `AsyncioExecutor` PR on ros rolling by nadavelkabets is incredible [https://github.com/ros2/rclpy/pull/1399](https://github.com/ros2/rclpy/pull/1399). (maybe I will add support for it when I am bored, but not many will want to use an unmerged experimental PR of ROS 2 rolling)
 - This `AsyncioExecutor` having better perf when using `afor` is interesting, because `afor` does not bypass code.
@@ -140,3 +139,7 @@ Analysis and details:
   - Zenoh has its own thread, however it is built exclusively for multi-thread operations, without any executor. Thus achieves far superior performances.
 - `MultiThreadedExecutor` is just famously slow.
 - If there is interest in those benchmarks I will improve them, so others can run them all easily.
+
+Details:
+- `uvloop` was used, replacing asyncio executor (more or less doubles the performances)
+- RMW was set to `rmw_zenoh_cpp`
