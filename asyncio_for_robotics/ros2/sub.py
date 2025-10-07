@@ -35,7 +35,7 @@ class Sub(BaseSub[_MsgType]):
 
     @property
     def name(self) -> str:
-        return f"ROS2-{self.sub.topic_name}"
+        return f"ROS2-{self.topic_info.topic}"
 
     def _resolve_session(self, session: Optional[RosSession]) -> RosSession:
         return auto_session(session)
@@ -48,6 +48,8 @@ class Sub(BaseSub[_MsgType]):
             )
 
     def callback_for_sub(self, sample: _MsgType):
+        self._new_message_cbk(sample)
+        return
         try:
             healty = self.input_data(sample)
             if not healty:

@@ -12,6 +12,7 @@ from typing import (
 )
 
 from rclpy.executors import MultiThreadedExecutor, SingleThreadedExecutor
+from rclpy.experimental.asyncio_executor import AsyncioExecutor
 from rclpy.node import Node
 
 from rclpy.task import Future as FutureRos
@@ -27,7 +28,7 @@ class ThreadedSession:
     def __init__(
         self,
         node: Union[None, str, Node] = None,
-        executor: Union[None, SingleThreadedExecutor, MultiThreadedExecutor] = None,
+        executor: Union[None, AsyncioExecutor] = None,
         make_global: bool = False,
     ) -> None:
         """Ros2 node spinning in its own thread.
@@ -49,14 +50,15 @@ class ThreadedSession:
             node = Node(name)
         self._node = node
         if executor is None:
-            executor = SingleThreadedExecutor()
+            executor = AsyncioExecutor()
         self._executor = executor
         self._executor.add_node(self._node)
         self.thread = threading.Thread(target=self._spin_thread, daemon=True)
         self._stop_event = threading.Event()
         self._lock = threading.Lock()
         self._can_spin_event = threading.Event()
-        self._node.create_timer(0.01, self._ros_pause_check)
+        # self._node.create_timer(0.01, self._ros_pause_check)
+        self._spin_task = None
         if make_global:
             self.set_global_session(self)
         logger.debug("Initialized Threaded ROS Sessions")
@@ -99,8 +101,8 @@ class ThreadedSession:
 
         When exiting this context, the internal _lock is freed and executor resumed.
         """
-        # yield self._node
-        # return
+        yield self._node
+        return
         was_running = self._can_spin_event.is_set()
         try:
             self._pause()
@@ -112,6 +114,8 @@ class ThreadedSession:
 
     def start(self):
         """Starts spinning the ros2 node in its thread"""
+        self._spin_task = asyncio.create_task(self._executor.spin_async())
+        return
         if not self.thread.is_alive():
             logger.debug("RosNode thread started")
             self._resume()
@@ -119,6 +123,12 @@ class ThreadedSession:
 
     def stop(self):
         """Stops spinning the ros2 node, destroys it and joins the thread"""
+        # if self._spin_task is None:
+            # return
+        # self._node.destroy_node()
+        self._executor.shutdown()
+        # self._spin_task.cancel()
+        return
         self._pause()
         self._stop_event.set()
         with self._lock:
@@ -169,9 +179,11 @@ class ThreadedSession:
             logger.critical(e)
 
     def _pause(self):
+        return
         self._can_spin_event.clear()
 
     def _resume(self):
+        return
         self._can_spin_event.set()
 
 

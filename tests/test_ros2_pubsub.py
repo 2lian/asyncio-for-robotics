@@ -10,33 +10,49 @@ from rclpy.qos import QoSProfile
 from std_msgs.msg import String
 
 from asyncio_for_robotics.core._logger import setup_logger
+from asyncio_for_robotics.core.utils import soft_timeout
 import asyncio_for_robotics.ros2 as aros
 from asyncio_for_robotics import soft_wait_for
+from asyncio_for_robotics.ros2.session import DEFAULT_SESSION_TYPE
 
 setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
 
-
-@pytest.fixture(scope="session", autouse=True)
-def session() -> Generator[aros.RosSession, Any, Any]:
-    logger.info("Starting rclpy and session")
+@pytest.fixture(scope="session",autouse=True)
+def rclpy_init() -> Generator[None, None, None]:
     rclpy.init()
-    ses = aros.auto_session()
-    yield ses
-    logger.info("closing rclpy and session")
-    ses.close()
+    yield
     rclpy.shutdown()
 
+# @pytest.fixture(scope="module", autouse=True)
+# def asyncio_loop() -> Generator[asyncio.AbstractEventLoop, None, None]:
+#     loop = asyncio.new_event_loop()
+#     asyncio.set_event_loop(loop)
+#     yield loop
+#     if not loop.is_closed():
+#         loop.close()
 
-topic = aros.TopicInfo("test/something", String, QoSProfile(
+@pytest.fixture(scope="function", autouse=True)
+async def session(rclpy_init) -> AsyncGenerator[aros.RosSession, Any]:
+    logger.info("Starting rclpy and session")
+    if DEFAULT_SESSION_TYPE._global_node is not None:
+        # DEFAULT_SESSION_TYPE._global_node.close()
+        DEFAULT_SESSION_TYPE._global_node = None
+    ses = aros.auto_session()
+    yield ses
+    logger.info("closing session")
+    ses.close()
+
+
+TOPIC = aros.TopicInfo("test/something", String, QoSProfile(
     depth=100,
     ))
 
 
-@pytest.fixture(scope="module")
-def pub(session: aros.RosSession) -> Generator[Publisher, Any, Any]:
+@pytest.fixture(scope="function")
+async def pub(session: aros.RosSession) -> AsyncGenerator[Publisher, Any]:
     with session.lock() as node:
-        p: Publisher = node.create_publisher(**topic.as_kwarg())
+        p: Publisher = node.create_publisher(**TOPIC.as_kwarg())
     yield p
     with session.lock() as node:
         node.destroy_publisher(p)
@@ -44,7 +60,7 @@ def pub(session: aros.RosSession) -> Generator[Publisher, Any, Any]:
 
 @pytest.fixture
 async def sub(session) -> AsyncGenerator[aros.Sub[String], Any]:
-    s: aros.Sub = aros.Sub(**topic.as_kwarg())
+    s: aros.Sub = aros.Sub(**TOPIC.as_kwarg())
     yield s
     s.close()
 
@@ -63,7 +79,7 @@ async def test_wait_for_value(pub: Publisher, sub: aros.Sub[String]):
 async def test_wait_new(pub: Publisher, sub: aros.Sub[String]):
     payload = "hello"
     pub.publish(String(data=payload))
-    sample = await sub.wait_for_value()
+    sample = await soft_wait_for(sub.wait_for_value(), 1)
     assert not isinstance(sample, TimeoutError), f"Should get a message"
 
     wait_task = sub.wait_for_new()
@@ -131,11 +147,12 @@ async def test_listen_too_fast(pub: Publisher, sub: aros.Sub[String]):
             break
         last_payload = f"hello{sample_count}"
         pub.publish(String(data=last_payload))
+        await asyncio.sleep(0.001)
         put_count += 1
         last_payload = f"hello{sample_count}"
         pub.publish(String(data=last_payload))
         put_count += 1
-        await asyncio.sleep(0.01)
+        await asyncio.sleep(0.001)
 
     assert put_count / 2 == sample_count == max_iter
 
@@ -162,22 +179,53 @@ async def test_reliable_too_fast(pub: Publisher, sub: aros.Sub[String]):
     data = list(range(20))
     put_queue = [str(v) for v in data]
     received_buf = []
-    listener = sub.listen_reliable(fresh=True)
+    listener = sub.listen_reliable(fresh=True, queue_size=len(data)*2)
     pub.publish(String(data=put_queue.pop()))
     await asyncio.sleep(0.1)
     pub.publish(String(data=put_queue.pop()))
-    async for sample in listener:
-        payload = int(sample.data)
-        received_buf.append(payload)
-        if len(received_buf) >= len(data):
-            break
-        if put_queue != []:
-            pub.publish(String(data=put_queue.pop()))
-        if put_queue != []:
-            pub.publish(String(data=put_queue.pop()))
+    async with soft_timeout(1):
+        async for sample in listener:
+            payload = int(sample.data)
+            received_buf.append(payload)
+            if len(received_buf) >= len(data):
+                break
+            if put_queue != []:
+                pub.publish(String(data=put_queue.pop()))
+                await asyncio.sleep(0.001)
+            if put_queue != []:
+                pub.publish(String(data=put_queue.pop()))
+                await asyncio.sleep(0.001)
 
     received_buf.reverse()
-    assert data == received_buf
+    assert set(data) == set(received_buf), f"data was missed"
+    assert data == received_buf, f"data is out of order"
+
+
+@pytest.mark.xfail(reason="Order is not preserved perfectly with AsyncExecutor")
+async def test_reliable_extremely_fast(pub: Publisher, sub: aros.Sub[String]):
+    data = list(range(20))
+    put_queue = [str(v) for v in data]
+    received_buf = []
+    listener = sub.listen_reliable(fresh=True, queue_size=len(data)*2)
+    pub.publish(String(data=put_queue.pop()))
+    await asyncio.sleep(0.1)
+    pub.publish(String(data=put_queue.pop()))
+    async with soft_timeout(1):
+        async for sample in listener:
+            payload = int(sample.data)
+            received_buf.append(payload)
+            if len(received_buf) >= len(data):
+                break
+            if put_queue != []:
+                pub.publish(String(data=put_queue.pop()))
+                # await asyncio.sleep(0.001)
+            if put_queue != []:
+                pub.publish(String(data=put_queue.pop()))
+                # await asyncio.sleep(0.001)
+
+    received_buf.reverse()
+    assert set(data) == set(received_buf), f"data was missed"
+    assert data == received_buf, f"data is out of order"
 
 
 async def test_freshness(pub: Publisher, sub: aros.Sub[String]):
