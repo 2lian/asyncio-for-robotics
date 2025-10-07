@@ -1,6 +1,6 @@
 # Asyncio For Robotics (WIP)
 
-The Asyncio For Robotics (`afor`) library makes asyncio usable with ROS 2, Zenoh and more, letting you write linear, testable, and non-blocking Python code.
+The Asyncio For Robotics (`afor`) library makes `asyncio` usable with ROS 2, Zenoh and more, letting you write linear, testable, and non-blocking Python code.
 
 - Make your code linear, easy to write, easy to follow.
 - No gigantic spaghetti of callback and future.
@@ -112,7 +112,7 @@ assert last_second_average == pytest.approx(expected_average)
 
 The inevitable question: *“But isn’t this slower than the ROS 2 executor? ROS 2 is the best!”*
 
-Benchmark code is available in (`./tests/bench/`)[tests/bench/], it consists in two pairs of pub/sub infinitely echoing a message (using one single node). The messaging rate, thus measures the request to response latency. 
+Benchmark code is available in [`./tests/bench/`](tests/bench/), it consists in two pairs of pub/sub infinitely echoing a message (using one single node). The messaging rate, thus measures the request to response latency. 
 
 | With `afor`  | Transport | Executor                          | Frequency (kHz) | Latency (ms) |
 |:----------:|:----------|:----------------------------------|---------:|---------:|
