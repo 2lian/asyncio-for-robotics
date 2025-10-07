@@ -19,7 +19,7 @@ better, faster code.
 
 ### For ROS 2
 
-Compatible with: `jazzy`, `humble` and newer. This library is pure python, without dependencies so it easily installs anywhere.
+Compatible with: `jazzy`, `humble` and newer. This library is pure python, without dependencies, so it easily installs anywhere.
 
 ```bash
 pip install git+https://github.com/2lian/asyncio-for-robotics.git
@@ -118,10 +118,10 @@ Benchmark code is available in [`./tests/bench/`](tests/bench/), it consists in 
 |:----------:|:----------|:----------------------------------|---------:|---------:|
 | ✔️         | Zenoh     | None                              | **95** | **0.01** |
 | ✔️         | ROS 2     | Experimental Asyncio              | **17** | **0.06** |
-| ❌         | ROS 2     | Experimental Asyncio              | **13** | **0.08** |
-| ❌         | ROS 2     | SingleThreaded                    | **9** | **0.11** |
+| ❌         | ROS 2     | Experimental Asyncio              | 13 | 0.08 |
+| ❌         | ROS 2     | SingleThreaded                    | 9 | 0.11 |
 | ✔️         | ROS 2     | SingleThreaded                    | **7**  | **0.15** |
-| ❌         | ROS 2     | MultiThreaded                     | **3**  | **0.3** |
+| ❌         | ROS 2     | MultiThreaded                     | 3  | 0.3 |
 | ✔️         | ROS 2     | MultiThreaded                     | **3**  | **0.3** |
 
 
@@ -129,7 +129,7 @@ In short: `rclpy`'s executor is the bottleneck. If you find it slow, you should 
 
 Analysis:
 - Zenoh is extremely fast, proving that `afor` is not the bottleneck.
-- The experimental `AsyncioExecutor` PR on ros rolling by nadavelkabets is incredible [https://github.com/ros2/rclpy/pull/1399](https://github.com/ros2/rclpy/pull/1399). (maybe I will add support for it when I am bored, but not many will want to use an unmerged experimental PR of ROS 2 rolling)
+- The experimental `AsyncioExecutor` PR on ros rolling by nadavelkabets is incredible [https://github.com/ros2/rclpy/pull/1399](https://github.com/ros2/rclpy/pull/1399). (maybe I will add support for it, but only a few will want to use an unmerged experimental PR of ROS 2 rolling)
 - This `AsyncioExecutor` having better perf when using `afor` is interesting, because `afor` does not bypass code.
   - I think this is due to `AsyncioExecutor` having some overhead that affects its own callback.
   - Without `afor` the ROS 2 callback executes some code and publishes.
