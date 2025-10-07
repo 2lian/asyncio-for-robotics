@@ -2,5 +2,9 @@
 Session.vim
 asyncio_for_robotics.egg-info
 **/__pycache__
+**cache**
+**log**
 build/
+install/
+log/
 uv.lock

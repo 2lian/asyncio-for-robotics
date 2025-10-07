@@ -112,14 +112,31 @@ assert last_second_average == pytest.approx(expected_average)
 
 The inevitable question: *“But isn’t this slower than the ROS 2 executor? ROS 2 is the best!”*
 
-- We’re in Python, time-critical processes should not live here.  
-- `sleep` is accurate within ~1–5 ms, whether ROS 2 is involved or not.  
-- Benchmarks on localhost (`./tests/bench/`) show:
-  - Pure ROS 2 + SingleThreaded executor → latency: **0.1 ms**
-  - Asyncio for Robotics + ROS 2 + SingleThreaded executor → latency: **0.2 ms**
-  - Pure ROS 2 + MultiThreaded executor → latency: **0.4 ms**
-  - Asyncio for Robotics + ROS 2 + MultiThreaded executor → latency: **0.4 ms**
-- The nail on the coffin: **Asyncio for Robotics with Zenoh transport (no ros) is 10× faster**
-  - → latency: **0.01 ms**
+Benchmark code is available in (`./tests/bench/`)[tests/bench/], it consists in two pairs of pub/sub infinitely echoing a message (using one single node). The messaging rate, thus measures the request to response latency. 
 
-In short: `rclpy` is the bottleneck. If you find it slow, you should use C++ or Zenoh (or contribute to this repo?).
+| With AfoR  | Transport | Executor                          | Frequency (kHz) | Latency (ms) |
+|:----------:|:----------|:----------------------------------|---------:|---------:|
+| ✅         | Zenoh     | None                              | **95** | **0.01** |
+| ✅         | ROS 2     | Experimental Asyncio              | **17** | **0.06** |
+| ❌         | ROS 2     | Experimental Asyncio              | **13** | **0.08** |
+| ❌         | ROS 2     | SingleThreaded                    | **10** | **0.10** |
+| ✅         | ROS 2     | SingleThreaded                    | **6**  | **0.17** |
+| ❌         | ROS 2     | MultiThreaded                     | **3**  | **0.3** |
+| ✅         | ROS 2     | MultiThreaded                     | **3**  | **0.3** |
+
+
+In short: `rclpy`'s executor is the bottleneck. If you find it slow, you should use C++ or Zenoh (or contribute to this repo?).
+
+Analysis and details:
+- `uvloop` was used, replacing asyncio executor (more or less doubles the performances)
+- Zenoh is extremely fast, proving that `afor` is not the bottleneck.
+- The experimental `AsyncioExecutor` PR on ros rolling by nadavelkabets is incredible (https://github.com/ros2/rclpy/pull/1399)[https://github.com/ros2/rclpy/pull/1399]. (maybe I will add support for it when I have time)
+- This `AsyncioExecutor` having better perf when using `afor` is interesting, because `afor` does not bypass code.
+  - I think this is due to `AsyncioExecutor` having some overhead that affects its own callback.
+  - Without `afor` the ROS 2 callback executes some code and publishes.
+  - With `afor` the ROS 2 callback returns immediately, and fully delegates execution to `asyncio`.
+- The increase of latency on the `SingleThreaded` executors proves that getting data in and out of the `rclpy` executor and thread is the main bottleneck. 
+  - `AsyncioExecutor` does not have such thread, thus can directly communicate.
+  - Zenoh has its own thread, however it is built exclusively for multi-thread operations, without any executor. Thus achieves far superior performances.
+- `MultiThreadedExecutor` is just famously slow.
+- If there is interest in those benchmarks I will improve them, so others can run them all easily.
