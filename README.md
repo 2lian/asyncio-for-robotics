@@ -116,13 +116,13 @@ Benchmark code is available in [`./tests/bench/`](tests/bench/), it consists in 
 
 | With `afor`  | Transport | Executor                          | Frequency (kHz) | Latency (ms) |
 |:----------:|:----------|:----------------------------------|---------:|---------:|
-| ✓         | Zenoh     | None                              | **95** | **0.01** |
-| ✓         | ROS 2     | Experimental Asyncio              | **17** | **0.06** |
-| ✕         | ROS 2     | Experimental Asyncio              | **13** | **0.08** |
-| ✕         | ROS 2     | SingleThreaded                    | **9** | **0.11** |
-| ✓         | ROS 2     | SingleThreaded                    | **7**  | **0.15** |
-| ✕         | ROS 2     | MultiThreaded                     | **3**  | **0.3** |
-| ✓         | ROS 2     | MultiThreaded                     | **3**  | **0.3** |
+| ✔️         | Zenoh     | None                              | **95** | **0.01** |
+| ✔️         | ROS 2     | Experimental Asyncio              | **17** | **0.06** |
+| ❌         | ROS 2     | Experimental Asyncio              | **13** | **0.08** |
+| ❌         | ROS 2     | SingleThreaded                    | **9** | **0.11** |
+| ✔️         | ROS 2     | SingleThreaded                    | **7**  | **0.15** |
+| ❌         | ROS 2     | MultiThreaded                     | **3**  | **0.3** |
+| ✔️         | ROS 2     | MultiThreaded                     | **3**  | **0.3** |
 
 
 In short: `rclpy`'s executor is the bottleneck. If you find it slow, you should use C++ or Zenoh (or contribute to this repo?).
