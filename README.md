@@ -112,6 +112,11 @@ assert last_second_average == pytest.approx(expected_average)
 
 The inevitable question: *“But isn’t this slower than the ROS 2 executor? ROS 2 is the best!”*
 
+In short: `rclpy`'s executor is the bottleneck. 
+- Comparing to the best ROS 2 Jazzy can do (`SingleThreadedExecutor`), `afor` increases latency from 110us to 150us.
+- Comparing to other execution methods, `afor` is equivalent if not faster.
+- If you find it slow, you should use C++ or Zenoh (or contribute to this repo?).
+
 Benchmark code is available in [`./tests/bench/`](tests/bench/), it consists in two pairs of pub/sub infinitely echoing a message (using one single node). The messaging rate, thus measures the request to response latency. 
 
 | With `afor`  | Transport | Executor                        | | Frequency (kHz) | Latency (ms) |
@@ -126,15 +131,10 @@ Benchmark code is available in [`./tests/bench/`](tests/bench/), it consists in 
 | ✔️         | ROS 2     | [`ros_loop` Method](https://github.com/m2-farzan/ros2-asyncio)                     | | 3  | 0.3 |
 
 
-In short: `rclpy`'s executor is the bottleneck. 
-- Comparing to the best ROS 2 Jazzy can do (`SingleThreadedExecutor`), `afor` increases latency from 110us to 150us.
-- Comparing to other execution methods, `afor` is equivalent if not faster.
-- If you find it slow, you should use C++ or Zenoh (or contribute to this repo?).
-
 Details:
 - `uvloop` was used, replacing the asyncio executor (more or less doubles the performances for Zenoh)
 - RMW was set to `rmw_zenoh_cpp`
-- ROS2 benchmarks uses `afor`'s `ros2.ThreadedSession` (this is the default in `afor`). 
+- ROS2 benchmarks uses `afor`'s `ros2.ThreadedSession` (the default in `afor`). 
 - Only the Benchmark of the [`ros_loop` method](https://github.com/m2-farzan/ros2-asyncio) uses `afor`'s second type of session: `ros2.SynchronousSession`.
 - ROS 2 executors can easily be changed in `afor` when creating a session.
 - The experimental `AsyncioExecutor` PR on ros rolling by nadavelkabets is incredible [https://github.com/ros2/rclpy/pull/1399](https://github.com/ros2/rclpy/pull/1399). Maybe I will add proper support for it (but only a few will want to use an unmerged experimental PR of ROS 2 rolling).
