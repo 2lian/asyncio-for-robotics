@@ -117,13 +117,13 @@ Benchmark code is available in [`./tests/bench/`](tests/bench/), it consists in 
 | With `afor`  | Transport | Executor                        | | Frequency (kHz) | Latency (ms) |
 |:----------:|:----------|:----------------------------------|-|---------:|---------:|
 | ✔️         | Zenoh     | None                              | | **95** | **0.01** |
-| ✔️         | ROS 2     | (Experimental Asyncio)[(https://github.com/ros2/rclpy/pull/1399)]              | | **17** | **0.06** |
-| ❌         | ROS 2     | (Experimental Asyncio)[(https://github.com/ros2/rclpy/pull/1399)]              | | 13 | 0.08 |
+| ✔️         | ROS 2     | [Experimental Asyncio](https://github.com/ros2/rclpy/pull/1399)              | | **17** | **0.06** |
+| ❌         | ROS 2     | [Experimental Asyncio](https://github.com/ros2/rclpy/pull/1399)              | | 13 | 0.08 |
 | ❌         | ROS 2     | SingleThreaded                    | | 9 | 0.11 |
 | ✔️         | ROS 2     | SingleThreaded                    | | **7**  | **0.15** |
 | ✔️         | ROS 2     | MultiThreaded                     | | **3**  | **0.3** |
 | ❌         | ROS 2     | MultiThreaded                     | | 3  | 0.3 |
-| ✔️         | ROS 2     | (`ros_loop` Method)[https://github.com/m2-farzan/ros2-asyncio]                     | | 3  | 0.3 |
+| ✔️         | ROS 2     | [`ros_loop` Method](https://github.com/m2-farzan/ros2-asyncio)                     | | 3  | 0.3 |
 
 
 In short: `rclpy`'s executor is the bottleneck. If you find it slow, you should use C++ or Zenoh (or contribute to this repo?).
@@ -132,7 +132,7 @@ Details:
 - `uvloop` was used, replacing asyncio executor (more or less doubles the performances for Zenoh)
 - RMW was set to `rmw_zenoh_cpp`
 - ROS2 benchmarks uses `afor`'s `ros2.ThreadedSession` (this is the default in `afor`). 
-- Only the Benchmark of the (`ros_loop` method)[https://github.com/m2-farzan/ros2-asyncio] uses `afor`'s second type of session: `ros2.SynchronousSession`.
+- Only the Benchmark of the [`ros_loop` method](https://github.com/m2-farzan/ros2-asyncio) uses `afor`'s second type of session: `ros2.SynchronousSession`.
 - ROS 2 executors can easily be changed in `afor` when creating a session.
 - The experimental `AsyncioExecutor` PR on ros rolling by nadavelkabets is incredible [https://github.com/ros2/rclpy/pull/1399](https://github.com/ros2/rclpy/pull/1399). Maybe I will add proper support for it (but only a few will want to use an unmerged experimental PR of ROS 2 rolling).
 - If there is interest in those benchmarks I will improve them, so others can run them all easily.
@@ -147,4 +147,4 @@ Analysis:
   - `AsyncioExecutor` does not have such thread, thus can directly communicate.
   - Zenoh has its own thread, however it is built exclusively for multi-thread operations, without any executor. Thus achieves far superior performances.
 - `MultiThreadedExecutor` is just famously slow.
-- Very surprisingly, the well known `ros_loop` method detailed here (https://github.com/m2-farzan/ros2-asyncio)[https://github.com/m2-farzan/ros2-asyncio] is slow.
+- Very surprisingly, the well known `ros_loop` method detailed here [https://github.com/m2-farzan/ros2-asyncio](https://github.com/m2-farzan/ros2-asyncio) is slow.
