@@ -31,6 +31,15 @@ pip install git+https://github.com/2lian/asyncio-for-robotics.git
 pip install git+https://github.com/2lian/asyncio-for-robotics.git[zenoh]
 ```
 
+## WIP before release:
+
+- Ros2 Services and Action
+- Better ROS 2 usage and examples
+  - How to make timers
+  - How to make a custom node
+  - How to get node parameters
+- Explanation on adding support for more messaging protocols
+
 ## Read more
 
 - [Usage with other ROS 2 tooling](./using_with_ros.md)
