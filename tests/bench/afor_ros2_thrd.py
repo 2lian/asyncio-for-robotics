@@ -11,6 +11,7 @@ from std_msgs.msg import Int64
 from asyncio_for_robotics import soft_timeout
 from asyncio_for_robotics.core._logger import setup_logger
 from asyncio_for_robotics.ros2 import *
+from asyncio_for_robotics.ros2.session import set_auto_session
 
 setup_logger("./")
 logger = logging.getLogger("asyncio_for_robotics")
@@ -80,6 +81,7 @@ if __name__ == "__main__":
         use_hello = True
         use_world = True
     rclpy.init()
+    set_auto_session(ThreadedSession())
     uvloop.run(main(use_hello, use_world))
     auto_session().close()
     rclpy.shutdown()

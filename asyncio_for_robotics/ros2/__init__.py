@@ -1,7 +1,7 @@
 from .session import (
-    DEFAULT_SESSION_TYPE,
-    AsyncioSession,
-    RosSession,
+    GLOBAL_SESSION,
+    SynchronousSession,
+    BaseSession,
     ThreadedSession,
     auto_session,
 )
@@ -10,10 +10,10 @@ from .sub import Sub
 
 __all__ = [
     "auto_session",
-    "DEFAULT_SESSION_TYPE",
+    "GLOBAL_SESSION",
     "ThreadedSession",
-    "AsyncioSession",
-    "RosSession",
+    "SynchronousSession",
+    "BaseSession",
     "Sub",
     "TopicInfo",
     "QOS_TRANSIENT",

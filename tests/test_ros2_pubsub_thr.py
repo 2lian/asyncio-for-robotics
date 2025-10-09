@@ -12,15 +12,17 @@ from std_msgs.msg import String
 from asyncio_for_robotics.core._logger import setup_logger
 import asyncio_for_robotics.ros2 as aros
 from asyncio_for_robotics import soft_wait_for
+from asyncio_for_robotics.ros2.session import ThreadedSession, set_auto_session
 
 setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
 
 
-@pytest.fixture(scope="session", autouse=True)
-def session() -> Generator[aros.RosSession, Any, Any]:
+@pytest.fixture(scope="module", autouse=True)
+def session() -> Generator[aros.BaseSession, Any, Any]:
     logger.info("Starting rclpy and session")
     rclpy.init()
+    set_auto_session(ThreadedSession())
     ses = aros.auto_session()
     yield ses
     logger.info("closing rclpy and session")
@@ -34,7 +36,7 @@ topic = aros.TopicInfo("test/something", String, QoSProfile(
 
 
 @pytest.fixture(scope="module")
-def pub(session: aros.RosSession) -> Generator[Publisher, Any, Any]:
+def pub(session: aros.BaseSession) -> Generator[Publisher, Any, Any]:
     with session.lock() as node:
         p: Publisher = node.create_publisher(**topic.as_kwarg())
     yield p

@@ -2,33 +2,22 @@ import asyncio
 import logging
 import threading
 import uuid
+from abc import ABC, abstractmethod
 from contextlib import contextmanager, suppress
-from typing import (
-    Any,
-    Generator,
-    Optional,
-    Self,
-    Union,
-)
+from typing import Any, Generator, Optional, Self, Union
 
 from rclpy.executors import MultiThreadedExecutor, SingleThreadedExecutor
 from rclpy.node import Node
-
 from rclpy.task import Future as FutureRos
-
 
 logger = logging.getLogger(__name__)
 
 
-
-class ThreadedSession:
-    _global_node: Optional[Self] = None
-
+class BaseSession(ABC):
     def __init__(
         self,
         node: Union[None, str, Node] = None,
         executor: Union[None, SingleThreadedExecutor, MultiThreadedExecutor] = None,
-        make_global: bool = False,
     ) -> None:
         """Ros2 node spinning in its own thread.
 
@@ -42,41 +31,75 @@ class ThreadedSession:
             name: name of the node, None will give it a UUID
         """
         logger.debug("Initializing Threaded ROS Sessions")
-        name = f"ThreadedNode{uuid.uuid4()}".replace("-", "_")
+        name = f"SessionNode{uuid.uuid4()}".replace("-", "_")
         if isinstance(node, str):
             name = node
         if not isinstance(node, Node):
             node = Node(name)
         self._node = node
         if executor is None:
-            executor = SingleThreadedExecutor()
+            executor = GLOBAL_SESSION_DEFAULT_EXEC()
         self._executor = executor
         self._executor.add_node(self._node)
+        self._lock = threading.Lock()
+
+    def set_global_session(self) -> None:
+        """Make this object instance the global session used by default with auto_session."""
+        set_auto_session(self)
+
+    @abstractmethod
+    @contextmanager
+    def lock(self) -> Generator[Node, Any, Any]:
+        """Context to stop the node from spinning momentarly.
+
+        Use like so:
+            ```python
+            with session.lock() as node:
+                node.create_subscription(...)
+            # your code continues safely
+            ```
+        """
+        ...
+
+    @abstractmethod
+    def start(self):
+        """Starts spinning the ros2 node"""
+        ...
+
+    def stop(self):
+        """Stops the executor and node"""
+        with self.lock():
+            self._node.destroy_node()
+            self._executor.shutdown()
+
+    def close(self):
+        self.stop()
+
+
+class ThreadedSession(BaseSession):
+    _global_node: Optional[Self] = None
+
+    def __init__(
+        self,
+        node: Union[None, str, Node] = None,
+        executor: Union[None, SingleThreadedExecutor, MultiThreadedExecutor] = None,
+    ) -> None:
+        """Ros2 node spinning in its own background thread.
+        ROS2 Callbacks are therefor short and never-blocking.
+
+        .. Critical:
+            Use the lock() context to safely interact with the node from the main thread.
+
+        .. Important:
+            (I think) In the current version. You cannot have more than one per
+            python instance.
+        """
+        super().__init__(node, executor)
         self.thread = threading.Thread(target=self._spin_thread, daemon=True)
         self._stop_event = threading.Event()
-        self._lock = threading.Lock()
         self._can_spin_event = threading.Event()
         self._node.create_timer(0.01, self._ros_pause_check)
-        if make_global:
-            self.set_global_session(self)
         logger.debug("Initialized Threaded ROS Sessions")
-
-    @classmethod
-    def auto_session(cls, session: Optional[Self] = None) -> Self:
-        if session is not None:
-            return session
-        if cls._global_node is None:
-            logger.debug("Global Threaded Ros Session set")
-            inst = cls()
-            cls.set_global_session(inst)
-            # cls._global_node: Self
-        return cls._global_node  # type: ignore
-
-    @classmethod
-    def set_global_session(cls, session: Self) -> None:
-        global DEFAULT_SESSION_TYPE
-        DEFAULT_SESSION_TYPE = cls
-        cls._global_node = session
 
     @contextmanager
     def lock(self) -> Generator[Node, Any, Any]:
@@ -99,8 +122,6 @@ class ThreadedSession:
 
         When exiting this context, the internal _lock is freed and executor resumed.
         """
-        # yield self._node
-        # return
         was_running = self._can_spin_event.is_set()
         try:
             self._pause()
@@ -112,22 +133,17 @@ class ThreadedSession:
 
     def start(self):
         """Starts spinning the ros2 node in its thread"""
+        self._stop_event.clear()
         if not self.thread.is_alive():
             logger.debug("RosNode thread started")
             self._resume()
             self.thread.start()
 
     def stop(self):
-        """Stops spinning the ros2 node, destroys it and joins the thread"""
-        self._pause()
         self._stop_event.set()
-        with self._lock:
-            self._node.destroy_node()
+        super().stop()
         self.thread.join()
         logger.debug("RosNode thread stoped")
-
-    def close(self):
-        self.stop()
 
     def _spin_thread(self):
         """(thrd 2) Executes in a second thread to spin the node"""
@@ -142,23 +158,25 @@ class ThreadedSession:
         while aok():
             try:
                 self._can_spin_event.wait(timeout=1)
+                if not aok():
+                    return
             except TimeoutError:
                 # checks back on aok every timeout
                 continue
             logger.debug("ROS waiting for lock")
             with self._lock:
-                logger.debug("ROS has lock and is spinning")
+                logger.debug("ROS has lock, spinning")
                 # spins until the pause future is triggered
                 self.pause_fut = FutureRos()
                 self._executor.spin_until_future_complete(self.pause_fut)
-                logger.debug("ROS stopped spinning")
+                logger.debug("ROS spinning paused")
             logger.debug("ROS released lock")
+        logger.debug("ROS spinning TERMINATED")
 
     def _ros_pause_check(self):
-        """(thrd 2) Timer checking if ros spin should end"""
+        """(thrd 2) Timer checking if ros spin should pause"""
         try:
-            cannot_spin = not self._can_spin_event.is_set()
-            # logger.info(f"{cannot_spin=}")
+            cannot_spin = (not self._can_spin_event.is_set()) or self._stop_event
             if cannot_spin:
                 if self.pause_fut.done():
                     return
@@ -175,88 +193,76 @@ class ThreadedSession:
         self._can_spin_event.set()
 
 
-class AsyncioSession:
+class SynchronousSession(BaseSession):
     _global_node: Optional[Self] = None
 
     def __init__(
         self,
         node: Union[None, str, Node] = None,
         executor: Union[None, SingleThreadedExecutor, MultiThreadedExecutor] = None,
-        make_global: bool = False,
     ) -> None:
         """Ros2 node spinning in as periodic asyncio task.
 
         .. Important:
             Unlike ThreadedSession, lock is not necessary to interact with the node.
         """
-        name = f"ThreadedNode{uuid.uuid4()}".replace("-", "_")
-        if isinstance(node, str):
-            name = node
-        if not isinstance(node, Node):
-            node = Node(name)
-        self.node = node
-        if executor is None:
-            executor = SingleThreadedExecutor()
-        self._executor = executor
-        self._executor.add_node(self.node)
-        self.thread = threading.Thread(target=self._spin_thread, daemon=True)
-        if make_global:
-            self.set_global_session(self)
+        super().__init__(node, executor)
+        self.rosloop_task: Optional[asyncio.Task] = None
 
-    @classmethod
-    def auto_session(cls, session: Optional[Self] = None) -> Self:
-        if session is not None:
-            return session
-        if cls._global_node is None:
-            inst = cls()
-            cls.set_global_session(inst)
-            # cls._global_node: Self
-        return cls._global_node  # type: ignore
-
-    @classmethod
-    def set_global_session(cls, session: Self) -> None:
-        global DEFAULT_SESSION_TYPE
-        DEFAULT_SESSION_TYPE = cls
-        cls._global_node = session
-
-    async def _spin_thread(self):
+    async def _spin_periodic(self):
         """Executes in the thread to spin the node"""
         while 1:
-            await asyncio.sleep(0.001)
+            await asyncio.sleep(0)
             self._executor.spin_once(timeout_sec=0.0)
 
     @contextmanager
     def lock(self) -> Generator[Node, Any, Any]:
         try:
-            yield self.node
+            yield self._node
         finally:
             pass
 
     def start(self):
-        """Starts spinning the ros2 node in its thread"""
+        """Starts spinning the ros2 node in a asyncio task"""
         logger.debug("RosNode asyncio started")
         self._event_loop = asyncio.get_event_loop()
-        self.rosloop_task = self._event_loop.create_task(self._spin_thread())
+        self.rosloop_task = self._event_loop.create_task(self._spin_periodic())
 
     def stop(self):
         """Stops spinning the ros2 node and joins the thread"""
-        self.rosloop_task.cancel()
-        self.node.destroy_node()
+        super().stop()
+        if self.rosloop_task is not None:
+            self.rosloop_task.cancel()
         logger.debug("RosNode asyncio stoped")
 
-    def close(self):
-        self.stop()
+
+#: type of executor used by default
+GLOBAL_SESSION_DEFAULT_EXEC: Union[
+    type[SingleThreadedExecutor], type[MultiThreadedExecutor]
+] = SingleThreadedExecutor
+
+#: type of session created by default
+GLOBAL_SESSION_DEFAULT_TYPE: type[BaseSession] = ThreadedSession
+
+#: global share session (singleton)
+GLOBAL_SESSION: Optional[BaseSession] = None
 
 
-RosSession = Union[ThreadedSession, AsyncioSession]
-DEFAULT_SESSION_TYPE: Union[type[ThreadedSession], type[AsyncioSession]] = (
-    ThreadedSession
-)
+def set_auto_session(session: Optional[BaseSession] = None) -> None:
+    global GLOBAL_SESSION
+    GLOBAL_SESSION = session
 
 
-def auto_session(session: Optional[RosSession] = None) -> RosSession:
+def auto_session(session: Optional[BaseSession] = None) -> BaseSession:
+    global GLOBAL_SESSION, GLOBAL_SESSION_DEFAULT_EXEC, GLOBAL_SESSION_DEFAULT_TYPE
     if session is not None:
         return session
-    ses= DEFAULT_SESSION_TYPE.auto_session()
+    if GLOBAL_SESSION is None:
+        ses = GLOBAL_SESSION_DEFAULT_TYPE(
+            node=None, executor=GLOBAL_SESSION_DEFAULT_EXEC()
+        )
+        GLOBAL_SESSION = ses
+    else:
+        ses = GLOBAL_SESSION
     ses.start()
     return ses
