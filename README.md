@@ -19,7 +19,7 @@ better, faster code.
 
 ### For ROS 2
 
-Compatible with: `jazzy`, `humble` and newer. This library is pure python, without dependencies, so it easily installs anywhere.
+Compatible with: `jazzy`, (maybe `humble`) and newer. This library is pure python, without dependencies, so it easily installs anywhere.
 
 ```bash
 pip install git+https://github.com/2lian/asyncio-for-robotics.git
@@ -33,6 +33,7 @@ pip install git+https://github.com/2lian/asyncio-for-robotics.git[zenoh]
 
 ## WIP before release:
 
+- Support for `humble`
 - Ros2 Services and Action
 - Better ROS 2 usage and examples
   - How to make timers
