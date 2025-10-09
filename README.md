@@ -122,14 +122,17 @@ Benchmark code is available in [`./tests/bench/`](tests/bench/), it consists in 
 | ❌         | ROS 2     | SingleThreaded                    | | 9 | 0.11 |
 | ✔️         | ROS 2     | SingleThreaded                    | | **7**  | **0.15** |
 | ✔️         | ROS 2     | MultiThreaded                     | | **3**  | **0.3** |
-| ❌         | ROS 2     | MultiThreaded                     | | 3  | 0.3 |
+| ❌         | ROS 2     | MultiThreaded                     | | **3**  | **0.3** |
 | ✔️         | ROS 2     | [`ros_loop` Method](https://github.com/m2-farzan/ros2-asyncio)                     | | 3  | 0.3 |
 
 
-In short: `rclpy`'s executor is the bottleneck. If you find it slow, you should use C++ or Zenoh (or contribute to this repo?).
+In short: `rclpy`'s executor is the bottleneck. 
+- Comparing to the best ROS 2 Jazzy can do (`SingleThreadedExecutor`), `afor` increases latency from 110us to 150us.
+- Comparing to other execution methods, `afor` is equivalent if not faster.
+- If you find it slow, you should use C++ or Zenoh (or contribute to this repo?).
 
 Details:
-- `uvloop` was used, replacing asyncio executor (more or less doubles the performances for Zenoh)
+- `uvloop` was used, replacing the asyncio executor (more or less doubles the performances for Zenoh)
 - RMW was set to `rmw_zenoh_cpp`
 - ROS2 benchmarks uses `afor`'s `ros2.ThreadedSession` (this is the default in `afor`). 
 - Only the Benchmark of the [`ros_loop` method](https://github.com/m2-farzan/ros2-asyncio) uses `afor`'s second type of session: `ros2.SynchronousSession`.
