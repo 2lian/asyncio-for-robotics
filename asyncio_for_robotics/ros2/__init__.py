@@ -1,6 +1,7 @@
 from .session import (
     GLOBAL_SESSION,
     SynchronousSession,
+    set_auto_session,
     BaseSession,
     ThreadedSession,
     auto_session,
@@ -10,6 +11,7 @@ from .sub import Sub
 
 __all__ = [
     "auto_session",
+    "set_auto_session",
     "GLOBAL_SESSION",
     "ThreadedSession",
     "SynchronousSession",
