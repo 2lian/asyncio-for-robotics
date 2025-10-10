@@ -33,8 +33,8 @@ class TopicInfo(NamedTuple, Generic[_MsgType]):
     """Precisely describes a ROS2 topic
 
     Attributes:
-        msg_type:
         name:
+        msg_type:
         qos:
     """
 
