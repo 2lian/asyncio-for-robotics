@@ -1,5 +1,5 @@
 import logging
-from typing import Callable, Dict, Generic, Optional, Type, TypeVar, Union
+from typing import Callable, Dict, Generic, Optional, Self, Type, TypeVar, Union
 
 from rclpy.qos import QoSProfile
 from rclpy.subscription import Subscription
@@ -32,6 +32,15 @@ class Sub(BaseSub[_MsgType]):
         self.topic_info = TopicInfo(topic=topic, msg_type=msg_type, qos=qos_profile)
         self.sub = self._resolve_sub(self.topic_info)
         super().__init__(buff_size)
+
+    @classmethod
+    def from_info(
+        cls: type[Self],
+        topic_info: TopicInfo,
+        session: Optional[BaseSession] = None,
+        buff_size: int = 10,
+    ) -> Self:
+        return cls(**topic_info.as_kwarg(), session=session, buff_size=buff_size)
 
     @property
     def name(self) -> str:
