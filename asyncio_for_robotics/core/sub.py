@@ -225,7 +225,7 @@ class BaseSub(Generic[_MsgType], ABC):
         for q in self._dyncamic_queues:
             if q.full():
                 if q.qsize() > 2:
-                    logger.warning("Queue full on %s", self.name)
+                    logger.warning("Queue full (%s) on %s", q.qsize, self.name)
                 q.get_nowait()
             q.put_nowait(msg)
         self.buffer.append(msg)

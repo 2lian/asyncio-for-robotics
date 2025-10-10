@@ -44,7 +44,10 @@ class Sub(BaseSub[_MsgType]):
 
     @property
     def name(self) -> str:
-        return f"ROS2-{self.sub.topic_name}"
+        try:
+            return f"ROS2-{self.sub.topic_name}"
+        except:
+            return f"ROS2-{self.topic_info.topic}"
 
     def _resolve_session(self, session: Optional[BaseSession]) -> BaseSession:
         return auto_session(session)
@@ -66,4 +69,6 @@ class Sub(BaseSub[_MsgType]):
 
     def close(self):
         with self.session.lock() as node:
+            if not node.executor.context.ok():
+                return
             node.destroy_subscription(self.sub)

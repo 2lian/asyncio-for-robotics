@@ -125,6 +125,7 @@ class ThreadedSession(BaseSession):
 
         When exiting this context, the internal _lock is freed and executor resumed.
         """
+        logger.debug("lock requested")
         was_running = self._can_spin_event.is_set()
         try:
             self._pause()
@@ -179,12 +180,17 @@ class ThreadedSession(BaseSession):
     def _ros_pause_check(self):
         """(thrd 2) Timer checking if ros spin should pause"""
         try:
-            cannot_spin = (not self._can_spin_event.is_set()) or self._stop_event
-            if cannot_spin:
+            pause_called = not self._can_spin_event.is_set()
+            stop_called = self._stop_event.is_set()
+            if stop_called or pause_called:
                 if self.pause_fut.done():
                     return
                 self.pause_fut.set_result(None)
-                logger.debug("Rclpy pause set")
+                logger.debug(
+                    f"Rclpy pause set pause_called=%s, stop_called=%s",
+                    pause_called,
+                    stop_called,
+                )
         except Exception as e:
             print(e)
             logger.critical(e)
