@@ -1,8 +1,5 @@
-# [build-system]
-# requires = ["setuptools>=61.0"]
-# build-backend = "setuptools.build_meta"
-[tool.setuptools]
-packages = ["asyncio_for_robotics"]
+[tool.setuptools.packages.find]
+include = ["asyncio_for_robotics", "asyncio_for_robotics.*"]
 
 [project]
 name = "asyncio_for_robotics"
