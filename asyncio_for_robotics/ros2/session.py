@@ -36,10 +36,10 @@ class BaseSession(ABC):
             name = node
         if not isinstance(node, Node):
             node = Node(name)
-        self._node = node
+        self._node: Node = node
         if executor is None:
             executor = GLOBAL_SESSION_DEFAULT_EXEC()
-        self._executor = executor
+        self._executor: Union[SingleThreadedExecutor, MultiThreadedExecutor] = executor
         self._executor.add_node(self._node)
         self._lock = threading.Lock()
 
@@ -73,7 +73,10 @@ class BaseSession(ABC):
             self._executor.shutdown()
 
     def close(self):
+        global GLOBAL_SESSION
         self.stop()
+        if GLOBAL_SESSION is self:
+            GLOBAL_SESSION = None
 
 
 class ThreadedSession(BaseSession):

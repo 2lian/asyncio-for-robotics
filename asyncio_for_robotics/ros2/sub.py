@@ -28,7 +28,7 @@ class Sub(BaseSub[_MsgType]):
             session:
             buff_size:
         """
-        self.session = self._resolve_session(session)
+        self.session: BaseSession = self._resolve_session(session)
         self.topic_info = TopicInfo(topic=topic, msg_type=msg_type, qos=qos_profile)
         self.sub = self._resolve_sub(self.topic_info)
         super().__init__(buff_size)
@@ -60,8 +60,7 @@ class Sub(BaseSub[_MsgType]):
         try:
             healty = self.input_data(sample)
             if not healty:
-                with self.session.lock() as node:
-                    node.destroy_subscription(self.sub)
+                self.session._node.destroy_subscription(self.sub)
         except Exception as e:
             logger.error(e)
 
