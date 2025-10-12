@@ -10,6 +10,7 @@ from rclpy.qos import QoSProfile
 from std_msgs.msg import String
 
 from asyncio_for_robotics.core._logger import setup_logger
+from asyncio_for_robotics.core.utils import soft_timeout
 import asyncio_for_robotics.ros2 as aros
 from asyncio_for_robotics import soft_wait_for
 from asyncio_for_robotics.ros2.session import ThreadedSession, set_auto_session
@@ -31,7 +32,7 @@ def session() -> Generator[aros.BaseSession, Any, Any]:
 
 
 topic = aros.TopicInfo("test/something", String, QoSProfile(
-    depth=100,
+    depth=10000,
     ))
 
 
@@ -161,22 +162,23 @@ async def test_reliable_one_by_one(pub: Publisher, sub: aros.Sub[String]):
 
 
 async def test_reliable_too_fast(pub: Publisher, sub: aros.Sub[String]):
-    data = list(range(20))
+    data = list(range(200))
     put_queue = [str(v) for v in data]
     received_buf = []
-    listener = sub.listen_reliable(fresh=True)
-    pub.publish(String(data=put_queue.pop()))
+    listener = sub.listen_reliable(fresh=True, queue_size=len(data)*2)
     await asyncio.sleep(0.1)
     pub.publish(String(data=put_queue.pop()))
-    async for sample in listener:
-        payload = int(sample.data)
-        received_buf.append(payload)
-        if len(received_buf) >= len(data):
-            break
-        if put_queue != []:
-            pub.publish(String(data=put_queue.pop()))
-        if put_queue != []:
-            pub.publish(String(data=put_queue.pop()))
+    pub.publish(String(data=put_queue.pop()))
+    async with soft_timeout(2):
+        async for sample in listener:
+            payload = int(sample.data)
+            received_buf.append(payload)
+            if len(received_buf) >= len(data):
+                break
+            if put_queue != []:
+                pub.publish(String(data=put_queue.pop()))
+            if put_queue != []:
+                pub.publish(String(data=put_queue.pop()))
 
     received_buf.reverse()
     assert data == received_buf

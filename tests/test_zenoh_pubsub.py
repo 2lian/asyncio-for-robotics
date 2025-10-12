@@ -6,7 +6,7 @@ from typing import Any, AsyncGenerator, Generator
 import pytest
 import zenoh
 
-from asyncio_for_robotics.core.utils import soft_wait_for
+from asyncio_for_robotics.core.utils import soft_timeout, soft_wait_for
 from asyncio_for_robotics.zenoh.session import auto_session
 from asyncio_for_robotics.zenoh.sub import Sub
 
@@ -144,22 +144,23 @@ async def test_reliable_one_by_one(pub: zenoh.Publisher, sub: Sub):
 
 
 async def test_reliable_too_fast(pub: zenoh.Publisher, sub: Sub):
-    data = list(range(20))
+    data = list(range(200))
     put_queue = [str(v) for v in data]
     received_buf = []
-    listener = sub.listen_reliable(fresh=True)
-    pub.put(put_queue.pop())
+    listener = sub.listen_reliable(fresh=True, queue_size=len(data))
     await asyncio.sleep(0.1)
     pub.put(put_queue.pop())
-    async for sample in listener:
-        payload = int(sample.payload.to_string())
-        received_buf.append(payload)
-        if len(received_buf) >= len(data):
-            break
-        if put_queue != []:
-            pub.put(put_queue.pop())
-        if put_queue != []:
-            pub.put(put_queue.pop())
+    pub.put(put_queue.pop())
+    async with soft_timeout(2):
+        async for sample in listener:
+            payload = int(sample.payload.to_string())
+            received_buf.append(payload)
+            if len(received_buf) >= len(data):
+                break
+            if put_queue != []:
+                pub.put(put_queue.pop())
+            if put_queue != []:
+                pub.put(put_queue.pop())
 
     received_buf.reverse()
     assert data == received_buf

@@ -8,8 +8,11 @@ from .session import (
 )
 from .utils import TopicInfo, QOS_DEFAULT, QOS_TRANSIENT
 from .sub import Sub
+from .service import Server, Client
 
 __all__ = [
+    "Server",
+    "Client",
     "auto_session",
     "set_auto_session",
     "GLOBAL_SESSION",

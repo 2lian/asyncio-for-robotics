@@ -178,7 +178,7 @@ class BaseSub(Generic[_MsgType], ABC):
             logger.debug("Reliable listener closed %s", self.name)
 
     @abstractmethod
-    def callback_for_sub(self, *args, **kwargs):
+    def callback_for_sub(self, *args, **kwargs) -> Any:
         """Use this as a callback to your data stream (you subscriber, listener...).
         Once your data is processed call self.input_data with your data.
 
