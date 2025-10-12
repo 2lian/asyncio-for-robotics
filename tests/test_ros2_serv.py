@@ -63,13 +63,17 @@ async def test_client_receives_response(
     server: Server[SetBool.Request, SetBool.Response],
     client: Client[SetBool.Request, SetBool.Response],
 ):
-    response = client.call(SetBool.Request(data=False))
+    response_async = client.call(SetBool.Request(data=True))
 
     responder = await soft_wait_for(server.wait_for_value(), 1)
     assert not isinstance(responder, TimeoutError), f"Server did not receive request"
-    assert responder.request.data == False
+    assert responder.request.data == True
+    responder.response.success = True
+    responder.response.message = "hello"
     await responder.send()
 
-    res = await soft_wait_for(response, 1)
-    assert not isinstance(res, TimeoutError), f"Client did not receive reply"
+    response = await soft_wait_for(response_async, 1)
+    assert not isinstance(response, TimeoutError), f"Client did not receive reply"
+    assert response.message == "hello"
+    assert response.success == True
     return
