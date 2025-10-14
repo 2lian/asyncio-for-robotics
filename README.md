@@ -33,13 +33,18 @@ pip install git+https://github.com/2lian/asyncio-for-robotics.git[zenoh]
 
 ## WIP before release:
 
-- Support for `humble`
-- Ros2 Services and Action
+- Support for `humble` (should be fine if python 3.10 works)
+- Ros2 Services (mostly done, refer to tests)
 - Better ROS 2 usage and examples
   - How to make timers
   - How to make a custom node
   - How to get node parameters
 - Explanation on adding support for more messaging protocols
+
+Support for ROS 2 action will come later
+- Those are very complex with cancelation and rejection on the client and server side.
+- Actions are not used a lot (understandably...)
+- I need to override and inject code into rclpy, like I did for the Service Server, except it's much more complicated.
 
 ## Read more
 

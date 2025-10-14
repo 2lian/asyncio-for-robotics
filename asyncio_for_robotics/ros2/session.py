@@ -258,11 +258,35 @@ GLOBAL_SESSION: Optional[BaseSession] = None
 
 
 def set_auto_session(session: Optional[BaseSession] = None) -> None:
+    """Set the global shared session instance.
+
+    If called with a session, it replaces the current global session.
+    If called with None, the global session is unset (but not close!).
+
+    Args:
+        session: ros session to set as default
+    """
     global GLOBAL_SESSION
     GLOBAL_SESSION = session
 
 
 def auto_session(session: Optional[BaseSession] = None) -> BaseSession:
+    """Return an active session, returning or creating a global one if needed.
+
+    If a session is passed, it is returned as-is.
+    If no session is given and no global session exists,
+      a default session is created using the configured default type
+      and executor, started, and stored globally.
+    If no session is given and a global session exists,
+      global session is returned
+
+
+    Args:
+        session: Session potentially empty (None)
+
+    Returns:
+        An active session, returning or creating a global one if needed.
+    """
     global GLOBAL_SESSION, GLOBAL_SESSION_DEFAULT_EXEC, GLOBAL_SESSION_DEFAULT_TYPE
     if session is not None:
         return session
