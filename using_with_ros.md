@@ -47,6 +47,8 @@ You do not need to create a ROS 2 package, nor need to use `ros2 run ...` `ros2 
 
 ## Publisher node
 
+Making publisher with `afor` is extremely similar to ros2 on purpose. This section is more about explaining how to interact with ROS 2 by using the `afor` session.
+
 You can follow the ros tutorial and just replace this section with `afor` style code: [Writing a simple publisher and subscriber --- 2 Write the publisher node](https://docs.ros.org/en/jazzy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html#write-the-publisher-node)
 
 ### ROS tutorial code
@@ -151,7 +153,7 @@ async def main_async():
     rclpy.shutdown()
 ```
 
-`afor` does not provide a publisher because you can directly the ROS 2 publisher. I believe it is important to let you the user in control and not hide everything behind wrappers. To get the node of the current `afor` session we need `with auto_session().lock() as node:`, this step is critical for ROS 2 to avoid race conditions (this is not required for Zenoh and other thread-safe transport protocol). Then we simply declare the publisher on the node with `node.create_publisher(...)`.
+`afor` does not provide a publisher because you can directly use the ROS 2 publisher. I believe it is important to let you -- the user -- in control, and not hide everything behind wrappers. To get the node of the current `afor` session we use `with auto_session().lock() as node:`, this step is critical to avoid race conditions in ROS 2 (this is not required for Zenoh and other thread-safe transport protocol). Then we simply declare the publisher on the node with `node.create_publisher(...)`.
 
 ```python
 with auto_session().lock() as node:
@@ -215,7 +217,7 @@ def main():
 
 #### Examine the code
 
-Global initialization is better outside functions that perform work. This time we manually create a `ThreadedSession` (default) using a node named `minimal_publisher`. This is how you can make `afor`'s session run any node you like, then set it as default with `set_auto_session(my_session)` (so you don't need to think about it anymore).
+Global initialization is better outside functions that perform work. This time we manually create a `ThreadedSession` (default) using a node named `minimal_publisher`. This is how you can make `afor`'s session run any node you like, then set it as default with `set_auto_session(my_session)`.
 
 ```python
 my_session = ThreadedSession(node=Node(node_name="minimal_publisher"))
@@ -318,16 +320,13 @@ def main():
 
 #### Examine the code
 
-That's it, 3 lines, non-blocking. The subscriber is implemented by `afor` so creation with `ros2.Sub` is easier than the previous ROS 2 publisher.
+That's it, 3 lines, non-blocking. The subscriber is implemented by `afor` so creation with `ros2.Sub` is easier than the previous ROS 2 publisher. The `async for` loop will execute every time a new message is received. If there are no messages it will wait. (the only way to exit this loop is to `break`)
 
 ```python
-sub = Sub(TOPIC.msg_type, TOPIC.topic, TOPIC.qos)
-```
-
-The `async for` loop will execute every time a new message is received. If there are not message it will wait. (the only way to exit this loop is to `break`)
-
-```python
-async for message in sub.listen_reliable():
+async def hello_world_subscriber():
+    sub = Sub(TOPIC.msg_type, TOPIC.topic, TOPIC.qos)
+    async for message in sub.listen_reliable():
+        print(f"I heard: {message.data}")
 ```
 
 ## Run pubsub in the same session
