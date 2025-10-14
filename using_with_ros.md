@@ -188,7 +188,7 @@ from asyncio_for_robotics.ros2 import (
     TopicInfo,
 )
 
-TOPIC = TopicInfo(msg_type=String, topic="example/talker")
+TOPIC = TopicInfo(msg_type=String, topic="topic")
 
 async def hello_world_publisher():
     # create the publisher safely
@@ -213,6 +213,9 @@ def main():
     finally:
         auto_session().close()
         rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
 ```
 
 #### Examine the code
@@ -312,10 +315,13 @@ def main():
     my_session = ThreadedSession(node=Node(node_name="minimal_subscriber"))
     set_auto_session(my_session)
     try:
-        asyncio.run(hello_world_publisher())
+        asyncio.run(hello_world_subscriber())
     finally:
         auto_session().close()
         rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
 ```
 
 #### Examine the code
@@ -369,9 +375,9 @@ async def hello_world_subscriber():
         print(f"I heard: {message.data}")
 
 async def hello_world_pubsub():
-    pub_task = asyncio.create_task(hello_world_publisher())
     sub_task = asyncio.create_task(hello_world_subscriber())
-    await asyncio.wait([sub_task, pub_task])
+    pub_task = asyncio.create_task(hello_world_publisher())
+    await asyncio.wait([pub_task, sub_task])
 
 def main():
     rclpy.init()
@@ -382,6 +388,9 @@ def main():
     finally:
         auto_session().close()
         rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
 ```
 
 ### Examine the code
