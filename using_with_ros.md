@@ -122,7 +122,7 @@ async def main_async():
         i += 1
         print(f"Publishing: {data}")
         pub.publish(String(data=data)) # sends data (lock is not necessary)
-        await asyncio.sleep(2) # non-blocking sleep
+        await asyncio.sleep(0.5) # non-blocking sleep
 
     auto_session().close()
     rclpy.shutdown()
@@ -169,7 +169,7 @@ while 1:
     i += 1
     print(f"Publishing: {data}")
     pub.publish(String(data=data)) # sends data (lock is not necessary)
-    await asyncio.sleep(2) # non-blocking sleep
+    await asyncio.sleep(0.5) # non-blocking sleep
 ```
 
 ### Improving `afor`'s code
@@ -201,7 +201,7 @@ async def hello_world_publisher():
         i += 1
         print(f"Publishing: {data}")
         pub.publish(String(data=data)) # sends data (lock is not necessary)
-        await asyncio.sleep(2) # non-blocking sleep
+        await asyncio.sleep(0.5) # non-blocking sleep
 
 
 def main():
@@ -367,7 +367,7 @@ async def hello_world_publisher():
         i += 1
         print(f"Publishing: {data}")
         pub.publish(String(data=data)) # sends data (lock is not necessary)
-        await asyncio.sleep(2) # non-blocking sleep
+        await asyncio.sleep(0.5) # non-blocking sleep
 
 async def hello_world_subscriber():
     sub = Sub(TOPIC.msg_type, TOPIC.topic, TOPIC.qos)
