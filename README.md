@@ -48,7 +48,7 @@ Support for ROS 2 action will come later
 
 ## Read more
 
-- [Usage with other ROS 2 tooling](./using_with_ros.md)
+- [Detailed ROS 2 tutorial](./using_with_ros.md)
 - [Detailed examples](./asyncio_for_robotics/example)
 - [Usage for software testing](./tests)
 
