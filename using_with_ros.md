@@ -1,5 +1,13 @@
 # Using with ROS 2
 
+## Preamble
+
+Comming from `ROS 2`, the `afor` library is different but does not lock you out of any ROS 2 possibilities.
+
+A node is spinning in the background, and afor allows asyncio to communicate with it from the main (user) thread.
+
+The advantages of `afor` are not evident for simple tasks (one timer, one publisher, one subscriber). Advantages become obvious when those objects need to be composed together. The following tutorial keep things simple, therefor advantages will not be tremendous. The reader is invited to keep this in mind.
+
 ## Installing without a venv
 
 ```bash
@@ -24,14 +32,7 @@ uv pip install git+https://github.com/2lian/asyncio-for-robotics.git
 uv run colcon build
 ```
 
-Before running a python script you should source ros and the venv.
-```bash
-cd <YOUR_WORKSPACE>
-. /opt/ros/jazzy/setup.bash
-source .venv/bin/activate
-```
-
-To build a ros package do not use raw colcon, but the one from you venv:
+Before running a python script you should source ros and the venv. To build a ros package do not use raw colcon, but the colcon from you venv:
 ```bash
 cd <YOUR_WORKSPACE>
 . /opt/ros/jazzy/setup.bash
@@ -47,11 +48,11 @@ You do not need to create a ROS 2 package, nor need to use `ros2 run ...` `ros2 
 
 ## Publisher node
 
-Making publisher with `afor` is extremely similar to ros2 on purpose. This section is more about explaining how to interact with ROS 2 by using the `afor` session.
+`afor` does not provide a publisher because you can directly use a ROS 2 publisher. This section explains the concept of *session* and how to (safely) interact with ROS 2 nodes.
 
-You can follow the ros tutorial and just replace this section with `afor` style code: [Writing a simple publisher and subscriber --- 2 Write the publisher node](https://docs.ros.org/en/jazzy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html#write-the-publisher-node)
+You can follow the ros tutorial, this section will rewrite only the publisher code using `afor` coding style: [Writing a simple publisher and subscriber --- 2 Write the publisher node](https://docs.ros.org/en/jazzy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html#write-the-publisher-node)
 
-### ROS tutorial code
+### ROS original tutorial code
 
 ```python
 import rclpy
@@ -220,14 +221,21 @@ if __name__ == '__main__':
 
 #### Examine the code
 
-Global initialization is better outside functions that perform work. This time we manually create a `ThreadedSession` (default) using a node named `minimal_publisher`. This is how you can make `afor`'s session run any node you like, then set it as default with `set_auto_session(my_session)`.
+Global initialization is better outside functions that perform work, thus main is now responsible for all initialisation. 
+
+This time we manually create a `ThreadedSession` (default) using a basic node named `minimal_publisher`. This is how you can make `afor`'s session run any node you like! Any ros node you already have written can be passed, and it will be spun in `afor`'s background thread.
+
+If you are unfamiliar with MultiThreading, race conditions and need to interact directly with the session's node (without going through safe `afor` methods). I advise you to use the less performant `SyncSession` instead.
+
+
+Then we set the session as default with `set_auto_session(my_session)`. Every time the session is not provided to `afor`, it will fallback to this default one.
 
 ```python
 my_session = ThreadedSession(node=Node(node_name="minimal_publisher"))
 set_auto_session(my_session)
 ```
 
-The try finally block will run your async code. After `asyncio.run` returns (due to an error or not), the `finally` block will execute the cleanup.
+The `try` block will run your async code. After `asyncio.run` returns (due to an error or not), the `finally` block will execute the cleanup.
 
 ```python
 try:
@@ -239,7 +247,9 @@ finally:
 
 ## Subscriber node
 
-This where `afor` shines, it is specialized in subscribing not publishing. You can follow the ros tutorial and just replace this section with `afor` style code: [Writing a simple publisher and subscriber --- 3 Write the subscriber node](https://docs.ros.org/en/jazzy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html#write-the-subscriber-node)
+This is where `afor` shines, it is specialized in subscribing not publishing.
+
+You can follow the ros tutorial, this section will rewrite only the subscriber code using `afor` coding style: [Writing a simple publisher and subscriber --- 3 Write the subscriber node](https://docs.ros.org/en/jazzy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html#write-the-subscriber-node)
 
 ### ROS tutorial code
 
@@ -326,7 +336,7 @@ if __name__ == '__main__':
 
 #### Examine the code
 
-That's it, 3 lines, non-blocking. The subscriber is implemented by `afor` so creation with `ros2.Sub` is easier than the previous ROS 2 publisher. The `async for` loop will execute every time a new message is received. If there are no messages it will wait. (the only way to exit this loop is to `break`)
+That's it! The subscriber is safely implemented by `afor` so creation with `ros2.Sub` is easier than the previous ROS 2 publisher. The `async for` loop will execute every time a new message is received. If there are no messages it will wait. (the only way to exit this loop is to `break`)
 
 ```python
 async def hello_world_subscriber():
@@ -395,7 +405,7 @@ if __name__ == '__main__':
 
 ### Examine the code
 
-Our previous pub and sub code did not change. (No need to touch or know what Bob or Gary's code is doing). All we need to do is execute our previous async functions in an asyncio task then wait for them to (never) finish.
+Our previous main, pub and sub code did not change! (No need to touch or know what Bob or Gary's code is doing). All we need to do is execute our previous async functions in an asyncio task then wait for them to (never) finish.
 
 ```python
 async def hello_world_pubsub():
@@ -403,5 +413,7 @@ async def hello_world_pubsub():
     sub_task = asyncio.create_task(hello_world_subscriber())
     await asyncio.wait([sub_task, pub_task])
 ```
+
+In ROS 2 you cannot compose functions and tasks so easily.
 
 **Note:** You can possibly run both pub and sub in separate sessions thus nodes.
