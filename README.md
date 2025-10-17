@@ -41,10 +41,7 @@ pip install git+https://github.com/2lian/asyncio-for-robotics.git[zenoh]
   - How to get node parameters
 - Explanation on adding support for more messaging protocols
 
-Support for ROS 2 action will come later
-- Those are very complex with cancelation and rejection on the client and server side.
-- Actions are not used a lot (understandably...)
-- I need to override and inject code into rclpy, like I did for the Service Server, except it's much more complicated.
+Support for ROS 2 action will come later.
 
 ## Read more
 
