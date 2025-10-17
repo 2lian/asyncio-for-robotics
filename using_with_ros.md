@@ -2,11 +2,9 @@
 
 ## Preamble
 
-Comming from `ROS 2`, the `afor` library is different but does not lock you out of any ROS 2 possibilities.
+The advantages of `afor` are not evident for simple tasks (one timer, one publisher, one subscriber). Advantages become obvious when those objects need to be composed together. The following tutorial keep things simple, therefore advantages will not be tremendous. The reader is invited to keep this in mind.
 
-A node is spinning in the background, and afor allows asyncio to communicate with it from the main (user) thread.
-
-The advantages of `afor` are not evident for simple tasks (one timer, one publisher, one subscriber). Advantages become obvious when those objects need to be composed together. The following tutorial keep things simple, therefor advantages will not be tremendous. The reader is invited to keep this in mind.
+[Example directory](./asyncio_for_robotics/example) gives more advanced applications, with more obvious adavntages.
 
 ## Installing without a venv
 
