@@ -2,6 +2,8 @@ import logging
 from typing import Any, AsyncGenerator, Generator
 
 import pytest
+pytest.importorskip("rclpy")
+pytest.importorskip("yaml")
 import rclpy
 from rclpy.publisher import Publisher
 from rclpy.qos import QoSProfile
@@ -21,7 +23,6 @@ import asyncio_for_robotics.ros2 as aros
 from asyncio_for_robotics.core._logger import setup_logger
 from asyncio_for_robotics.ros2.session import SynchronousSession, set_auto_session
 
-setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
 
 

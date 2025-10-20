@@ -4,11 +4,17 @@ import threading
 import uuid
 from abc import ABC, abstractmethod
 from contextlib import contextmanager, suppress
-from typing import Any, Generator, Optional, Self, Union
+from typing import Any, Generator, Optional, Union
 
 from rclpy.executors import MultiThreadedExecutor, SingleThreadedExecutor
 from rclpy.node import Node
 from rclpy.task import Future as FutureRos
+
+try:
+    from typing import Self  # Python 3.11+
+except ImportError:
+    from typing_extensions import Self  # Python 3.10
+
 
 logger = logging.getLogger(__name__)
 

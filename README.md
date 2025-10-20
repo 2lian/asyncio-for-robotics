@@ -19,7 +19,7 @@ better, faster code.
 
 ### For ROS 2
 
-Compatible with: `jazzy`, (maybe `humble`) and newer. This library is pure python, without dependencies, so it easily installs anywhere.
+Compatible with: `jazzy`,`humble` and newer. This library is pure python (>=3.10), so it installs easily.
 
 ```bash
 pip install git+https://github.com/2lian/asyncio-for-robotics.git
@@ -33,13 +33,11 @@ pip install git+https://github.com/2lian/asyncio-for-robotics.git[zenoh]
 
 ## WIP before release:
 
-- Support for `humble` (should be fine if python 3.10 works)
 - Ros2 Services (mostly done, refer to tests)
 - Better ROS 2 usage and examples
-  - How to make timers
   - How to make a custom node
   - How to get node parameters
-- Explanation on adding support for more messaging protocols
+- README on adding support for more messaging protocols
 
 Support for ROS 2 action will come later.
 
@@ -83,15 +81,36 @@ Application:
 ```python
 # Continuously process the latest messages
 async for msg in sub.listen():
-    status = process(msg)
+    status = foo(msg)
     if status == DONE:
         break
 
 # Continuously process all incoming messages
 async for msg in sub.listen_reliable():
-    status = process(msg)
+    status = foo(msg)
     if status == DONE:
         break
+```
+
+### Reliable, non-drifting Rate
+
+Application:
+- Periodic updates and actions
+
+```python
+# Rate is simply a subscriber triggering on every tick
+rate = Rate(frequency=0.01, time_source=time.time_ns)
+
+# Wait for the next tick
+await rate.wait_for_new()
+
+# Executes after a tick
+async for _ in rate.listen():
+    foo(...)
+
+# Reliably executes for every tick
+async for _ in sub.listen_reliable():
+    foo(...)
 ```
 
 ### Process for the right amount of time
@@ -101,6 +120,8 @@ Application:
 - Run small tasks with small and local code
 
 ```python
+from asyncio_for_robotics.core.utils import soft_timeout, soft_wait_for
+
 # Listen with a timeout
 data = await soft_wait_for(sub.wait_for_new(), timeout=1)
 if isinstance(data, TimeoutError):

@@ -4,6 +4,9 @@ import logging
 from typing import Any, AsyncGenerator, Generator
 
 import pytest
+
+pytest.importorskip("rclpy")
+pytest.importorskip("yaml")
 import rclpy
 from rclpy.publisher import Publisher
 from rclpy.qos import QoSProfile

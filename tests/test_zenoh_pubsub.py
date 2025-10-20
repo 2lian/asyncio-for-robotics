@@ -1,31 +1,40 @@
-import asyncio
-import copy
 import logging
-from typing import Any, AsyncGenerator, Generator
 
 import pytest
+
+pytest.importorskip("zenoh")
+
+import asyncio
+import copy
+from contextlib import suppress
+from typing import Any, AsyncGenerator, Generator
+
 import zenoh
 
 from asyncio_for_robotics.core.utils import soft_timeout, soft_wait_for
 from asyncio_for_robotics.zenoh.session import auto_session
 from asyncio_for_robotics.zenoh.sub import Sub
 
-logger = logging.getLogger("asyncio_for_robotics" + __name__)
+logger = logging.getLogger("asyncio_for_robotics.test")
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="module", autouse=True)
 def session() -> Generator[zenoh.Session, Any, Any]:
     ses = auto_session()
     yield ses
-    ses.close()
+    if not auto_session().is_closed():
+        with suppress(zenoh.ZError):
+            ses.close()
 
 
 @pytest.fixture
 def pub(session) -> Generator[zenoh.Publisher, Any, Any]:
     pub_topic = "test/something"
+    logger.debug("Creating PUB-%s", pub_topic)
     p: zenoh.Publisher = auto_session().declare_publisher(pub_topic)
     yield p
     if not auto_session().is_closed():
+        logger.debug("closing PUB-%s", pub_topic)
         p.undeclare()
 
 

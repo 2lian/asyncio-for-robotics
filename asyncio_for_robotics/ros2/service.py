@@ -2,16 +2,10 @@ import asyncio
 import logging
 from asyncio import AbstractEventLoop, Future
 from typing import (
-    Any,
-    Callable,
-    Dict,
     Generic,
     Optional,
     Protocol,
-    Self,
-    Type,
     TypeVar,
-    Union,
 )
 
 from rclpy.client import Client as RosClient
@@ -121,12 +115,11 @@ class Server(BaseSub[Responder[_ReqT, _ResT]]):
         topic: str,
         qos_profile: QoSProfile = QOS_DEFAULT,
         session: Optional[BaseSession] = None,
-        buff_size: int = 10,
     ) -> None:
         self.session: BaseSession = self._resolve_session(session)
         self.topic_info = TopicInfo(topic=topic, msg_type=msg_type, qos=qos_profile)
         self.srv = self._resolve_sub(self.topic_info)
-        super().__init__(buff_size)
+        super().__init__()
 
     @property
     def name(self) -> str:

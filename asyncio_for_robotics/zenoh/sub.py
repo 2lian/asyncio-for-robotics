@@ -15,19 +15,18 @@ class Sub(BaseSub[zenoh.Sample]):
         self,
         key_expr: Union[zenoh.KeyExpr, str],
         session: Optional[zenoh.Session] = None,
-        buff_size: int = 10,
     ) -> None:
         """
-        Simple implementation of a Zenoh subscriber.
+        asyncio_for_robotics implementation of a Zenoh subscriber.
 
         Args:
             key_expr:
             session:
-            buff_size:
         """
         self.session = self._resolve_session(session)
         self.sub = self._resolve_sub(key_expr)
-        super().__init__(buff_size)
+        self._is_closed: bool = False
+        super().__init__()
 
     @property
     def name(self) -> str:
@@ -42,16 +41,23 @@ class Sub(BaseSub[zenoh.Sample]):
         )
 
     def callback_for_sub(self, sample: zenoh.Sample):
+        """Zenoh callback happening on the Zenoh thread"""
+        if self._is_closed:
+            return
         try:
             healty = self.input_data(sample)
             if not healty:
-                self.sub.undeclare()
+                self.close()
         except Exception as e:
             logger.error(e)
 
     def close(self):
-        logger.debug("Closing ", self.name)
+        """Udeclares the subscriber on the zenoh session"""
+        if self._is_closed:
+            return
+        logger.debug("Closing %s", self.name)
         if not self.session.is_closed():
             self.sub.undeclare()
         else:
-            logger.debug("Zenoh session already closed for ", self.name)
+            logger.debug("Zenoh session already closed for %s", self.name)
+        self._is_closed=True

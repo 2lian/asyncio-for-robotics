@@ -1,5 +1,6 @@
 import logging
-from typing import Callable, Dict, Generic, Optional, Self, Type, TypeVar, Union
+
+from typing import Callable, Dict, Generic, Optional, Type, TypeVar, Union
 
 from rclpy.qos import QoSProfile
 from rclpy.subscription import Subscription
@@ -7,6 +8,11 @@ from rclpy.subscription import Subscription
 from ..core.sub import BaseSub
 from .session import BaseSession, auto_session
 from .utils import QOS_DEFAULT, TopicInfo, _MsgType
+
+try:
+    from typing import Self  # Python 3.11+
+except ImportError:
+    from typing_extensions import Self  # Python 3.10
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +24,6 @@ class Sub(BaseSub[_MsgType]):
         topic: str,
         qos_profile: QoSProfile = QOS_DEFAULT,
         session: Optional[BaseSession] = None,
-        buff_size: int = 10,
     ) -> None:
         """
         Simple implementation of a Zenoh subscriber.
@@ -31,7 +36,7 @@ class Sub(BaseSub[_MsgType]):
         self.session: BaseSession = self._resolve_session(session)
         self.topic_info = TopicInfo(topic=topic, msg_type=msg_type, qos=qos_profile)
         self.sub = self._resolve_sub(self.topic_info)
-        super().__init__(buff_size)
+        super().__init__()
 
     @classmethod
     def from_info(

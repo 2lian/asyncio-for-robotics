@@ -1,4 +1,5 @@
-from typing import Any, Dict, Final, Generic, NamedTuple, TypeVar
+from dataclasses import dataclass, field
+from typing import Any, Dict, Final, Generic, NamedTuple, Tuple, TypeVar
 
 from rclpy.qos import (
     DurabilityPolicy,
@@ -23,13 +24,8 @@ QOS_TRANSIENT: Final = QoSProfile(
 _MsgType = TypeVar("_MsgType")
 
 
-class _TopicRosarg(NamedTuple, Generic[_MsgType]):
-    msg_type: _MsgType
-    topic: str
-    qos_profile: QoSProfile = QOS_DEFAULT
-
-
-class TopicInfo(NamedTuple, Generic[_MsgType]):
+@dataclass(frozen=True, slots=True)
+class TopicInfo(Generic[_MsgType]):
     """Precisely describes a ROS2 topic
 
     Attributes:
@@ -40,10 +36,10 @@ class TopicInfo(NamedTuple, Generic[_MsgType]):
 
     topic: str
     msg_type: _MsgType
-    qos: QoSProfile = QOS_DEFAULT
+    qos: QoSProfile = field(default_factory=lambda *_, **__: QOS_DEFAULT)
 
-    def as_arg(self) -> _TopicRosarg:
-        return _TopicRosarg(self.msg_type, self.topic, self.qos)
+    def as_arg(self) -> Tuple[_MsgType, str, QoSProfile]:
+        return (self.msg_type, self.topic, self.qos)
 
     def as_kwarg(self) -> Dict[str, Any]:
-        return _TopicRosarg(self.msg_type, self.topic, self.qos)._asdict()
+        return {"msg_type": self.msg_type, "topic": self.topic, "qos_profile": self.qos}

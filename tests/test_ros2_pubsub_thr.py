@@ -3,16 +3,18 @@ import copy
 import logging
 from typing import Any, AsyncGenerator, Generator
 
+
 import pytest
+pytest.importorskip("rclpy")
 import rclpy
 from rclpy.publisher import Publisher
 from rclpy.qos import QoSProfile
 from std_msgs.msg import String
 
-from asyncio_for_robotics.core._logger import setup_logger
-from asyncio_for_robotics.core.utils import soft_timeout
 import asyncio_for_robotics.ros2 as aros
 from asyncio_for_robotics import soft_wait_for
+from asyncio_for_robotics.core._logger import setup_logger
+from asyncio_for_robotics.core.utils import soft_timeout
 from asyncio_for_robotics.ros2.session import ThreadedSession, set_auto_session
 
 setup_logger(debug_path="tests")
@@ -31,9 +33,13 @@ def session() -> Generator[aros.BaseSession, Any, Any]:
     rclpy.shutdown()
 
 
-topic = aros.TopicInfo("test/something", String, QoSProfile(
-    depth=10000,
-    ))
+topic = aros.TopicInfo(
+    "test/something",
+    String,
+    QoSProfile(
+        depth=10000,
+    ),
+)
 
 
 @pytest.fixture(scope="module")
@@ -165,7 +171,7 @@ async def test_reliable_too_fast(pub: Publisher, sub: aros.Sub[String]):
     data = list(range(200))
     put_queue = [str(v) for v in data]
     received_buf = []
-    listener = sub.listen_reliable(fresh=True, queue_size=len(data)*2)
+    listener = sub.listen_reliable(fresh=True, queue_size=len(data) * 2)
     await asyncio.sleep(0.1)
     pub.publish(String(data=put_queue.pop()))
     pub.publish(String(data=put_queue.pop()))
@@ -205,7 +211,7 @@ async def test_freshness(pub: Publisher, sub: aros.Sub[String]):
     pub.publish(String(data=payload))
     await new
     sample = await soft_wait_for(anext(sub.listen(fresh=True)), 0.1)
-    assert isinstance(sample, TimeoutError), f"Should NOT get the message"
+    assert isinstance(sample, TimeoutError), f"Should NOT get the message. got {sample}"
 
     new = sub.wait_for_new()
     pub.publish(String(data=payload))
