@@ -43,9 +43,8 @@ class Sub(BaseSub[_MsgType]):
         cls: type[Self],
         topic_info: TopicInfo,
         session: Optional[BaseSession] = None,
-        buff_size: int = 10,
     ) -> Self:
-        return cls(**topic_info.as_kwarg(), session=session, buff_size=buff_size)
+        return cls(**topic_info.as_kwarg(), session=session)
 
     @property
     def name(self) -> str:
