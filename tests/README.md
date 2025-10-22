@@ -1,7 +1,8 @@
 # Asyncio For Robotics --- For Testing Applications
 
-The tests in `asyncio_for_robotics` provide practical exemple for setting up
-similar tests in your ROS 2 or Zenoh applications.
+The tests of `asyncio_for_robotics` are great practical examples.
+
+For ROS 2 in particular, `test_ros2_pubsub_thrd.py` goes through every subscription method, then triggers and verifies their different outcome.
 
 You can install the dependencies required to run the tests with:
 
@@ -9,7 +10,7 @@ You can install the dependencies required to run the tests with:
 pip install git+https://github.com/2lian/asyncio-for-robotics.git[zenoh,dev]
 ```
 
-Important notes:
+Notes about testing with asyncio:
 - Async test functions automatically use an `asyncio` event loop fixture.
 - The fixture has `scope="function"`, meaning each test closes the previous
 event loop and starts a new one.
