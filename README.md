@@ -2,18 +2,17 @@
 
 The Asyncio For Robotics (`afor`) library makes `asyncio` usable with ROS 2, Zenoh and more, letting you write linear, testable, and non-blocking Python code.
 
-- Make your code linear, easy to write, easy to follow.
-- No gigantic spaghetti of callback and future.
-- Nobody responsible for spinning an executor.
-- Fantastic for software testing with many small tasks and checks to be
-  maintained and run.
-- Ability to `asyncio.sleep` while other tasks are continuing.
-- No dependencies, light weight, just native python.
+- Better syntax.
+- Only native python: Better docs and support.
+- No ROS 2 executor.
+- Simplifies testing.
 
 *Will this make my code slower?* [No.](https://github.com/2lian/asyncio-for-robotics/tree/main?tab=readme-ov-file#about-speed)
 
 *Will this make my code faster?* No. However `asyncio` will help YOU write
 better, faster code.
+
+*Does it replace ROS 2? Is this a wrapper?* No. It is a tool adding async capabilities. It gives you more choices, not less.
 
 ## Install
 
