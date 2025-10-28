@@ -63,7 +63,6 @@ class BaseSub(Generic[_MsgType], ABC):
         logger.debug("created sub %s", self.name)
 
     @property
-    @abstractmethod
     def name(self) -> str:
         """The friendly name of you subscriber"""
         return "no_name"
