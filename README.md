@@ -1,4 +1,4 @@
-# Asyncio For Robotics (WIP)
+# Asyncio For Robotics
 
 The Asyncio For Robotics (`afor`) library makes `asyncio` usable with ROS 2, Zenoh and more, letting you write linear, testable, and non-blocking Python code.
 
@@ -29,12 +29,6 @@ pip install git+https://github.com/2lian/asyncio-for-robotics.git
 ```bash
 pip install git+https://github.com/2lian/asyncio-for-robotics.git[zenoh]
 ```
-
-## WIP before release:
-
-- README on adding support for more messaging protocols
-
-Support for ROS 2 action will come later.
 
 ## Read more
 

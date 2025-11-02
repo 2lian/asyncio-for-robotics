@@ -44,10 +44,10 @@ python3 -m asyncio_for_robotics.example.ros2_discussion
 
 ```bash
 # Terminal #1
-python3 -m python3 -m asyncio_for_robotics.example.ros2_talker
+python3 -m asyncio_for_robotics.example.ros2_talker
 
 # Terminal #2
-python3 -m python3 -m asyncio_for_robotics.example.ros2_listener
+python3 -m asyncio_for_robotics.example.ros2_listener
 ```
 
 ### 3. `ros2_double_talker.py` and `ros2_double_listener.py`
@@ -60,10 +60,10 @@ python3 -m python3 -m asyncio_for_robotics.example.ros2_listener
 
 ```bash
 # Terminal #1
-python3 -m python3 -m asyncio_for_robotics.example.ros2_double_talker
+python3 -m asyncio_for_robotics.example.ros2_double_talker
 
 # Terminal #2
-python3 -m python3 -m asyncio_for_robotics.example.ros2_double_listener
+python3 -m asyncio_for_robotics.example.ros2_double_listener
 ```
 
 ### 4. `ros2_service_client.py` and `ros2_service_server.py`
@@ -73,10 +73,10 @@ python3 -m python3 -m asyncio_for_robotics.example.ros2_double_listener
 
 ```bash
 # Terminal #1
-python3 -m python3 -m asyncio_for_robotics.example.ros2_service_server
+python3 -m asyncio_for_robotics.example.ros2_service_server
 
 # Terminal #2
-python3 -m python3 -m asyncio_for_robotics.example.ros2_service_client
+python3 -m asyncio_for_robotics.example.ros2_service_client
 ```
 
 ### 5. `custom_stdout.py`
@@ -85,5 +85,5 @@ python3 -m python3 -m asyncio_for_robotics.example.ros2_service_client
 
 ```bash
 # Terminal #1
-python3 -m python3 -m asyncio_for_robotics.example.custom_stdout
+python3 -m asyncio_for_robotics.example.custom_stdout
 ```
