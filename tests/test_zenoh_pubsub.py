@@ -5,15 +5,12 @@ import pytest
 pytest.importorskip("zenoh")
 
 import asyncio
-import copy
 from contextlib import suppress
 from typing import Any, AsyncGenerator, Generator
 
 import zenoh
 
-from asyncio_for_robotics.core.utils import soft_timeout, soft_wait_for
-from asyncio_for_robotics.zenoh.session import auto_session
-from asyncio_for_robotics.zenoh.sub import Sub
+from asyncio_for_robotics.zenoh import Sub, auto_session, soft_timeout, soft_wait_for
 
 logger = logging.getLogger("asyncio_for_robotics.test")
 
