@@ -1,4 +1,4 @@
-name: ROS 2 tests
+name: ROS 2
 
 on:
   push:
