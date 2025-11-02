@@ -7,7 +7,7 @@ include = ["asyncio_for_robotics", "asyncio_for_robotics.*"]
 
 [project]
 name = "asyncio_for_robotics"
-version = "1.0.0"
+version = "1.0.2a2"
 description = "Asyncio interface for ROS 2, Zenoh, and other robotic middlewares."
 readme = "README.md"
 license = "MIT"
