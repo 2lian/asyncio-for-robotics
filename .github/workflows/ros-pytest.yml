@@ -1,4 +1,4 @@
-name: ROS pytests
+name: ROS 2 tests
 
 on:
   push:
