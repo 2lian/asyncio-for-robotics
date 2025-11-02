@@ -41,10 +41,10 @@ pip install asyncio_for_robotics[zenoh]
 
 ## Read more
 
-- [Detailed ROS 2 tutorial](./using_with_ros.md)
-- [Detailed examples](./asyncio_for_robotics/example)
-- [Usage for software testing](./tests)
-- [Implement your own protocol](./own_proto_example.md)
+- [Detailed ROS 2 tutorial](https://github.com/2lian/asyncio-for-robotics/blob/main/using_with_ros.md)
+- [Detailed examples](https://github.com/2lian/asyncio-for-robotics/blob/main/asyncio_for_robotics/example)
+- [Usage for software testing](https://github.com/2lian/asyncio-for-robotics/blob/main/tests)
+- [Implement your own protocol](https://github.com/2lian/asyncio-for-robotics/blob/main/own_proto_example.md)
 
 ## Code sample
 
@@ -182,7 +182,7 @@ In short: `rclpy`'s executor is the bottleneck.
 - Comparing to other execution methods, `afor` is equivalent if not faster.
 - If you find it slow, you should use C++ or Zenoh (or contribute to this repo?).
 
-Benchmark code is available in [`./tests/bench/`](tests/bench/), it consists in two pairs of pub/sub infinitely echoing a message (using one single node). The messaging rate, thus measures the request to response latency. 
+Benchmark code is available in [`./tests/bench/`](https://github.com/2lian/asyncio-for-robotics/blob/main/tests/bench/), it consists in two pairs of pub/sub infinitely echoing a message (using one single node). The messaging rate, thus measures the request to response latency. 
 
 | With `afor`  | Transport | Executor                        | | Frequency (kHz) | Latency (ms) |
 |:----------:|:----------|:----------------------------------|-|---------:|---------:|
