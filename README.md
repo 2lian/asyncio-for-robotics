@@ -1,5 +1,8 @@
 # Asyncio For Robotics
 
+[![ROS 2 tests](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pytest.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pytest.yml)
+[![Python tests](https://github.com/2lian/asyncio-for-robotics/actions/workflows/python-package.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/python-package.yml)
+
 The Asyncio For Robotics (`afor`) library makes `asyncio` usable with ROS 2, Zenoh and more, letting you write linear, testable, and non-blocking Python code.
 
 - Better syntax.
