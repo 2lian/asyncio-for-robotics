@@ -73,7 +73,7 @@ async def test_client_receives_response(
     assert responder.request.data == True
     responder.response.success = True
     responder.response.message = "hello"
-    await responder.send()
+    responder.send()
 
     response = await soft_wait_for(response_async, 1)
     assert not isinstance(response, TimeoutError), f"Client did not receive reply"

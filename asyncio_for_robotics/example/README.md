@@ -65,3 +65,16 @@ python3 -m python3 -m asyncio_for_robotics.example.ros2_double_talker
 # Terminal #2
 python3 -m python3 -m asyncio_for_robotics.example.ros2_double_listener
 ```
+
+### 4. `ros2_service_client.py` and `ros2_service_server.py`
+
+- Simple client / server implementing `add_two_int` example and the
+  Fibonacci sequence.
+
+```bash
+# Terminal #1
+python3 -m python3 -m asyncio_for_robotics.example.ros2_service_server
+
+# Terminal #2
+python3 -m python3 -m asyncio_for_robotics.example.ros2_service_client
+```

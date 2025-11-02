@@ -33,6 +33,7 @@ async def pub1_loop():
     # create the publisher safely
     with auto_session().lock() as node:
         pub = node.create_publisher(TOPIC1.msg_type, TOPIC1.topic, TOPIC1.qos)
+        node.get_clock(...)
         print("Pub #1 safely created")
 
     try:

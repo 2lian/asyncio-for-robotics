@@ -15,6 +15,8 @@ async def main():
 
 if __name__ == "__main__":
     rclpy.init()
-    asyncio.run(main())
-    auto_session().close()
-    rclpy.shutdown()
+    try:
+        asyncio.run(main())
+    finally:
+        auto_session().close()
+        rclpy.shutdown()

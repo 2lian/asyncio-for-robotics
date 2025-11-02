@@ -59,7 +59,7 @@ Application:
 - Wait for system to be operational
 
 ```python
-sub = Sub("afor/example")
+sub = afor.Sub(...)
 
 # get the latest message
 latest = await sub.wait_for_value()
@@ -98,7 +98,7 @@ Application:
 
 ```python
 # Rate is simply a subscriber triggering on every tick
-rate = Rate(frequency=0.01, time_source=time.time_ns)
+rate = afor.Rate(frequency=0.01, time_source=time.time_ns)
 
 # Wait for the next tick
 await rate.wait_for_new()
@@ -112,6 +112,41 @@ async for _ in sub.listen_reliable():
     foo(...)
 ```
 
+### Improved Services / Queryable for ROS 2
+
+Services are needlessly convoluted in ROS 2 and intrinsically not async
+(because the server callback function MUST return a response). `afor` overrides
+the ROS behavior, allowing for the response to be sent later. Implementing
+similar systems for a transport protocol (that is not suffering from skill
+issues) should be very easy: The server is just a
+`asyncio_for_robotics.core.BaseSub` generating responder objects.
+
+Application:
+- Client request reply from a server.
+- Servers can delay their response without blocking (not possible in ROS 2)
+
+```python
+# Server is once again a afor subscriber, but generating responder objects
+server = afor.Server(...)
+
+# processes all requests.
+# listen_reliable method is recommanded as it cannot skip requests
+async for responder in server.listen_reliable():
+    if responder.request == "PING!":
+        reponder.response = "PONG!"
+        await asyncio.sleep(...) # replay can be differed
+        reponder.send()
+    else:
+        ... # reply not necessary
+```
+
+```python
+# the client implements a async call method
+client = afor.Client(...)
+
+response = await client.call("PING!")
+```
+
 ### Process for the right amount of time
 
 Application:
@@ -119,16 +154,14 @@ Application:
 - Run small tasks with small and local code
 
 ```python
-from asyncio_for_robotics.core.utils import soft_timeout, soft_wait_for
-
 # Listen with a timeout
-data = await soft_wait_for(sub.wait_for_new(), timeout=1)
+data = await afor.soft_wait_for(sub.wait_for_new(), timeout=1)
 if isinstance(data, TimeoutError):
     pytest.fail(f"Failed to get new data in under 1 second")
 
 
 # Process a codeblock with a timeout
-async with soft_timeout(1):
+async with afor.soft_timeout(1):
     sum = 0
     total = 0
     async for msg in sub.listen_reliable():

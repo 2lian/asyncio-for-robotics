@@ -4,7 +4,9 @@
 
 The advantages of `afor` are not evident for simple tasks (one timer, one publisher, one subscriber). Advantages become obvious when those objects need to be composed together. The following tutorial keep things simple, therefore advantages will not be tremendous. The reader is invited to keep this in mind.
 
-[Example directory](./asyncio_for_robotics/example) gives more advanced applications, with more obvious adavntages.
+[Example directory](./asyncio_for_robotics/example) gives more advanced applications, with more obvious advantages and less blabla.
+- For a simple pub/sub: [`ros2_talker.py`](./asyncio_for_robotics/example/ros2_talker.py) and [`ros2_listener.py`](./asyncio_for_robotics/example/ros2_listener.py)
+- For a simple client/server: [`ros2_service_client.py`](./asyncio_for_robotics/example/ros2_service_client.py) and [`ros2_service_server.py`](./asyncio_for_robotics/example/ros2_service_server.py)
 
 ## Installing without a venv
 
@@ -14,28 +16,17 @@ pip install git+https://github.com/2lian/asyncio-for-robotics.git
 
 ## Installing with a venv
 
-In my experience, the `uv` library handles venv with ros better. (replace `jazzy` with your ros distro)
-
-```bash
-cd <YOUR_WORKSPACE>
-. /opt/ros/jazzy/setup.bash
-# create your venv
-uv venv --system-site-packages
-# !!
-# instructions to activate the venv are displayed by uv 
-# usually `source .venv/bin/activate`
-# !!
-uv pip install git+https://github.com/2lian/asyncio-for-robotics.git
-# to colcon build you should use
-uv run colcon build
-```
+This is not a tutorial on using a venv with ROS 2 (which is sadly confusing and badly documented).
 
 Before running a python script you should source ros and the venv. To build a ros package do not use raw colcon, but the colcon from you venv:
 ```bash
 cd <YOUR_WORKSPACE>
 . /opt/ros/jazzy/setup.bash
+virtualenv --system-site-packages .venv # creates venv
 source .venv/bin/activate
+python3 -m pip install git+https://github.com/2lian/asyncio-for-robotics.git
 python3 -m colcon build
+...
 ```
 
 # Re-doing the ROS 2 tutorial
@@ -135,14 +126,14 @@ if __name__ == '__main__':
 
 #### Examine the code
 
-Main now delegates execution of our `async` function to asyncio.
+Main delegates execution of our `async` function to asyncio.
 
 ```python
 def main():
     asyncio.run(main_async())
 ```
 
-`rclpy.init` and `rclpy.shutdown` is still required. Additionally `auto_session().close()` shuts down the background ros node automatically created by `afor`. This is a core concept, `afor` starts a "Session" made of an executor spinning a node, you can find more about it in the source code `asyncio_for_robotics.ros2.session`.
+`rclpy.init` and `rclpy.shutdown` is still required. Additionally `auto_session().close()` shuts down the background ROS node automatically created by `afor`. This is a core concept, `afor` starts a "Session" made of an executor spinning a node, you can find more about it in the source code `asyncio_for_robotics.ros2.session`.
 
 ```python
 async def main_async():
@@ -415,3 +406,87 @@ async def hello_world_pubsub():
 In ROS 2 you cannot compose functions and tasks so easily.
 
 **Note:** You can possibly run both pub and sub in separate sessions thus nodes.
+
+# How to interface with a non async ROS node
+
+## WARNING
+
+With the `ThreadedSession`, ROS 2 executor and asyncio executor are not running on the same thread! Code running on different threads can lead to race conditions and crashes. 
+
+### Simple solution:
+
+Please use the `asyncio_for_robotics.ros2.SyncSession` to be safe and make all executors run on the same thread. (*Note:* The `SyncSession` decreases performances)
+
+### Advanced solution:
+
+With `ThreadedSession`:
+- In asyncio thread: Code inside `with session.lock() as node:` is safe.
+- In ROS 2 thread: Scheduling an asyncio callback using `asyncio_event_loop.call_soon_threadsafe(callback)` is safe.
+
+## Safely reading node data
+
+Following the above warning, if using `ThreadedSession`, the node can safely be interacted with using:
+
+```python
+with auto_session().lock() as node:
+    pub = node.create_publisher(...)
+    param = node.get_parameter(...)
+    clock = node.get_clock(...)
+```
+
+## Spinning a custom node in the session
+
+You can simply pass a node to the session, and the session will spin it.
+
+```python
+import asyncio
+
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+
+from asyncio_for_robotics.ros2 import (
+    ThreadedSession,
+    auto_session,
+    set_auto_session,
+    TopicInfo,
+    Sub,
+)
+
+async def hello_world_subscriber():
+    sub = Sub(TOPIC.msg_type, TOPIC.topic, TOPIC.qos)
+    async for message in sub.listen_reliable():
+        print(f"I heard: {message.data}")
+
+### VVV node from ROS 2 tutorial VVV ###
+###                                  ###
+class MinimalPublisher(Node):
+    def __init__(self):
+        super().__init__('minimal_publisher')
+        self.publisher_ = self.create_publisher(String, 'topic', 10)
+        timer_period = 0.5  # seconds
+        self.timer = self.create_timer(timer_period, self.timer_callback)
+        self.i = 0
+
+    def timer_callback(self):
+        msg = String()
+        msg.data = 'Hello World: %d' % self.i
+        self.publisher_.publish(msg)
+        self.get_logger().info('Publishing: "%s"' % msg.data)
+        self.i += 1
+###                                  ###
+### ^^^ node from ROS 2 tutorial ^^^ ###
+
+def main():
+    rclpy.init()
+    my_session = ThreadedSession(node=MinimalPublisher())
+    set_auto_session(my_session)
+    try:
+        asyncio.run(hello_world_subscriber())
+    finally:
+        auto_session().close()
+        rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
+```
