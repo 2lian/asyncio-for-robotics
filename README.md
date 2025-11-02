@@ -1,7 +1,12 @@
 # Asyncio For Robotics
+[![python](https://https://img.shields.io/badge/Python-3.10_|_3.11_|_3.12_|_3.13_|_3.14-%20blue)](https://www.python.org/)
+[![mit](https://img.shields.io/badge/License-MIT-gold)](https://opensource.org/license/mit)
 
-[![ROS 2 tests](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pytest.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pytest.yml)
+[![zenoh](https://https://img.shields.io/badge/Zenoh-%3E%3D1.0-blue)](https://github.com/ros2)
+[![ros](https://img.shields.io/badge/ROS_2-Humble%20%7C%20Jazzy-blue)](https://github.com/ros2)
+
 [![Python tests](https://github.com/2lian/asyncio-for-robotics/actions/workflows/python-package.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/python-package.yml)
+[![ROS 2 tests](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pytest.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pytest.yml)
 
 The Asyncio For Robotics (`afor`) library makes `asyncio` usable with ROS 2, Zenoh and more, letting you write linear, testable, and non-blocking Python code.
 
@@ -18,6 +23,12 @@ better, faster code.
 *Does it replace ROS 2? Is this a wrapper?* No. It is a tool adding async capabilities. It gives you more choices, not less.
 
 ## Install
+
+### Barebone
+
+```bash
+pip install git+https://github.com/2lian/asyncio-for-robotics.git
+```
 
 ### For ROS 2
 
