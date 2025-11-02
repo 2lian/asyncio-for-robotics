@@ -1,6 +1,6 @@
 # Implement your own protocol
 
-If you have a stream of data, you can use it through `afor`. This quick tutorial will implement a `afor` subscriber getting data from `stdout` of a process. So every line the process is prints to the terminal will be available as a string.
+If you have a stream of data, you can use it through `afor`. This quick tutorial will implement a `afor` subscriber getting data from `stdout` of a process. So every line the process printed to the terminal will be available as a string.
 
 ## Code
 
@@ -40,7 +40,6 @@ async def main():
         ["ping", "google.com"],
         stdout=subprocess.PIPE,
         text=True,
-        bufsize=1,
     )
     stdout_sub = make_afor_stdout_monitor(proc)
     async for line in stdout_sub.listen_reliable():
@@ -54,7 +53,7 @@ if __name__ == "__main__":
 
 ## Analyse the code
 
-`main` is very straight forward. The process is started using python's `Popen` with it's `stdout` captured and buffered. `make_afor_stdout_monitor` creates a subscriber of it then every line is printed.
+`main` is very straight forward. The process is started using python's `Popen` with it's `stdout` captured. `make_afor_stdout_monitor` creates an `afor` subscriber from it then every line is printed.
 
 ```python
 async def main():
@@ -105,4 +104,4 @@ The following method from asyncio will call our `reader` callback every time som
 
 ## Important Note: Be careful to not miss data!
 
-In this example `.readline()` reads the next line on each call, and `read()` is called on every line change. So we cannot miss a line.
+In this example `.readline()` reads the next line on each call, and `reader()` is called on every line change. So we cannot miss a line.

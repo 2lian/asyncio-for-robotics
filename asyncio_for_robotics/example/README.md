@@ -78,3 +78,12 @@ python3 -m python3 -m asyncio_for_robotics.example.ros2_service_server
 # Terminal #2
 python3 -m python3 -m asyncio_for_robotics.example.ros2_service_client
 ```
+
+### 5. `custom_stdout.py`
+
+- Implements a custom subscriber capturing the `stdout` of `ping localhost`
+
+```bash
+# Terminal #1
+python3 -m python3 -m asyncio_for_robotics.example.custom_stdout
+```
