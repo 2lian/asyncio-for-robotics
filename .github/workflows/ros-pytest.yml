@@ -1,0 +1,25 @@
+name: ROS 2 tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ros-version: ["humble","jazzy"]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Docker build ROS 2 ${{ matrix.ros-version }}
+      run: |
+        sudo docker build -t afor:${{ matrix.ros-version }} -f ./dev_tools/${{ matrix.ros-version }}/Dockerfile .
+    - name: Test with pytest in Docker
+      run: |
+        sudo docker run afor:${{ matrix.ros-version }} uv run pytest ./tests
