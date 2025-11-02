@@ -1,22 +1,32 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
 [tool.setuptools.packages.find]
 include = ["asyncio_for_robotics", "asyncio_for_robotics.*"]
 
 [project]
 name = "asyncio_for_robotics"
-version = "0.1.0"
-description = "Asyncio interface for ROS 2, Zenoh, and other robotics middleware."
+version = "1.0.0"
+description = "Asyncio interface for ROS 2, Zenoh, and other robotic middlewares."
 readme = "README.md"
 license = "MIT"
 authors = [
   { name = "Elian", email = "no@no.com" }
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 keywords = ["asyncio", "robotics", "ros2", "zenoh", "publisher", "subcriber"]
 
 classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Natural Language :: English",
   "Programming Language :: Python :: 3",
   "Operating System :: POSIX :: Linux",
-  "Topic :: Scientific/Engineering :: Robotics",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Software Development :: Embedded Systems",
+  "Topic :: System :: Networking",
+  "Framework :: AsyncIO",
 ]
 
 dependencies = [
@@ -27,6 +37,7 @@ dependencies = [
 [project.optional-dependencies]
 zenoh = ["eclipse-zenoh>=1.0.0"]
 dev = ["colorama", "pytest", "pytest-asyncio", "pyfiglet", "uvloop"]
+build = ["build", "twine"]
 
 [project.urls]
 Homepage = "https://github.com/2lian/asyncio-for-robotics"
@@ -35,3 +46,9 @@ Issues = "https://github.com/yourusername/asyncio-for-robotics/issues"
 
 [tool.setuptools.package-data]
 "asyncio_for_robotics" = ["py.typed"]
+
+[[tool.uv.index]]
+name = "testpypi"
+url = "https://test.pypi.org/simple/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true
