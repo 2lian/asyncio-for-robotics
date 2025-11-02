@@ -32,10 +32,6 @@ pip install git+https://github.com/2lian/asyncio-for-robotics.git[zenoh]
 
 ## WIP before release:
 
-- Ros2 Services (mostly done, refer to tests)
-- Better ROS 2 usage and examples
-  - How to make a custom node
-  - How to get node parameters
 - README on adding support for more messaging protocols
 
 Support for ROS 2 action will come later.
@@ -45,6 +41,7 @@ Support for ROS 2 action will come later.
 - [Detailed ROS 2 tutorial](./using_with_ros.md)
 - [Detailed examples](./asyncio_for_robotics/example)
 - [Usage for software testing](./tests)
+- [Implement your own protocol](./own_proto_example.md)
 
 ## Code sample
 
@@ -134,7 +131,7 @@ server = afor.Server(...)
 async for responder in server.listen_reliable():
     if responder.request == "PING!":
         reponder.response = "PONG!"
-        await asyncio.sleep(...) # replay can be differed
+        await asyncio.sleep(...) # reply can be differed
         reponder.send()
     else:
         ... # reply not necessary
