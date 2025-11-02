@@ -22,7 +22,7 @@ better, faster code.
 ### Barebone
 
 ```bash
-pip install git+https://github.com/2lian/asyncio-for-robotics.git
+pip install asyncio_for_robotics
 ```
 
 ### For ROS 2
@@ -30,13 +30,13 @@ pip install git+https://github.com/2lian/asyncio-for-robotics.git
 Compatible with: `jazzy`,`humble` and newer. This library is pure python (>=3.10), so it installs easily.
 
 ```bash
-pip install git+https://github.com/2lian/asyncio-for-robotics.git
+pip install asyncio_for_robotics
 ```
 
 ### For Zenoh
 
 ```bash
-pip install git+https://github.com/2lian/asyncio-for-robotics.git[zenoh]
+pip install asyncio_for_robotics[zenoh]
 ```
 
 ## Read more

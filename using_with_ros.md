@@ -11,7 +11,7 @@ The advantages of `afor` are not evident for simple tasks (one timer, one publis
 ## Installing without a venv
 
 ```bash
-pip install git+https://github.com/2lian/asyncio-for-robotics.git
+pip install asyncio_for_robotics
 ```
 
 ## Installing with a venv
@@ -24,7 +24,7 @@ cd <YOUR_WORKSPACE>
 . /opt/ros/jazzy/setup.bash
 virtualenv --system-site-packages .venv # creates venv
 source .venv/bin/activate
-python3 -m pip install git+https://github.com/2lian/asyncio-for-robotics.git
+python3 -m pip install asyncio_for_robotics
 python3 -m colcon build
 ...
 ```

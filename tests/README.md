@@ -7,7 +7,7 @@ For ROS 2 in particular, `test_ros2_pubsub_thrd.py` goes through every subscript
 You can install the dependencies required to run the tests with:
 
 ```bash
-pip install git+https://github.com/2lian/asyncio-for-robotics.git[zenoh,dev]
+pip install asyncio_for_robotics[zenoh,dev]
 ```
 
 Notes about testing with asyncio:
