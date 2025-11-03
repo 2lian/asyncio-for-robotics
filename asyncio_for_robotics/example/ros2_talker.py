@@ -18,8 +18,11 @@ async def main():
         pub = node.create_publisher(TOPIC.msg_type, TOPIC.topic, TOPIC.qos)
 
     count = 0
+    last_t = None
     async for t in Rate(frequency=2).listen_reliable():  # stable timer
-        data = f"[Hello world! timestamp: {count/10:.1f}s]"
+        if last_t is None:
+            last_t = t
+        data = f"[Hello World! timestamp: {(t-last_t)/1e9}s]"
         count += 1
         print(f"Sending: {data}")
         pub.publish(String(data=data))  # sends data (lock is not necessary)

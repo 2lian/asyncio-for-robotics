@@ -10,13 +10,16 @@ This script demonstrates:
 - Properly shutting down Zenoh sessions to allow clean program exit.
 """
 import asyncio
+from contextlib import suppress
 
 import zenoh
 
 from asyncio_for_robotics.zenoh.session import auto_session
 from asyncio_for_robotics.zenoh.sub import Sub
+from asyncio_for_robotics.core._logger import setup_logger
 
 from .python_discussion import brint, discuss
+setup_logger("./")
 
 
 async def talking_loop():
@@ -34,7 +37,7 @@ async def talking_loop():
             count += 1
             await asyncio.sleep(0.1)
     finally:
-        # pass
+        print(f"Zenoh stopped publishing onto {pub.key_expr}")
         pub.undeclare()
 
 
@@ -45,8 +48,11 @@ def get_str_from_msg(msg: zenoh.Sample):
 async def main():
     background_talker_task = asyncio.create_task(talking_loop())
     sub = Sub("example/**")
-    await discuss(sub, get_str_from_msg)
-    background_talker_task.cancel()
+    try:
+        await discuss(sub, get_str_from_msg)
+    finally:
+        sub.close()
+        background_talker_task.cancel()
 
 
 if __name__ == "__main__":
@@ -66,4 +72,5 @@ if __name__ == "__main__":
     retrieve and close the one automatically created with `auto_session().close()`
     """
     )
-    auto_session().close()
+    with suppress(zenoh.ZError): # why error here???
+        auto_session().close()

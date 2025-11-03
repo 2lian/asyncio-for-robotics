@@ -59,7 +59,7 @@ with auto_session().lock() as node:
             )
     with auto_session().lock() as node:
         pub = node.create_publisher(TOPIC.msg_type, TOPIC.topic, TOPIC.qos)
-    print(f"Zenoh started publishing onto {pub.topic_name}")
+    print(f"ROS 2 started publishing onto {pub.topic_name}")
     try:
         count = 0
         while 1:

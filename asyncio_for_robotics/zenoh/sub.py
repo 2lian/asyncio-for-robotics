@@ -9,7 +9,6 @@ from .session import auto_session
 
 logger = logging.getLogger(__name__)
 
-
 class Sub(BaseSub[zenoh.Sample]):
     def __init__(
         self,
@@ -25,12 +24,13 @@ class Sub(BaseSub[zenoh.Sample]):
         """
         self.session = self._resolve_session(session)
         self.sub = self._resolve_sub(key_expr)
+        self._name =f"zenoh-{self.sub.key_expr}" 
         self._is_closed: bool = False
         super().__init__()
 
     @property
     def name(self) -> str:
-        return f"zenoh-{self.sub.key_expr}"
+        return self._name
 
     def _resolve_session(self, session: Optional[zenoh.Session]) -> zenoh.Session:
         return auto_session(session)
@@ -52,7 +52,7 @@ class Sub(BaseSub[zenoh.Sample]):
             logger.error(e)
 
     def close(self):
-        """Udeclares the subscriber on the zenoh session"""
+        """Undeclares the subscriber on the zenoh session"""
         if self._is_closed:
             return
         logger.debug("Closing %s", self.name)

@@ -66,7 +66,7 @@ async def soft_timeout(timeout: float):
         timed_out = True
 
 
-class Rate(BaseSub):
+class Rate(BaseSub[int]):
     def __init__(
         self, frequency: float, time_source: Callable[[], int] = time.time_ns
     ) -> None:
