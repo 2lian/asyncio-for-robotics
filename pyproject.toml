@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools >= 77.0.3"]
+requires = ["setuptools >= 61"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
@@ -7,7 +7,7 @@ include = ["asyncio_for_robotics", "asyncio_for_robotics.*"]
 
 [project]
 name = "asyncio_for_robotics"
-version = "1.0.3"
+version = "1.0.4"
 description = "Asyncio interface for ROS 2, Zenoh, and other robotic middlewares."
 readme = "README.md"
 license = "MIT"
@@ -15,7 +15,7 @@ authors = [
   { name = "Elian", email = "no@no.com" }
 ]
 requires-python = ">=3.10"
-keywords = ["asyncio", "robotics", "ros2", "zenoh", "publisher", "subcriber"]
+keywords = ["asyncio", "robotics", "ros2", "zenoh", "publisher", "subscriber"]
 
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -49,10 +49,13 @@ build = ["build", "twine"]
 [project.urls]
 Homepage = "https://github.com/2lian/asyncio-for-robotics"
 Repository = "https://github.com/2lian/asyncio-for-robotics"
-Issues = "https://github.com/yourusername/asyncio-for-robotics/issues"
+Issues = "https://github.com/2lian/asyncio-for-robotics/issues"
 
 [tool.setuptools.package-data]
 "asyncio_for_robotics" = ["py.typed"]
+
+[tool.uv]
+index-strategy = "compatible"
 
 [[tool.uv.index]]
 name = "testpypi"
