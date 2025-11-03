@@ -1,13 +1,12 @@
 # Asyncio For Robotics
 | Requirements | Compatibility | Tests |
 |---|---|---|
-| [![python](https://img.shields.io/badge/Python-3.10_\|_3.11_\|_3.12_\|_3.13_\|_3.14-%20blue)](https://www.python.org/)<br>[![mit](https://img.shields.io/badge/License-MIT-gold)](https://opensource.org/license/mit) | [![zenoh](https://img.shields.io/badge/Zenoh-%3E%3D1.0-blue)](https://zenoh.io/)<br>[![ros](https://img.shields.io/badge/ROS_2-Humble%20%7C%20Jazzy-blue)](https://github.com/ros2) | [![Python](https://github.com/2lian/asyncio-for-robotics/actions/workflows/python-package.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/python-package.yml)<br>[![ROS 2](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pytest.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pytest.yml) |
+| [![python](https://img.shields.io/pypi/pyversions/asyncio_for_robotics?logo=python&logoColor=white&label=Python&color=%20blue)](https://pypi.org/project/asyncio_for_robotics/)<br>[![mit](https://img.shields.io/badge/License-MIT-gold)](https://opensource.org/license/mit) | [![zenoh](https://img.shields.io/badge/Zenoh-%3E%3D1.0-blue)](https://zenoh.io/)<br>[![ros](https://img.shields.io/badge/ROS_2-Humble%20%7C%20Jazzy-blue?logo=ros)](https://github.com/ros2) | [![Python](https://github.com/2lian/asyncio-for-robotics/actions/workflows/python-package.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/python-package.yml)<br>[![ROS 2](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pytest.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pytest.yml) |
 
 The Asyncio For Robotics (`afor`) library makes `asyncio` usable with ROS 2, Zenoh and more, letting you write linear, testable, and non-blocking Python code.
 
 - Better syntax.
 - Only native python: Better docs and support.
-- No ROS 2 executor.
 - Simplifies testing.
 
 *Will this make my code slower?* [No.](https://github.com/2lian/asyncio-for-robotics/tree/main/README.md#about-speed)
