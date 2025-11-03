@@ -18,7 +18,7 @@ async def main():
         pub = node.create_publisher(TOPIC.msg_type, TOPIC.topic, TOPIC.qos)
 
     count = 0
-    async for t in Rate(frequency=2).listen_reliable():  # non stable timer
+    async for t in Rate(frequency=2).listen_reliable():  # stable timer
         data = f"[Hello world! timestamp: {count/10:.1f}s]"
         count += 1
         print(f"Sending: {data}")
