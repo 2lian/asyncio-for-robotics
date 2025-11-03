@@ -43,6 +43,7 @@ pip install asyncio_for_robotics[zenoh]
 
 - [Detailed ROS 2 tutorial](https://github.com/2lian/asyncio-for-robotics/blob/main/using_with_ros.md)
 - [Detailed examples](https://github.com/2lian/asyncio-for-robotics/blob/main/asyncio_for_robotics/example)
+  - [no talking 🦍 show me code 🦍](https://github.com/2lian/asyncio-for-robotics/blob/main/asyncio_for_robotics/example/ros2_pubsub.py)
 - [Usage for software testing](https://github.com/2lian/asyncio-for-robotics/blob/main/tests)
 - [Implement your own protocol](https://github.com/2lian/asyncio-for-robotics/blob/main/own_proto_example.md)
 
@@ -117,8 +118,7 @@ async for _ in sub.listen_reliable():
 Services are needlessly convoluted in ROS 2 and intrinsically not async
 (because the server callback function MUST return a response). `afor` overrides
 the ROS behavior, allowing for the response to be sent later. Implementing
-similar systems for a transport protocol (that is not suffering from skill
-issues) should be very easy: The server is just a
+similar systems for other transport protocol should be very easy: The server is just a
 `asyncio_for_robotics.core.BaseSub` generating responder objects.
 
 Application:
@@ -137,7 +137,7 @@ async for responder in server.listen_reliable():
         await asyncio.sleep(...) # reply can be differed
         reponder.send()
     else:
-        ... # reply not necessary
+        ... # reply is not necessary
 ```
 
 ```python

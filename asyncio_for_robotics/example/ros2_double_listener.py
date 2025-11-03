@@ -13,16 +13,16 @@ This example demonstrates how to:
 Run this script using `python3 -m asyncio_for_robotics.example.ros2_double_listener`
 Run this script side by side with `python3 -m asyncio_for_robotics.example.ros2_double_talker`
 """
+
 import asyncio
+from contextlib import suppress
 
 import rclpy
-from colorama import Fore # colorama is included with ros so not dependency
+from colorama import Fore  # colorama is included with ros so not dependency
 from std_msgs.msg import String
 
 from asyncio_for_robotics import soft_timeout
-from asyncio_for_robotics.ros2 import auto_session
-from asyncio_for_robotics.ros2 import Sub
-from asyncio_for_robotics.ros2 import TopicInfo
+from asyncio_for_robotics.ros2 import Sub, TopicInfo, auto_session
 
 TOPIC1 = TopicInfo(msg_type=String, topic="example/talker1")
 TOPIC2 = TopicInfo(msg_type=String, topic="example/talker2")
@@ -73,6 +73,11 @@ Latest received messages:
 
 if __name__ == "__main__":
     rclpy.init()
-    asyncio.run(main())
-    auto_session().close()
-    rclpy.shutdown()
+    try:
+        # suppress, just so we don't flood the terminal on exit
+        with suppress(KeyboardInterrupt, asyncio.CancelledError):
+            asyncio.run(main())  # starts asyncio executor
+    finally:
+        # cleanup. `finally` statment always executes
+        auto_session().close()
+        rclpy.shutdown()

@@ -19,6 +19,7 @@ Run this script using `python3 -m asyncio_for_robotics.example.ros2_double_talke
 Run this script side by side with `python3 -m asyncio_for_robotics.example.ros2_double_listener`
 """
 import asyncio
+from contextlib import suppress
 
 import rclpy
 from std_msgs.msg import String
@@ -92,9 +93,15 @@ async def main():
         await asyncio.sleep(2)
 
 
+
 if __name__ == "__main__":
     rclpy.init()
-    asyncio.run(main())
-    auto_session().close()
-    rclpy.shutdown()
+    try:
+        # suppress, just so we don't flood the terminal on exit
+        with suppress(KeyboardInterrupt, asyncio.CancelledError):
+            asyncio.run(main()) # starts asyncio executor
+    finally:
+        # cleanup. `finally` statment always executes
+        auto_session().close()
+        rclpy.shutdown()
 

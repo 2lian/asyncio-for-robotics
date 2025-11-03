@@ -1,4 +1,5 @@
 import asyncio
+from contextlib import suppress
 
 import rclpy
 from example_interfaces.srv import AddTwoInts
@@ -22,15 +23,13 @@ async def fibo_server():
         print(f"Replied: {a} + {b} = {a+b}")
 
 
-def main():
+if __name__ == "__main__":
     rclpy.init()
-    afor.auto_session()
     try:
-        asyncio.run(fibo_server())
+        # suppress, just so we don't flood the terminal on exit
+        with suppress(KeyboardInterrupt, asyncio.CancelledError):
+            asyncio.run(fibo_server())  # starts asyncio executor
     finally:
+        # cleanup. `finally` statment always executes
         afor.auto_session().close()
         rclpy.shutdown()
-
-
-if __name__ == "__main__":
-    main()

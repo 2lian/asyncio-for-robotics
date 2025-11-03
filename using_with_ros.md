@@ -5,7 +5,8 @@
 The advantages of `afor` are not evident for simple tasks (one timer, one publisher, one subscriber). Advantages become obvious when those objects need to be composed together. The following tutorial keep things simple, therefore advantages will not be tremendous. The reader is invited to keep this in mind.
 
 [Example directory](./asyncio_for_robotics/example) gives more advanced applications, with more obvious advantages and less blabla.
-- For a simple pub/sub: [`ros2_talker.py`](./asyncio_for_robotics/example/ros2_talker.py) and [`ros2_listener.py`](./asyncio_for_robotics/example/ros2_listener.py)
+- For a simple pub/sub: [`ros2_talker.py`](./asyncio_for_robotics/example/ros2_talker.py), [`ros2_listener.py`](./asyncio_for_robotics/example/ros2_listener.py)
+- For pub/sub fused in one node: [`ros2_pubsub.py`](./asyncio_for_robotics/example/ros2_pubsub.py)
 - For a simple client/server: [`ros2_service_client.py`](./asyncio_for_robotics/example/ros2_service_client.py) and [`ros2_service_server.py`](./asyncio_for_robotics/example/ros2_service_server.py)
 
 ## Installing without a venv
@@ -86,6 +87,8 @@ if __name__ == '__main__':
 ```
 
 ### `afor` equivalent code
+
+*Note:* Run this example using `python3 -m asyncio_for_robotics.example.ros2_talker`
 
 ```python
 import asyncio
@@ -284,6 +287,8 @@ if __name__ == '__main__':
 
 ### `afor` equivalent code
 
+*Note:* Run this example using `python3 -m asyncio_for_robotics.example.ros2_listener`
+
 Let's build upon our improved subscriber `main` function.
 
 ```python
@@ -335,6 +340,8 @@ async def hello_world_subscriber():
 ```
 
 ## Run pubsub in the same session
+
+*Note:* Run this example using `python3 -m asyncio_for_robotics.example.ros2_pubsub`
 
 The problem with ros is "what if Bob made a node, and Gary made a node? how can I fuse their work? Reuse their work?". Let's fuse our pub and sub in one script:
 
@@ -420,8 +427,8 @@ Please use the `asyncio_for_robotics.ros2.SyncSession` to be safe and make all e
 ### Advanced solution:
 
 With `ThreadedSession`:
-- In asyncio thread: Code inside `with session.lock() as node:` is safe.
-- In ROS 2 thread: Scheduling an asyncio callback using `asyncio_event_loop.call_soon_threadsafe(callback)` is safe.
+- In the asyncio thread: Code inside `with session.lock() as node:` is safe (the ros2 thread is *paused* inside this block).
+- In the ROS 2 thread: Scheduling an asyncio callback using `asyncio_event_loop.call_soon_threadsafe(callback)` is safe.
 
 ## Safely reading node data
 

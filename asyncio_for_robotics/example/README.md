@@ -50,6 +50,11 @@ python3 -m asyncio_for_robotics.example.ros2_talker
 python3 -m asyncio_for_robotics.example.ros2_listener
 ```
 
+Or run both simultaneously in the same terminal using:
+```bash
+python3 -m asyncio_for_robotics.example.ros2_pubsub
+```
+
 ### 3. `ros2_double_talker.py` and `ros2_double_listener.py`
 
 - Publishes and listens to two data stream simultaneously.

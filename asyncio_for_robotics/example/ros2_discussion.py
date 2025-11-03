@@ -13,6 +13,7 @@ This script demonstrates:
   program exit.
 """
 import asyncio
+from contextlib import suppress
 import rclpy
 
 from rclpy.qos import QoSProfile
@@ -108,13 +109,19 @@ if __name__ == "__main__":
         """
     )
     rclpy.init()
-    asyncio.run(main())
-    print()
-    brint(
-        f"""
-    To finish and let python exit, the session and rclpy needs to be closed. We can
-    retrieve and close the one automatically created with `auto_session().close()`
-    """
-    )
-    auto_session().close()
-    rclpy.shutdown()
+    try:
+        # suppress, just so we don't flood the terminal on exit
+        with suppress(KeyboardInterrupt, asyncio.CancelledError):
+            asyncio.run(main()) # starts asyncio executor
+    finally:
+        # cleanup. `finally` statment always executes
+        print()
+        brint(
+            f"""
+        To finish and let python exit, the session and rclpy needs to be closed. We can
+        retrieve and close the one automatically created with `auto_session().close()`
+        """
+        )
+        auto_session().close()
+        rclpy.shutdown()
+
