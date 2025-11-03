@@ -7,7 +7,7 @@ include = ["asyncio_for_robotics", "asyncio_for_robotics.*"]
 
 [project]
 name = "asyncio_for_robotics"
-version = "1.0.4"
+version = "1.0.5"
 description = "Asyncio interface for ROS 2, Zenoh, and other robotic middlewares."
 readme = "README.md"
 license = "MIT"
@@ -53,9 +53,6 @@ Issues = "https://github.com/2lian/asyncio-for-robotics/issues"
 
 [tool.setuptools.package-data]
 "asyncio_for_robotics" = ["py.typed"]
-
-[tool.uv]
-index-strategy = "compatible"
 
 [[tool.uv.index]]
 name = "testpypi"
