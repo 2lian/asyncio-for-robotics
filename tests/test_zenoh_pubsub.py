@@ -114,7 +114,7 @@ async def test_listen_too_fast(pub: zenoh.Publisher, sub: Sub):
     sample_count = 0
     put_count = 2
     max_iter = 20
-    await asyncio.sleep(0.01)
+    await asyncio.sleep(0.001)
     async for sample in sub.listen():
         sample_count += 1
         assert sample.payload.to_string() == last_payload
@@ -123,10 +123,11 @@ async def test_listen_too_fast(pub: zenoh.Publisher, sub: Sub):
         last_payload = f"hello{sample_count}"
         pub.put(last_payload)
         put_count += 1
+        await asyncio.sleep(0.001)
         last_payload = f"hello{sample_count}"
         pub.put(last_payload)
         put_count += 1
-        await asyncio.sleep(0.01)
+        await asyncio.sleep(0.001)
 
     assert put_count / 2 == sample_count == max_iter
 
@@ -192,7 +193,6 @@ async def test_reliable_extremely_fast(pub: zenoh.Publisher, sub: Sub):
             if put_queue != []:
                 pub.put(put_queue.pop())
 
-    received_buf.reverse()
     assert set(data) == set(received_buf)
 
 

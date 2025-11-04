@@ -17,10 +17,10 @@ from test_ros2_pubsub_thr import (
     test_wait_for_value,
     test_wait_new,
     test_wait_next,
+    test_reliable_extremely_fast,
 )
 
 import asyncio_for_robotics.ros2 as aros
-from asyncio_for_robotics.core._logger import setup_logger
 from asyncio_for_robotics.ros2.session import SynchronousSession, set_auto_session
 
 logger = logging.getLogger("asyncio_for_robotics.test")
