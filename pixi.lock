@@ -745,9 +745,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/xorg-xorgproto-2024.1-hb9d3cd8_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/yaml-0.2.5-h280c20c_3.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb8e6e7a_2.conda
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/b5/35/60249e9fd07b32c665192cec7af29e06c7cd96fa1d08b84f012a56a0b38e/uvloop-0.22.1-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
       - pypi: ./
       linux-aarch64:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/_openmp_mutex-4.5-2_gnu.tar.bz2
@@ -876,9 +874,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/xorg-xorgproto-2024.1-h86ecc28_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/yaml-0.2.5-h80f16a2_3.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zstd-1.5.7-hbcf94c1_2.conda
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/a3/94/94af78c156f88da4b3a733773ad5ba0b164393e357cc4bd0ab2e2677a7d6/uvloop-0.22.1-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl
       - pypi: ./
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/argcomplete-3.6.3-pyhd8ed1ab_0.conda
@@ -1001,9 +997,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/yaml-0.2.5-h4132b18_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-1.3.1-hd23fc13_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h8210216_2.conda
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/0d/f8/a132124dfda0777e489ca86732e85e69afcd1ff7686647000050ba670689/uvloop-0.22.1-cp314-cp314-macosx_10_13_x86_64.whl
       - pypi: ./
       osx-arm64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/argcomplete-3.6.3-pyhd8ed1ab_0.conda
@@ -1130,9 +1124,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/yaml-0.2.5-h925e9cb_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zlib-1.3.1-h8359307_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-h6491c7d_2.conda
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/90/cd/b62bdeaa429758aee8de8b00ac0dd26593a9de93d302bff3d21439e9791d/uvloop-0.22.1-cp314-cp314-macosx_10_13_universal2.whl
       - pypi: ./
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/win-64/_openmp_mutex-4.5-2_gnu.conda
@@ -1237,9 +1229,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/vswhere-3.1.7-h40126e0_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/yaml-0.2.5-h6a83c73_3.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-hbeecb71_2.conda
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/06/f0/18d39dbd1971d6d62c4629cc7fa67f74821b0dc1f5a77af43719de7936a7/uvloop-0.22.1.tar.gz
       - pypi: ./
   humble:
     channels:
@@ -1576,9 +1566,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb8e6e7a_2.conda
       - pypi: https://files.pythonhosted.org/packages/dd/81/7ac634430be1fd15aea65d6e849f7d73d0a8cf285dd74e8e39cd7b7ea2e2/eclipse_zenoh-1.6.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/74/4f/256aca690709e9b008b7108bc85fba619a2bc37c6d80743d18abad16ee09/uvloop-0.22.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
       - pypi: ./
       linux-aarch64:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/_openmp_mutex-4.5-2_gnu.tar.bz2
@@ -1908,9 +1896,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zstd-1.5.7-hbcf94c1_2.conda
       - pypi: https://files.pythonhosted.org/packages/29/fe/c5b2e65e0c2800b4e1a02b388e0ddf7c3b71f478757bb6a294c021d49e84/eclipse_zenoh-1.6.2-cp39-abi3-manylinux_2_28_aarch64.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/86/94/9fb7fad2f824d25f8ecac0d70b94d0d48107ad5ece03769a9c543444f78a/uvloop-0.22.1-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl
       - pypi: ./
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/argcomplete-3.6.3-pyhd8ed1ab_0.conda
@@ -2227,9 +2213,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-1.3.1-hd23fc13_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h8210216_2.conda
       - pypi: https://files.pythonhosted.org/packages/1b/84/f36e224fb7eb05927e55ea7cd2ee000f7a9254d194f7ab539627a1635dd3/eclipse_zenoh-1.6.2-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/a8/73/c4e271b3bce59724e291465cc936c37758886a4868787da0278b3b56b905/uvloop-0.22.1-cp311-cp311-macosx_10_9_x86_64.whl
       - pypi: ./
       osx-arm64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/argcomplete-3.6.3-pyhd8ed1ab_0.conda
@@ -2549,9 +2533,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zlib-1.3.1-h8359307_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-h6491c7d_2.conda
       - pypi: https://files.pythonhosted.org/packages/1b/84/f36e224fb7eb05927e55ea7cd2ee000f7a9254d194f7ab539627a1635dd3/eclipse_zenoh-1.6.2-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/c7/d5/69900f7883235562f1f50d8184bb7dd84a2fb61e9ec63f3782546fdbd057/uvloop-0.22.1-cp311-cp311-macosx_10_9_universal2.whl
       - pypi: ./
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/win-64/_openmp_mutex-4.5-2_gnu.conda
@@ -2854,9 +2836,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-hbeecb71_2.conda
       - pypi: https://files.pythonhosted.org/packages/77/93/4df169108c4313d0f476bb9abd7d76496059e8bfcc3a98168aa26cc73b00/eclipse_zenoh-1.6.2-cp39-abi3-win_amd64.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/06/f0/18d39dbd1971d6d62c4629cc7fa67f74821b0dc1f5a77af43719de7936a7/uvloop-0.22.1.tar.gz
       - pypi: ./
   jazzy:
     channels:
@@ -3207,9 +3187,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb8e6e7a_2.conda
       - pypi: https://files.pythonhosted.org/packages/dd/81/7ac634430be1fd15aea65d6e849f7d73d0a8cf285dd74e8e39cd7b7ea2e2/eclipse_zenoh-1.6.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/5f/6f/e62b4dfc7ad6518e7eff2516f680d02a0f6eb62c0c212e152ca708a0085e/uvloop-0.22.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
       - pypi: ./
       linux-aarch64:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/_openmp_mutex-4.5-2_gnu.tar.bz2
@@ -3553,9 +3531,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zstd-1.5.7-hbcf94c1_2.conda
       - pypi: https://files.pythonhosted.org/packages/29/fe/c5b2e65e0c2800b4e1a02b388e0ddf7c3b71f478757bb6a294c021d49e84/eclipse_zenoh-1.6.2-cp39-abi3-manylinux_2_28_aarch64.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/24/68/a6ac446820273e71aa762fa21cdcc09861edd3536ff47c5cd3b7afb10eeb/uvloop-0.22.1-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl
       - pypi: ./
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/argcomplete-3.6.3-pyhd8ed1ab_0.conda
@@ -3884,9 +3860,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-1.3.1-hd23fc13_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h8210216_2.conda
       - pypi: https://files.pythonhosted.org/packages/1b/84/f36e224fb7eb05927e55ea7cd2ee000f7a9254d194f7ab539627a1635dd3/eclipse_zenoh-1.6.2-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/c3/c6/e5d433f88fd54d81ef4be58b2b7b0cea13c442454a1db703a1eea0db1a59/uvloop-0.22.1-cp312-cp312-macosx_10_13_x86_64.whl
       - pypi: ./
       osx-arm64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/argcomplete-3.6.3-pyhd8ed1ab_0.conda
@@ -4218,9 +4192,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zlib-1.3.1-h8359307_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-h6491c7d_2.conda
       - pypi: https://files.pythonhosted.org/packages/1b/84/f36e224fb7eb05927e55ea7cd2ee000f7a9254d194f7ab539627a1635dd3/eclipse_zenoh-1.6.2-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/3d/ff/7f72e8170be527b4977b033239a83a68d5c881cc4775fca255c677f7ac5d/uvloop-0.22.1-cp312-cp312-macosx_10_13_universal2.whl
       - pypi: ./
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/win-64/_openmp_mutex-4.5-2_gnu.conda
@@ -4535,9 +4507,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-hbeecb71_2.conda
       - pypi: https://files.pythonhosted.org/packages/77/93/4df169108c4313d0f476bb9abd7d76496059e8bfcc3a98168aa26cc73b00/eclipse_zenoh-1.6.2-cp39-abi3-win_amd64.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/06/f0/18d39dbd1971d6d62c4629cc7fa67f74821b0dc1f5a77af43719de7936a7/uvloop-0.22.1.tar.gz
       - pypi: ./
   kilted:
     channels:
@@ -4889,9 +4859,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb8e6e7a_2.conda
       - pypi: https://files.pythonhosted.org/packages/dd/81/7ac634430be1fd15aea65d6e849f7d73d0a8cf285dd74e8e39cd7b7ea2e2/eclipse_zenoh-1.6.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/5f/6f/e62b4dfc7ad6518e7eff2516f680d02a0f6eb62c0c212e152ca708a0085e/uvloop-0.22.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
       - pypi: ./
       linux-aarch64:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/_openmp_mutex-4.5-2_gnu.tar.bz2
@@ -5236,9 +5204,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zstd-1.5.7-hbcf94c1_2.conda
       - pypi: https://files.pythonhosted.org/packages/29/fe/c5b2e65e0c2800b4e1a02b388e0ddf7c3b71f478757bb6a294c021d49e84/eclipse_zenoh-1.6.2-cp39-abi3-manylinux_2_28_aarch64.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/24/68/a6ac446820273e71aa762fa21cdcc09861edd3536ff47c5cd3b7afb10eeb/uvloop-0.22.1-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl
       - pypi: ./
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/argcomplete-3.6.3-pyhd8ed1ab_0.conda
@@ -5568,9 +5534,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-1.3.1-hd23fc13_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h8210216_2.conda
       - pypi: https://files.pythonhosted.org/packages/1b/84/f36e224fb7eb05927e55ea7cd2ee000f7a9254d194f7ab539627a1635dd3/eclipse_zenoh-1.6.2-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/c3/c6/e5d433f88fd54d81ef4be58b2b7b0cea13c442454a1db703a1eea0db1a59/uvloop-0.22.1-cp312-cp312-macosx_10_13_x86_64.whl
       - pypi: ./
       osx-arm64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/argcomplete-3.6.3-pyhd8ed1ab_0.conda
@@ -5903,9 +5867,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zlib-1.3.1-h8359307_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-h6491c7d_2.conda
       - pypi: https://files.pythonhosted.org/packages/1b/84/f36e224fb7eb05927e55ea7cd2ee000f7a9254d194f7ab539627a1635dd3/eclipse_zenoh-1.6.2-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/3d/ff/7f72e8170be527b4977b033239a83a68d5c881cc4775fca255c677f7ac5d/uvloop-0.22.1-cp312-cp312-macosx_10_13_universal2.whl
       - pypi: ./
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/win-64/_openmp_mutex-4.5-2_gnu.conda
@@ -6221,9 +6183,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-hbeecb71_2.conda
       - pypi: https://files.pythonhosted.org/packages/77/93/4df169108c4313d0f476bb9abd7d76496059e8bfcc3a98168aa26cc73b00/eclipse_zenoh-1.6.2-cp39-abi3-win_amd64.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/06/f0/18d39dbd1971d6d62c4629cc7fa67f74821b0dc1f5a77af43719de7936a7/uvloop-0.22.1.tar.gz
       - pypi: ./
   zenoh:
     channels:
@@ -6358,9 +6318,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/yaml-0.2.5-h280c20c_3.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb8e6e7a_2.conda
       - pypi: https://files.pythonhosted.org/packages/dd/81/7ac634430be1fd15aea65d6e849f7d73d0a8cf285dd74e8e39cd7b7ea2e2/eclipse_zenoh-1.6.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/b5/35/60249e9fd07b32c665192cec7af29e06c7cd96fa1d08b84f012a56a0b38e/uvloop-0.22.1-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
       - pypi: ./
       linux-aarch64:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/_openmp_mutex-4.5-2_gnu.tar.bz2
@@ -6490,9 +6448,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/yaml-0.2.5-h80f16a2_3.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zstd-1.5.7-hbcf94c1_2.conda
       - pypi: https://files.pythonhosted.org/packages/29/fe/c5b2e65e0c2800b4e1a02b388e0ddf7c3b71f478757bb6a294c021d49e84/eclipse_zenoh-1.6.2-cp39-abi3-manylinux_2_28_aarch64.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/a3/94/94af78c156f88da4b3a733773ad5ba0b164393e357cc4bd0ab2e2677a7d6/uvloop-0.22.1-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl
       - pypi: ./
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/argcomplete-3.6.3-pyhd8ed1ab_0.conda
@@ -6616,9 +6572,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-1.3.1-hd23fc13_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h8210216_2.conda
       - pypi: https://files.pythonhosted.org/packages/1b/84/f36e224fb7eb05927e55ea7cd2ee000f7a9254d194f7ab539627a1635dd3/eclipse_zenoh-1.6.2-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/0d/f8/a132124dfda0777e489ca86732e85e69afcd1ff7686647000050ba670689/uvloop-0.22.1-cp314-cp314-macosx_10_13_x86_64.whl
       - pypi: ./
       osx-arm64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/argcomplete-3.6.3-pyhd8ed1ab_0.conda
@@ -6746,9 +6700,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zlib-1.3.1-h8359307_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-h6491c7d_2.conda
       - pypi: https://files.pythonhosted.org/packages/1b/84/f36e224fb7eb05927e55ea7cd2ee000f7a9254d194f7ab539627a1635dd3/eclipse_zenoh-1.6.2-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/90/cd/b62bdeaa429758aee8de8b00ac0dd26593a9de93d302bff3d21439e9791d/uvloop-0.22.1-cp314-cp314-macosx_10_13_universal2.whl
       - pypi: ./
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/win-64/_openmp_mutex-4.5-2_gnu.conda
@@ -6854,9 +6806,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/yaml-0.2.5-h6a83c73_3.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-hbeecb71_2.conda
       - pypi: https://files.pythonhosted.org/packages/77/93/4df169108c4313d0f476bb9abd7d76496059e8bfcc3a98168aa26cc73b00/eclipse_zenoh-1.6.2-cp39-abi3-win_amd64.whl
-      - pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/93/2fa34714b7a4ae72f2f8dad66ba17dd9a2c793220719e736dda28b7aec27/pytest_asyncio-1.2.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/06/f0/18d39dbd1971d6d62c4629cc7fa67f74821b0dc1f5a77af43719de7936a7/uvloop-0.22.1.tar.gz
       - pypi: ./
 packages:
 - conda: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
@@ -6922,7 +6872,7 @@ packages:
 - pypi: ./
   name: asyncio-for-robotics
   version: 1.0.6a1
-  sha256: 24667f533763f28952f71327e353212cb6b10840684957e1e51a7fa79013f2b8
+  sha256: 3112644b5012bc23885fad7ade5f9a179a4c985d80cf1d1abfe2f59ef12ca073
   requires_dist:
   - typing-extensions>=4.0 ; python_full_version < '3.11'
   - async-timeout ; python_full_version < '3.11'
@@ -6930,8 +6880,8 @@ packages:
   - colorama ; extra == 'dev'
   - pytest ; extra == 'dev'
   - pytest-asyncio ; extra == 'dev'
-  - pyfiglet ; extra == 'dev'
-  - uvloop ; extra == 'dev'
+  - pyfiglet ; extra == 'benchmarks'
+  - uvloop ; extra == 'benchmarks'
   - build ; extra == 'build'
   - twine ; extra == 'build'
   requires_python: '>=3.10'
@@ -14190,11 +14140,6 @@ packages:
   - pkg:pypi/pydocstyle?source=hash-mapping
   size: 40236
   timestamp: 1733261742916
-- pypi: https://files.pythonhosted.org/packages/9f/5c/fe9f95abd5eaedfa69f31e450f7e2768bef121dbdf25bcddee2cd3087a16/pyfiglet-1.0.4-py3-none-any.whl
-  name: pyfiglet
-  version: 1.0.4
-  sha256: 65b57b7a8e1dff8a67dc8e940a117238661d5e14c3e49121032bd404d9b2b39f
-  requires_python: '>=3.9'
 - conda: https://conda.anaconda.org/conda-forge/noarch/pyflakes-3.4.0-pyhd8ed1ab_0.conda
   sha256: 4b6fb3f7697b4e591c06149671699777c71ca215e9ec16d5bd0767425e630d65
   md5: dba204e749e06890aeb3756ef2b1bf35
@@ -66548,227 +66493,6 @@ packages:
   purls: []
   size: 413662
   timestamp: 1747514675025
-- pypi: https://files.pythonhosted.org/packages/06/f0/18d39dbd1971d6d62c4629cc7fa67f74821b0dc1f5a77af43719de7936a7/uvloop-0.22.1.tar.gz
-  name: uvloop
-  version: 0.22.1
-  sha256: 6c84bae345b9147082b17371e3dd5d42775bddce91f885499017f4607fdaf39f
-  requires_dist:
-  - aiohttp>=3.10.5 ; extra == 'test'
-  - flake8~=6.1 ; extra == 'test'
-  - psutil ; extra == 'test'
-  - pycodestyle~=2.11.0 ; extra == 'test'
-  - pyopenssl~=25.3.0 ; extra == 'test'
-  - mypy>=0.800 ; extra == 'test'
-  - setuptools>=60 ; extra == 'dev'
-  - cython~=3.0 ; extra == 'dev'
-  - sphinx~=4.1.2 ; extra == 'docs'
-  - sphinxcontrib-asyncio~=0.3.0 ; extra == 'docs'
-  - sphinx-rtd-theme~=0.5.2 ; extra == 'docs'
-  requires_python: '>=3.8.1'
-- pypi: https://files.pythonhosted.org/packages/0d/f8/a132124dfda0777e489ca86732e85e69afcd1ff7686647000050ba670689/uvloop-0.22.1-cp314-cp314-macosx_10_13_x86_64.whl
-  name: uvloop
-  version: 0.22.1
-  sha256: 4baa86acedf1d62115c1dc6ad1e17134476688f08c6efd8a2ab076e815665c74
-  requires_dist:
-  - aiohttp>=3.10.5 ; extra == 'test'
-  - flake8~=6.1 ; extra == 'test'
-  - psutil ; extra == 'test'
-  - pycodestyle~=2.11.0 ; extra == 'test'
-  - pyopenssl~=25.3.0 ; extra == 'test'
-  - mypy>=0.800 ; extra == 'test'
-  - setuptools>=60 ; extra == 'dev'
-  - cython~=3.0 ; extra == 'dev'
-  - sphinx~=4.1.2 ; extra == 'docs'
-  - sphinxcontrib-asyncio~=0.3.0 ; extra == 'docs'
-  - sphinx-rtd-theme~=0.5.2 ; extra == 'docs'
-  requires_python: '>=3.8.1'
-- pypi: https://files.pythonhosted.org/packages/24/68/a6ac446820273e71aa762fa21cdcc09861edd3536ff47c5cd3b7afb10eeb/uvloop-0.22.1-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl
-  name: uvloop
-  version: 0.22.1
-  sha256: 700e674a166ca5778255e0e1dc4e9d79ab2acc57b9171b79e65feba7184b3370
-  requires_dist:
-  - aiohttp>=3.10.5 ; extra == 'test'
-  - flake8~=6.1 ; extra == 'test'
-  - psutil ; extra == 'test'
-  - pycodestyle~=2.11.0 ; extra == 'test'
-  - pyopenssl~=25.3.0 ; extra == 'test'
-  - mypy>=0.800 ; extra == 'test'
-  - setuptools>=60 ; extra == 'dev'
-  - cython~=3.0 ; extra == 'dev'
-  - sphinx~=4.1.2 ; extra == 'docs'
-  - sphinxcontrib-asyncio~=0.3.0 ; extra == 'docs'
-  - sphinx-rtd-theme~=0.5.2 ; extra == 'docs'
-  requires_python: '>=3.8.1'
-- pypi: https://files.pythonhosted.org/packages/3d/ff/7f72e8170be527b4977b033239a83a68d5c881cc4775fca255c677f7ac5d/uvloop-0.22.1-cp312-cp312-macosx_10_13_universal2.whl
-  name: uvloop
-  version: 0.22.1
-  sha256: fe94b4564e865d968414598eea1a6de60adba0c040ba4ed05ac1300de402cd42
-  requires_dist:
-  - aiohttp>=3.10.5 ; extra == 'test'
-  - flake8~=6.1 ; extra == 'test'
-  - psutil ; extra == 'test'
-  - pycodestyle~=2.11.0 ; extra == 'test'
-  - pyopenssl~=25.3.0 ; extra == 'test'
-  - mypy>=0.800 ; extra == 'test'
-  - setuptools>=60 ; extra == 'dev'
-  - cython~=3.0 ; extra == 'dev'
-  - sphinx~=4.1.2 ; extra == 'docs'
-  - sphinxcontrib-asyncio~=0.3.0 ; extra == 'docs'
-  - sphinx-rtd-theme~=0.5.2 ; extra == 'docs'
-  requires_python: '>=3.8.1'
-- pypi: https://files.pythonhosted.org/packages/5f/6f/e62b4dfc7ad6518e7eff2516f680d02a0f6eb62c0c212e152ca708a0085e/uvloop-0.22.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
-  name: uvloop
-  version: 0.22.1
-  sha256: 7b5b1ac819a3f946d3b2ee07f09149578ae76066d70b44df3fa990add49a82e4
-  requires_dist:
-  - aiohttp>=3.10.5 ; extra == 'test'
-  - flake8~=6.1 ; extra == 'test'
-  - psutil ; extra == 'test'
-  - pycodestyle~=2.11.0 ; extra == 'test'
-  - pyopenssl~=25.3.0 ; extra == 'test'
-  - mypy>=0.800 ; extra == 'test'
-  - setuptools>=60 ; extra == 'dev'
-  - cython~=3.0 ; extra == 'dev'
-  - sphinx~=4.1.2 ; extra == 'docs'
-  - sphinxcontrib-asyncio~=0.3.0 ; extra == 'docs'
-  - sphinx-rtd-theme~=0.5.2 ; extra == 'docs'
-  requires_python: '>=3.8.1'
-- pypi: https://files.pythonhosted.org/packages/74/4f/256aca690709e9b008b7108bc85fba619a2bc37c6d80743d18abad16ee09/uvloop-0.22.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
-  name: uvloop
-  version: 0.22.1
-  sha256: 56a2d1fae65fd82197cb8c53c367310b3eabe1bbb9fb5a04d28e3e3520e4f702
-  requires_dist:
-  - aiohttp>=3.10.5 ; extra == 'test'
-  - flake8~=6.1 ; extra == 'test'
-  - psutil ; extra == 'test'
-  - pycodestyle~=2.11.0 ; extra == 'test'
-  - pyopenssl~=25.3.0 ; extra == 'test'
-  - mypy>=0.800 ; extra == 'test'
-  - setuptools>=60 ; extra == 'dev'
-  - cython~=3.0 ; extra == 'dev'
-  - sphinx~=4.1.2 ; extra == 'docs'
-  - sphinxcontrib-asyncio~=0.3.0 ; extra == 'docs'
-  - sphinx-rtd-theme~=0.5.2 ; extra == 'docs'
-  requires_python: '>=3.8.1'
-- pypi: https://files.pythonhosted.org/packages/86/94/9fb7fad2f824d25f8ecac0d70b94d0d48107ad5ece03769a9c543444f78a/uvloop-0.22.1-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl
-  name: uvloop
-  version: 0.22.1
-  sha256: 53c85520781d84a4b8b230e24a5af5b0778efdb39142b424990ff1ef7c48ba21
-  requires_dist:
-  - aiohttp>=3.10.5 ; extra == 'test'
-  - flake8~=6.1 ; extra == 'test'
-  - psutil ; extra == 'test'
-  - pycodestyle~=2.11.0 ; extra == 'test'
-  - pyopenssl~=25.3.0 ; extra == 'test'
-  - mypy>=0.800 ; extra == 'test'
-  - setuptools>=60 ; extra == 'dev'
-  - cython~=3.0 ; extra == 'dev'
-  - sphinx~=4.1.2 ; extra == 'docs'
-  - sphinxcontrib-asyncio~=0.3.0 ; extra == 'docs'
-  - sphinx-rtd-theme~=0.5.2 ; extra == 'docs'
-  requires_python: '>=3.8.1'
-- pypi: https://files.pythonhosted.org/packages/90/cd/b62bdeaa429758aee8de8b00ac0dd26593a9de93d302bff3d21439e9791d/uvloop-0.22.1-cp314-cp314-macosx_10_13_universal2.whl
-  name: uvloop
-  version: 0.22.1
-  sha256: 3879b88423ec7e97cd4eba2a443aa26ed4e59b45e6b76aabf13fe2f27023a142
-  requires_dist:
-  - aiohttp>=3.10.5 ; extra == 'test'
-  - flake8~=6.1 ; extra == 'test'
-  - psutil ; extra == 'test'
-  - pycodestyle~=2.11.0 ; extra == 'test'
-  - pyopenssl~=25.3.0 ; extra == 'test'
-  - mypy>=0.800 ; extra == 'test'
-  - setuptools>=60 ; extra == 'dev'
-  - cython~=3.0 ; extra == 'dev'
-  - sphinx~=4.1.2 ; extra == 'docs'
-  - sphinxcontrib-asyncio~=0.3.0 ; extra == 'docs'
-  - sphinx-rtd-theme~=0.5.2 ; extra == 'docs'
-  requires_python: '>=3.8.1'
-- pypi: https://files.pythonhosted.org/packages/a3/94/94af78c156f88da4b3a733773ad5ba0b164393e357cc4bd0ab2e2677a7d6/uvloop-0.22.1-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl
-  name: uvloop
-  version: 0.22.1
-  sha256: 297c27d8003520596236bdb2335e6b3f649480bd09e00d1e3a99144b691d2a35
-  requires_dist:
-  - aiohttp>=3.10.5 ; extra == 'test'
-  - flake8~=6.1 ; extra == 'test'
-  - psutil ; extra == 'test'
-  - pycodestyle~=2.11.0 ; extra == 'test'
-  - pyopenssl~=25.3.0 ; extra == 'test'
-  - mypy>=0.800 ; extra == 'test'
-  - setuptools>=60 ; extra == 'dev'
-  - cython~=3.0 ; extra == 'dev'
-  - sphinx~=4.1.2 ; extra == 'docs'
-  - sphinxcontrib-asyncio~=0.3.0 ; extra == 'docs'
-  - sphinx-rtd-theme~=0.5.2 ; extra == 'docs'
-  requires_python: '>=3.8.1'
-- pypi: https://files.pythonhosted.org/packages/a8/73/c4e271b3bce59724e291465cc936c37758886a4868787da0278b3b56b905/uvloop-0.22.1-cp311-cp311-macosx_10_9_x86_64.whl
-  name: uvloop
-  version: 0.22.1
-  sha256: 3b7f102bf3cb1995cfeaee9321105e8f5da76fdb104cdad8986f85461a1b7b77
-  requires_dist:
-  - aiohttp>=3.10.5 ; extra == 'test'
-  - flake8~=6.1 ; extra == 'test'
-  - psutil ; extra == 'test'
-  - pycodestyle~=2.11.0 ; extra == 'test'
-  - pyopenssl~=25.3.0 ; extra == 'test'
-  - mypy>=0.800 ; extra == 'test'
-  - setuptools>=60 ; extra == 'dev'
-  - cython~=3.0 ; extra == 'dev'
-  - sphinx~=4.1.2 ; extra == 'docs'
-  - sphinxcontrib-asyncio~=0.3.0 ; extra == 'docs'
-  - sphinx-rtd-theme~=0.5.2 ; extra == 'docs'
-  requires_python: '>=3.8.1'
-- pypi: https://files.pythonhosted.org/packages/b5/35/60249e9fd07b32c665192cec7af29e06c7cd96fa1d08b84f012a56a0b38e/uvloop-0.22.1-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
-  name: uvloop
-  version: 0.22.1
-  sha256: c1955d5a1dd43198244d47664a5858082a3239766a839b2102a269aaff7a4e25
-  requires_dist:
-  - aiohttp>=3.10.5 ; extra == 'test'
-  - flake8~=6.1 ; extra == 'test'
-  - psutil ; extra == 'test'
-  - pycodestyle~=2.11.0 ; extra == 'test'
-  - pyopenssl~=25.3.0 ; extra == 'test'
-  - mypy>=0.800 ; extra == 'test'
-  - setuptools>=60 ; extra == 'dev'
-  - cython~=3.0 ; extra == 'dev'
-  - sphinx~=4.1.2 ; extra == 'docs'
-  - sphinxcontrib-asyncio~=0.3.0 ; extra == 'docs'
-  - sphinx-rtd-theme~=0.5.2 ; extra == 'docs'
-  requires_python: '>=3.8.1'
-- pypi: https://files.pythonhosted.org/packages/c3/c6/e5d433f88fd54d81ef4be58b2b7b0cea13c442454a1db703a1eea0db1a59/uvloop-0.22.1-cp312-cp312-macosx_10_13_x86_64.whl
-  name: uvloop
-  version: 0.22.1
-  sha256: 51eb9bd88391483410daad430813d982010f9c9c89512321f5b60e2cddbdddd6
-  requires_dist:
-  - aiohttp>=3.10.5 ; extra == 'test'
-  - flake8~=6.1 ; extra == 'test'
-  - psutil ; extra == 'test'
-  - pycodestyle~=2.11.0 ; extra == 'test'
-  - pyopenssl~=25.3.0 ; extra == 'test'
-  - mypy>=0.800 ; extra == 'test'
-  - setuptools>=60 ; extra == 'dev'
-  - cython~=3.0 ; extra == 'dev'
-  - sphinx~=4.1.2 ; extra == 'docs'
-  - sphinxcontrib-asyncio~=0.3.0 ; extra == 'docs'
-  - sphinx-rtd-theme~=0.5.2 ; extra == 'docs'
-  requires_python: '>=3.8.1'
-- pypi: https://files.pythonhosted.org/packages/c7/d5/69900f7883235562f1f50d8184bb7dd84a2fb61e9ec63f3782546fdbd057/uvloop-0.22.1-cp311-cp311-macosx_10_9_universal2.whl
-  name: uvloop
-  version: 0.22.1
-  sha256: c60ebcd36f7b240b30788554b6f0782454826a0ed765d8430652621b5de674b9
-  requires_dist:
-  - aiohttp>=3.10.5 ; extra == 'test'
-  - flake8~=6.1 ; extra == 'test'
-  - psutil ; extra == 'test'
-  - pycodestyle~=2.11.0 ; extra == 'test'
-  - pyopenssl~=25.3.0 ; extra == 'test'
-  - mypy>=0.800 ; extra == 'test'
-  - setuptools>=60 ; extra == 'dev'
-  - cython~=3.0 ; extra == 'dev'
-  - sphinx~=4.1.2 ; extra == 'docs'
-  - sphinxcontrib-asyncio~=0.3.0 ; extra == 'docs'
-  - sphinx-rtd-theme~=0.5.2 ; extra == 'docs'
-  requires_python: '>=3.8.1'
 - conda: https://conda.anaconda.org/conda-forge/win-64/vc-14.3-h2b53caa_32.conda
   sha256: 82250af59af9ff3c6a635dd4c4764c631d854feb334d6747d356d949af44d7cf
   md5: ef02bbe151253a72b8eda264a935db66
