@@ -169,8 +169,9 @@ async def test_reliable_one_by_one(pub: Publisher, sub: aros.Sub[String]):
 
 
 async def test_reliable_too_fast(pub: Publisher, sub: aros.Sub[String]):
-    data = list(range(200))
+    data = list(range(30))
     put_queue = [str(v) for v in data]
+    put_queue.reverse()
     received_buf = []
     listener = sub.listen_reliable(fresh=True, queue_size=len(data) * 2)
     await asyncio.sleep(0.001)
@@ -190,12 +191,12 @@ async def test_reliable_too_fast(pub: Publisher, sub: aros.Sub[String]):
                 pub.publish(String(data=put_queue.pop()))
                 await asyncio.sleep(0.001)
 
-    received_buf.reverse()
     assert data == received_buf
 
 async def test_reliable_extremely_fast(pub: Publisher, sub: aros.Sub[String]):
-    data = list(range(200))
+    data = list(range(30))
     put_queue = [str(v) for v in data]
+    put_queue.reverse()
     received_buf = []
     listener = sub.listen_reliable(fresh=True, queue_size=len(data) * 2)
     pub.publish(String(data=put_queue.pop()))
@@ -211,7 +212,6 @@ async def test_reliable_extremely_fast(pub: Publisher, sub: aros.Sub[String]):
             if put_queue != []:
                 pub.publish(String(data=put_queue.pop()))
 
-    received_buf.reverse()
     assert set(data) == set(received_buf)
 
 

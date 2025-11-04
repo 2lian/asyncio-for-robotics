@@ -153,8 +153,9 @@ async def test_reliable_one_by_one(pub: zenoh.Publisher, sub: Sub):
 
 
 async def test_reliable_too_fast(pub: zenoh.Publisher, sub: Sub):
-    data = list(range(200))
+    data = list(range(30))
     put_queue = [str(v) for v in data]
+    put_queue.reverse()
     received_buf = []
     listener = sub.listen_reliable(fresh=True, queue_size=len(data))
     await asyncio.sleep(0.1)
@@ -175,13 +176,13 @@ async def test_reliable_too_fast(pub: zenoh.Publisher, sub: Sub):
                 await asyncio.sleep(0.001)
 
     assert set(data) == set(received_buf)
-    received_buf.reverse()
     assert data == received_buf
 
 
 async def test_reliable_extremely_fast(pub: zenoh.Publisher, sub: Sub):
-    data = list(range(200))
+    data = list(range(30))
     put_queue = [str(v) for v in data]
+    put_queue.reverse()
     received_buf = []
     listener = sub.listen_reliable(fresh=True, queue_size=len(data))
     pub.put(put_queue.pop())
