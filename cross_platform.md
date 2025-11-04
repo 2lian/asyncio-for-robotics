@@ -1,5 +1,12 @@
 # Cross-Platform deployment
 
+| Python <br>`3.10`, `3.11`, <br>`3.12`, `3.13`, <br>`3.14`  | ROS 2 `humble`, <br>`jazzy`, `kilted` |
+|:---:|:---:|
+| `ubuntu`, <br>`windows`, <br>`macos` | `ubuntu`,<br>`windows` |
+| [![Python - crossplatform](https://github.com/2lian/asyncio-for-robotics/actions/workflows/python-pixi.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/python-pixi.yml) | [![ROS 2 - crossplatform](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pixi.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pixi.yml) |
+
+## How?
+
 Asyncio is platform-agnostic, thus `asyncio_for_robotics` should be able to run on any Python... which is the case! Our cross-platform CI tests are verifying that.
 
 Wouldn't it be great if you could just install ROS 2 in a virtual environment on any machine? Then install `asyncio_for_robotics` to be left with only a native python interface able to send messages on ROS? 
@@ -23,11 +30,9 @@ Wouldn't it be great if you could just install ROS 2 in a virtual environment on
 
 Do not import, depend or inherit from our `pixi.toml`. Our work is a pure Python package distributed through `PyPI`. However, please take inspiration from our `pixi.toml`, and read the Pixi + Robostack tutorials for your ROS project.
 
-To add ROS 2 and `asyncio_for_robotics` to your Pixi environment, you need to add our `PyPI` dependency to a [ROS Pixi environment](https://pixi.sh/latest/tutorials/ros2/):
+To add ROS 2 and `asyncio_for_robotics` to your Pixi environment, simply to add our `PyPI` dependency to a [ROS Pixi environment](https://pixi.sh/latest/tutorials/ros2/):
 
 ```toml
-...
 [pypi-dependencies]
 asyncio-for-robotics = "*"
-...
 ```
