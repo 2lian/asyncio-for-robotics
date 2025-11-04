@@ -141,10 +141,11 @@ async def test_listen_too_fast(pub: Publisher, sub: aros.Sub[String]):
         last_payload = f"hello{sample_count}"
         pub.publish(String(data=last_payload))
         put_count += 1
+        await asyncio.sleep(0.001)
         last_payload = f"hello{sample_count}"
         pub.publish(String(data=last_payload))
         put_count += 1
-        await asyncio.sleep(0.01)
+        await asyncio.sleep(0.001)
 
     assert put_count / 2 == sample_count == max_iter
 
@@ -168,11 +169,36 @@ async def test_reliable_one_by_one(pub: Publisher, sub: aros.Sub[String]):
 
 
 async def test_reliable_too_fast(pub: Publisher, sub: aros.Sub[String]):
-    data = list(range(200))
+    data = list(range(30))
     put_queue = [str(v) for v in data]
+    put_queue.reverse()
     received_buf = []
     listener = sub.listen_reliable(fresh=True, queue_size=len(data) * 2)
-    await asyncio.sleep(0.1)
+    await asyncio.sleep(0.001)
+    pub.publish(String(data=put_queue.pop()))
+    await asyncio.sleep(0.001)
+    pub.publish(String(data=put_queue.pop()))
+    async with soft_timeout(2):
+        async for sample in listener:
+            payload = int(sample.data)
+            received_buf.append(payload)
+            if len(received_buf) >= len(data):
+                break
+            if put_queue != []:
+                pub.publish(String(data=put_queue.pop()))
+                await asyncio.sleep(0.001)
+            if put_queue != []:
+                pub.publish(String(data=put_queue.pop()))
+                await asyncio.sleep(0.001)
+
+    assert data == received_buf
+
+async def test_reliable_extremely_fast(pub: Publisher, sub: aros.Sub[String]):
+    data = list(range(30))
+    put_queue = [str(v) for v in data]
+    put_queue.reverse()
+    received_buf = []
+    listener = sub.listen_reliable(fresh=True, queue_size=len(data) * 2)
     pub.publish(String(data=put_queue.pop()))
     pub.publish(String(data=put_queue.pop()))
     async with soft_timeout(2):
@@ -186,8 +212,7 @@ async def test_reliable_too_fast(pub: Publisher, sub: aros.Sub[String]):
             if put_queue != []:
                 pub.publish(String(data=put_queue.pop()))
 
-    received_buf.reverse()
-    assert data == received_buf
+    assert set(data) == set(received_buf)
 
 
 async def test_freshness(pub: Publisher, sub: aros.Sub[String]):

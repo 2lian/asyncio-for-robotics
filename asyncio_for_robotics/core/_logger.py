@@ -95,7 +95,7 @@ def setup_logger(debug_path: Optional[str] = None):
                 "level": "DEBUG",
                 "formatter": "json",
                 "filename": (
-                    os.path.expanduser(debug_path) + "/debug.log.jsonl"
+                    os.path.join(os.path.expanduser(debug_path) , "debug.log.jsonl")
                     if debug_path is not None
                     else "log.jsonl"
                 ),  # path relative to working dir
@@ -106,7 +106,7 @@ def setup_logger(debug_path: Optional[str] = None):
                 "level": "DEBUG",
                 "formatter": "user",
                 "filename": (
-                    os.path.expanduser(debug_path) + "/debug.log"
+                    os.path.join(os.path.expanduser(debug_path) , "debug.log")
                     if debug_path is not None
                     else "log"
                 ),  # path relative to working dir
