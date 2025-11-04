@@ -42,7 +42,8 @@ include = ["asyncio_for_robotics", "asyncio_for_robotics.*"]
 
 [project.optional-dependencies]
 zenoh = ["eclipse-zenoh>=1.0.0"]
-dev = ["colorama", "pytest", "pytest-asyncio", "pyfiglet", "uvloop"]
+dev = ["colorama", "pytest", "pytest-asyncio"]
+benchmarks = ["pyfiglet", "uvloop"]
 build = ["build", "twine"]
 
 [project.urls]
