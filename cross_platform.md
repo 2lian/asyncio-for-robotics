@@ -1,6 +1,6 @@
 # Cross-Platform deployment
 
-| Python <br>`3.10`, `3.11`, <br>`3.12`, `3.13`, <br>`3.14`  | ROS 2 `humble`, <br>`jazzy`, `kilted` |
+| Python <br>`3.10`, `3.11`, <br>`3.12`, `3.13`, <br>`3.14`  | ROS 2 <br>`humble`, `jazzy`, <br>`kilted` |
 |:---:|:---:|
 | `ubuntu`, <br>`windows`, <br>`macos` | `ubuntu`,<br>`windows` |
 | [![Python - crossplatform](https://github.com/2lian/asyncio-for-robotics/actions/workflows/python-pixi.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/python-pixi.yml) | [![ROS 2 - crossplatform](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pixi.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pixi.yml) |
