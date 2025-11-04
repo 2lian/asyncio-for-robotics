@@ -3,7 +3,7 @@ authors = ["Elian <elian.neppel@posteo.eu>"]
 channels = ["robostack-humble", "conda-forge"]
 name = "afor"
 platforms = ["linux-64", "win-64", "osx-64", "osx-arm64", "linux-aarch64"]
-version = "0.1.0"
+version = "0.0.0"
 
 
 [target.unix.activation]
