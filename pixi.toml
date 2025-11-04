@@ -1,0 +1,72 @@
+[workspace]
+authors = ["Elian <elian.neppel@posteo.eu>"]
+channels = ["robostack-humble", "conda-forge"]
+name = "pixi"
+platforms = ["linux-64", "win-64", "osx-64", "osx-arm64", "linux-aarch64"]
+version = "0.1.0"
+
+
+[target.unix.activation]
+# For activation scripts, we use bash for Unix-like systems
+scripts = ["install/setup.bash"]
+
+[feature.build.target.unix.tasks]
+build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+# Dependencies used by all environments
+[dependencies]
+python = "*"
+# Build tools
+compilers = "*"
+cmake = "*"
+pkg-config = "*"
+make = "*"
+ninja = "*"
+# ROS specific tools
+rosdep = "*"
+colcon-common-extensions = "*"
+
+[target.linux.dependencies]
+libgl-devel = "*"
+
+[pypi-dependencies]
+asyncio-for-robotics = { path=".", extras = ["zenoh", "dev"] }
+
+# Define all the different ROS environments
+# Each environment corresponds to a different ROS distribution
+# and can be activated using the `pixi run/shell -e <environment>` command.
+[environments]
+# noetic = { features = ["noetic", "build"] }
+humble = { features = ["humble", "build"] }
+jazzy = { features = ["jazzy", "build"] }
+kilted = { features = ["kilted", "build"] }
+
+### ROS Humble ####
+[feature.humble]
+channels = ["https://prefix.dev/robostack-humble"]
+
+[feature.humble.dependencies]
+ros-humble-desktop = "*"
+ros-humble-rmw-zenoh-cpp = "*"
+ros-humble-rmw-fastrtps-cpp = "*"
+ros-humble-rmw-cyclonedds-cpp = "*"
+
+### ROS Jazzy ####
+[feature.jazzy]
+channels = ["https://prefix.dev/robostack-jazzy"]
+
+[feature.jazzy.dependencies]
+ros-jazzy-desktop = "*"
+ros-jazzy-rmw-zenoh-cpp = "*"
+ros-jazzy-rmw-fastrtps-cpp = "*"
+ros-jazzy-rmw-cyclonedds-cpp = "*"
+
+### ROS Kilted ####
+[feature.kilted]
+channels = ["https://prefix.dev/robostack-kilted"]
+
+[feature.kilted.dependencies]
+ros-kilted-desktop = "*"
+ros-kilted-rmw-zenoh-cpp = "*"
+ros-kilted-rmw-fastrtps-cpp = "*"
+ros-kilted-rmw-cyclonedds-cpp = "*"
