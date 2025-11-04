@@ -28,7 +28,9 @@ def session() -> Generator[zenoh.Session, Any, Any]:
 def pub(session) -> Generator[zenoh.Publisher, Any, Any]:
     pub_topic = "test/something"
     logger.debug("Creating PUB-%s", pub_topic)
-    p: zenoh.Publisher = auto_session().declare_publisher(pub_topic)
+    p: zenoh.Publisher = auto_session().declare_publisher(
+        pub_topic, reliability=zenoh.Reliability.RELIABLE
+    )
     yield p
     if not auto_session().is_closed():
         logger.debug("closing PUB-%s", pub_topic)
@@ -174,6 +176,7 @@ async def test_reliable_too_fast(pub: zenoh.Publisher, sub: Sub):
 
     received_buf.reverse()
     assert data == received_buf
+
 
 async def test_reliable_extremely_fast(pub: zenoh.Publisher, sub: Sub):
     data = list(range(200))
