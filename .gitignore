@@ -8,3 +8,4 @@ build/
 install/
 log/
 uv.lock
+.pixi
