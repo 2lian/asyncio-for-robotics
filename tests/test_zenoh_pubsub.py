@@ -28,9 +28,7 @@ def session() -> Generator[zenoh.Session, Any, Any]:
 def pub(session) -> Generator[zenoh.Publisher, Any, Any]:
     pub_topic = "test/something"
     logger.debug("Creating PUB-%s", pub_topic)
-    p: zenoh.Publisher = auto_session().declare_publisher(
-        pub_topic, reliability=zenoh.Reliability.RELIABLE
-    )
+    p: zenoh.Publisher = auto_session().declare_publisher(pub_topic)
     yield p
     if not auto_session().is_closed():
         logger.debug("closing PUB-%s", pub_topic)
@@ -116,7 +114,7 @@ async def test_listen_too_fast(pub: zenoh.Publisher, sub: Sub):
     sample_count = 0
     put_count = 2
     max_iter = 20
-    await asyncio.sleep(0.001)
+    await asyncio.sleep(0.01)
     async for sample in sub.listen():
         sample_count += 1
         assert sample.payload.to_string() == last_payload
@@ -125,11 +123,10 @@ async def test_listen_too_fast(pub: zenoh.Publisher, sub: Sub):
         last_payload = f"hello{sample_count}"
         pub.put(last_payload)
         put_count += 1
-        await asyncio.sleep(0.001)
         last_payload = f"hello{sample_count}"
         pub.put(last_payload)
         put_count += 1
-        await asyncio.sleep(0.001)
+        await asyncio.sleep(0.01)
 
     assert put_count / 2 == sample_count == max_iter
 
@@ -153,14 +150,12 @@ async def test_reliable_one_by_one(pub: zenoh.Publisher, sub: Sub):
 
 
 async def test_reliable_too_fast(pub: zenoh.Publisher, sub: Sub):
-    data = list(range(30))
+    data = list(range(200))
     put_queue = [str(v) for v in data]
-    put_queue.reverse()
     received_buf = []
     listener = sub.listen_reliable(fresh=True, queue_size=len(data))
     await asyncio.sleep(0.1)
     pub.put(put_queue.pop())
-    await asyncio.sleep(0.001)
     pub.put(put_queue.pop())
     async with soft_timeout(2):
         async for sample in listener:
@@ -170,35 +165,11 @@ async def test_reliable_too_fast(pub: zenoh.Publisher, sub: Sub):
                 break
             if put_queue != []:
                 pub.put(put_queue.pop())
-                await asyncio.sleep(0.001)
             if put_queue != []:
                 pub.put(put_queue.pop())
-                await asyncio.sleep(0.001)
 
-    assert set(data) == set(received_buf)
+    received_buf.reverse()
     assert data == received_buf
-
-
-async def test_reliable_extremely_fast(pub: zenoh.Publisher, sub: Sub):
-    data = list(range(30))
-    put_queue = [str(v) for v in data]
-    put_queue.reverse()
-    received_buf = []
-    listener = sub.listen_reliable(fresh=True, queue_size=len(data))
-    pub.put(put_queue.pop())
-    pub.put(put_queue.pop())
-    async with soft_timeout(2):
-        async for sample in listener:
-            payload = int(sample.payload.to_string())
-            received_buf.append(payload)
-            if len(received_buf) >= len(data):
-                break
-            if put_queue != []:
-                pub.put(put_queue.pop())
-            if put_queue != []:
-                pub.put(put_queue.pop())
-
-    assert set(data) == set(received_buf)
 
 
 async def test_freshness(pub: zenoh.Publisher, sub: Sub):

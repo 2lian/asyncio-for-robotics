@@ -1,7 +1,7 @@
 # Asyncio For Robotics
 | Requirements | Compatibility | Tests |
 |---|---|---|
-| [![python](https://img.shields.io/pypi/pyversions/asyncio_for_robotics?logo=python&logoColor=white&label=Python&color=%20blue)](https://pypi.org/project/asyncio_for_robotics/)<br>[![mit](https://img.shields.io/badge/License-MIT-gold)](https://opensource.org/license/mit) | [![ros](https://img.shields.io/badge/ROS_2-Humble%20%7C%20Jazzy-blue?logo=ros)](https://github.com/ros2)<br>[![zenoh](https://img.shields.io/badge/Zenoh-%3E%3D1.0-blue)](https://zenoh.io/) | [![Python](https://github.com/2lian/asyncio-for-robotics/actions/workflows/python-package.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/python-package.yml)<br>[![ROS 2](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pytest.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pytest.yml) |
+| [![python](https://img.shields.io/pypi/pyversions/asyncio_for_robotics?logo=python&logoColor=white&label=Python&color=%20blue)](https://pypi.org/project/asyncio_for_robotics/)<br>[![mit](https://img.shields.io/badge/License-MIT-gold)](https://opensource.org/license/mit) | [![zenoh](https://img.shields.io/badge/Zenoh-%3E%3D1.0-blue)](https://zenoh.io/)<br>[![ros](https://img.shields.io/badge/ROS_2-Humble%20%7C%20Jazzy-blue?logo=ros)](https://github.com/ros2) | [![Python](https://github.com/2lian/asyncio-for-robotics/actions/workflows/python-package.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/python-package.yml)<br>[![ROS 2](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pytest.yml/badge.svg)](https://github.com/2lian/asyncio-for-robotics/actions/workflows/ros-pytest.yml) |
 
 The Asyncio For Robotics (`afor`) library makes `asyncio` usable with ROS 2, Zenoh and more, letting you write linear, testable, and non-blocking Python code.
 
@@ -20,7 +20,13 @@ better, faster code.
 
 ### Barebone
 
-Compatible with ROS 2 (`jazzy`,`humble` and newer) out of the box. This library is pure python (>=3.10), so it installs easily.
+```bash
+pip install asyncio_for_robotics
+```
+
+### For ROS 2
+
+Compatible with: `jazzy`,`humble` and newer. This library is pure python (>=3.10), so it installs easily.
 
 ```bash
 pip install asyncio_for_robotics
@@ -39,7 +45,6 @@ pip install asyncio_for_robotics[zenoh]
   - [no talking 🦍 show me code 🦍](https://github.com/2lian/asyncio-for-robotics/blob/main/asyncio_for_robotics/example/ros2_pubsub.py)
 - [Usage for software testing](https://github.com/2lian/asyncio-for-robotics/blob/main/tests)
 - [Implement your own protocol](https://github.com/2lian/asyncio-for-robotics/blob/main/own_proto_example.md)
-- [Cross-Platform deployment even with ROS](https://github.com/2lian/asyncio-for-robotics/blob/main/cross_platform.md) [![Pixi Badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/prefix-dev/pixi/main/assets/badge/v0.json)](https://pixi.sh)
 
 ## Code sample
 
