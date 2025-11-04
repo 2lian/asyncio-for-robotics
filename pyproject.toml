@@ -1,6 +1,13 @@
+[build-system]
+requires = ["setuptools >= 61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["asyncio_for_robotics", "asyncio_for_robotics.*"]
+
 [project]
 name = "asyncio_for_robotics"
-version = "1.0.6a1"
+version = "1.0.5"
 description = "Asyncio interface for ROS 2, Zenoh, and other robotic middlewares."
 readme = "README.md"
 license = "MIT"
@@ -33,17 +40,10 @@ dependencies = [
 "typing_extensions>=4.0; python_version<'3.11'",
 "async-timeout; python_version<'3.11'",
 ]
-[build-system]
-requires = ["setuptools >= 58.2.0"]
-build-backend = "setuptools.build_meta"
-
-[tool.setuptools.packages.find]
-include = ["asyncio_for_robotics", "asyncio_for_robotics.*"]
 
 [project.optional-dependencies]
 zenoh = ["eclipse-zenoh>=1.0.0"]
-dev = ["colorama", "pytest", "pytest-asyncio"]
-benchmarks = ["pyfiglet", "uvloop"]
+dev = ["colorama", "pytest", "pytest-asyncio", "pyfiglet", "uvloop"]
 build = ["build", "twine"]
 
 [project.urls]
