@@ -174,6 +174,7 @@ async def test_reliable_too_fast(pub: zenoh.Publisher, sub: Sub):
                 pub.put(put_queue.pop())
                 await asyncio.sleep(0.001)
 
+    assert set(data) == set(received_buf)
     received_buf.reverse()
     assert data == received_buf
 
