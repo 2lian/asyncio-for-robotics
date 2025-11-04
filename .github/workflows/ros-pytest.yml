@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ros-version: ["humble","jazzy"]
+        ros-version: ["humble","jazzy","kilted"]
 
     steps:
     - uses: actions/checkout@v4
