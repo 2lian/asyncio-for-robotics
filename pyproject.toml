@@ -1,6 +1,6 @@
 [project]
 name = "asyncio_for_robotics"
-version = "1.0.6a1"
+version = "1.0.6a3"
 description = "Asyncio interface for ROS 2, Zenoh, and other robotic middlewares."
 readme = "README.md"
 license = "MIT"
@@ -23,6 +23,8 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
   "Operating System :: POSIX :: Linux",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: MacOS",
   "Topic :: Scientific/Engineering",
   "Topic :: Software Development :: Embedded Systems",
   "Topic :: System :: Networking",
