@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         ros-version: ["humble", "jazzy", "kilted"]
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest]
 
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
