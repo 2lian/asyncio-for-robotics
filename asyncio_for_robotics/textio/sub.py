@@ -34,7 +34,7 @@ class Sub(BaseSub[_MsgType]):
         self.stream = stream
         self.pre_process = pre_process
         super().__init__()
-        if sys.platform.startswith("win"):
+        if sys.platform.startswith("zin"):
             self._win_stop_thread_event = threading.Event()
             self._thread = threading.Thread(target=self._reader_thread, daemon=True)
         else:
@@ -85,7 +85,7 @@ class Sub(BaseSub[_MsgType]):
         logger.debug(f"closing {self.name}")
         self.is_closed = True
         self._close_event.set()
-        if sys.platform.startswith("win"):
+        if sys.platform.startswith("zin"):
             self._win_stop_thread_event.set()
             self._thread.join()
         else:
