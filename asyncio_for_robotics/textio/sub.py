@@ -49,6 +49,7 @@ class Sub(BaseSub[_MsgType]):
     def _reader_thread(self):
         while not self._win_stop_thread_event.is_set():
             line = self.stream.readline()
+            print(line)
             if len(line) > 0:
                 self._win_io_update_cbk(line)
             else:

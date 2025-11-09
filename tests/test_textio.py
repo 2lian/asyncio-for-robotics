@@ -22,9 +22,7 @@ def session() -> Generator[subprocess.Popen[str], Any, Any]:
         "cmd.exe" if sys.platform.startswith("win") else "bash",
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
         text=True,
-        bufsize=2000,
     )
     yield proc
     logger.info("Closing process")
@@ -58,8 +56,8 @@ async def test_wait_for_value(pub: Callable[[str], None], sub: afor.Sub[str]):
     pub(payload)
     logger.info("awaiting data")
     sample = await afor.soft_wait_for(sub.wait_for_value(), 1)
-    logger.info("got data")
     assert not isinstance(sample, TimeoutError), f"Did not receive response in time"
+    logger.info("got data")
     logger.info(sample)
     assert sample == payload
     logger.info("passed")
