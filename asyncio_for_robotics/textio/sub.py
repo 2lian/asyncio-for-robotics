@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import subprocess
-from typing import IO, Any, Awaitable, Callable, List, Self, Type, TypeVar, Union
+from typing import IO, Callable, TypeVar, Union
 
 from asyncio_for_robotics.core.sub import BaseSub
 
