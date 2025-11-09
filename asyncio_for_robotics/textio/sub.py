@@ -5,6 +5,7 @@ import sys
 import threading
 import time
 from typing import IO, Callable, TypeVar, Union
+import warnings
 
 from asyncio_for_robotics.core.sub import BaseSub
 
@@ -34,9 +35,8 @@ class Sub(BaseSub[_MsgType]):
         self.stream = stream
         self.pre_process = pre_process
         super().__init__()
-        if sys.platform.startswith("zin"):
-            self._win_stop_thread_event = threading.Event()
-            self._thread = threading.Thread(target=self._reader_thread, daemon=True)
+        if sys.platform.startswith("win"):
+            warnings.warn("Not implemented for windows.")
         else:
             self._event_loop.add_reader(self.stream.fileno(), self._io_update_cbk)
         self.is_closed = False
@@ -45,22 +45,6 @@ class Sub(BaseSub[_MsgType]):
     @property
     def name(self) -> str:
         return f"sub io-{self.stream.name}"
-
-    def _reader_thread(self):
-        while not self._win_stop_thread_event.is_set():
-            line = self.stream.readline()
-            print(line)
-            if len(line) > 0:
-                self._win_io_update_cbk(line)
-            else:
-                time.sleep(0.01)  # li'l sleep
-
-    # def _reader_thread(self):
-    #     for line in self.stream:
-    #         # push callback into asyncio loop
-    #         if self.is_closed:
-    #             return
-    #         self._event_loop.call_soon_threadsafe(self._win_io_update_cbk, line)
 
     def _win_io_update_cbk(self, line):
         healthy = True
@@ -85,11 +69,7 @@ class Sub(BaseSub[_MsgType]):
         logger.debug(f"closing {self.name}")
         self.is_closed = True
         self._close_event.set()
-        if sys.platform.startswith("zin"):
-            self._win_stop_thread_event.set()
-            self._thread.join()
-        else:
-            self._event_loop.remove_reader(self.stream.fileno())
+        self._event_loop.remove_reader(self.stream.fileno())
 
 
 def from_proc_stdout(

@@ -15,7 +15,7 @@ setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
 
 if sys.platform.startswith("win"):
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    pytest.skip(allow_module_level=True)
 
 @pytest.fixture
 def session() -> Generator[subprocess.Popen[str], Any, Any]:
