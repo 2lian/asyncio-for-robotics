@@ -47,6 +47,8 @@ class Sub(BaseSub[_MsgType]):
     def _reader_thread(self):
         for line in self.stream:
             # push callback into asyncio loop
+            if self.is_closed:
+                return
             self._event_loop.call_soon_threadsafe(self._win_io_update_cbk, line)
 
     def _win_io_update_cbk(self, line):
