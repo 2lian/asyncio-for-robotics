@@ -2,8 +2,6 @@ import asyncio
 import logging
 import subprocess
 import sys
-import time
-import warnings
 from typing import Any, AsyncGenerator, Callable, Generator
 
 import pytest
@@ -14,8 +12,6 @@ from asyncio_for_robotics.core._logger import setup_logger
 setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
 
-if sys.platform.startswith("win"):
-    pytest.skip(allow_module_level=True)
 
 @pytest.fixture
 def session() -> Generator[subprocess.Popen[str], Any, Any]:
@@ -51,6 +47,9 @@ async def sub(session: subprocess.Popen[str]) -> AsyncGenerator[afor.Sub[str], A
     s.close()
 
 
+@pytest.mark.skipif(
+    condition=sys.platform.startswith("win"), reason="doesn't work on windows"
+)
 async def test_wait_for_value(pub: Callable[[str], None], sub: afor.Sub[str]):
     logger.info("entered test")
     payload = "hello"
@@ -65,6 +64,9 @@ async def test_wait_for_value(pub: Callable[[str], None], sub: afor.Sub[str]):
     logger.info("passed")
 
 
+@pytest.mark.skipif(
+    condition=sys.platform.startswith("win"), reason="doesn't work on windows"
+)
 async def test_wait_new(pub: Callable[[str], None], sub: afor.Sub[str]):
     payload = "hello"
     pub(payload)
@@ -82,6 +84,9 @@ async def test_wait_new(pub: Callable[[str], None], sub: afor.Sub[str]):
     assert new_sample == payload
 
 
+@pytest.mark.skipif(
+    condition=sys.platform.startswith("win"), reason="doesn't work on windows"
+)
 async def test_wait_next(pub: Callable[[str], None], sub: afor.Sub[str]):
     first_payload = "hello"
     pub(first_payload)
@@ -103,6 +108,9 @@ async def test_wait_next(pub: Callable[[str], None], sub: afor.Sub[str]):
     assert new_sample == first_payload
 
 
+@pytest.mark.skipif(
+    condition=sys.platform.startswith("win"), reason="doesn't work on windows"
+)
 async def test_listen_one_by_one(pub: Callable[[str], None], sub: afor.Sub[str]):
     last_payload = "test"
     pub(last_payload)
@@ -121,6 +129,9 @@ async def test_listen_one_by_one(pub: Callable[[str], None], sub: afor.Sub[str])
     assert put_count == sample_count == max_iter
 
 
+@pytest.mark.skipif(
+    condition=sys.platform.startswith("win"), reason="doesn't work on windows"
+)
 async def test_listen_too_fast(pub: Callable[[str], None], sub: afor.Sub[str]):
     last_payload = "hello"
     pub(last_payload)
@@ -146,6 +157,9 @@ async def test_listen_too_fast(pub: Callable[[str], None], sub: afor.Sub[str]):
     assert put_count / 2 == sample_count == max_iter
 
 
+@pytest.mark.skipif(
+    condition=sys.platform.startswith("win"), reason="doesn't work on windows"
+)
 async def test_reliable_one_by_one(pub: Callable[[str], None], sub: afor.Sub[str]):
     last_payload = "hello"
     pub(last_payload)
@@ -164,6 +178,9 @@ async def test_reliable_one_by_one(pub: Callable[[str], None], sub: afor.Sub[str
     assert put_count == sample_count == max_iter
 
 
+@pytest.mark.skipif(
+    condition=sys.platform.startswith("win"), reason="doesn't work on windows"
+)
 async def test_reliable_too_fast(pub: Callable[[str], None], sub: afor.Sub[str]):
     data = list(range(30))
     put_queue = [str(v) for v in data]
@@ -191,6 +208,9 @@ async def test_reliable_too_fast(pub: Callable[[str], None], sub: afor.Sub[str])
 
 
 @pytest.mark.xfail
+@pytest.mark.skipif(
+    condition=sys.platform.startswith("win"), reason="doesn't work on windows"
+)
 async def test_reliable_extremely_fast(pub: Callable[[str], None], sub: afor.Sub[str]):
     data = list(range(30))
     put_queue = [str(v) for v in data]
@@ -213,6 +233,9 @@ async def test_reliable_extremely_fast(pub: Callable[[str], None], sub: afor.Sub
     assert set(data) == set(received_buf)
 
 
+@pytest.mark.skipif(
+    condition=sys.platform.startswith("win"), reason="doesn't work on windows"
+)
 async def test_freshness(pub: Callable[[str], None], sub: afor.Sub[str]):
     payload = "hello"
     new = sub.wait_for_new()
