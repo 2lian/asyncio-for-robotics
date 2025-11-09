@@ -1,6 +1,6 @@
 [project]
 name = "asyncio_for_robotics"
-version = "1.0.6"
+version = "1.1.0"
 description = "Asyncio interface for ROS 2, Zenoh, and other robotic middlewares."
 readme = "README.md"
 license = "MIT"
