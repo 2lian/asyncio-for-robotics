@@ -23,4 +23,4 @@ jobs:
         sudo docker build -t afor:${{ matrix.ros-version }} -f ./dev_tools/${{ matrix.ros-version }}/Dockerfile .
     - name: Test with pytest in Docker
       run: |
-        sudo docker run afor:${{ matrix.ros-version }} uv run pytest ./tests
+        sudo docker run afor:${{ matrix.ros-version }} uv run pytest ./tests -s -vv

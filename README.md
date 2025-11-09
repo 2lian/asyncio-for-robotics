@@ -11,10 +11,12 @@ The Asyncio For Robotics (`afor`) library makes `asyncio` usable with ROS 2, Zen
 
 *Will this make my code slower?* [No.](https://github.com/2lian/asyncio-for-robotics/tree/main/README.md#about-speed)
 
-*Will this make my code faster?* No. However `asyncio` will help YOU write
+*Will this make my code faster?* No. However, `asyncio` will help YOU write
 better, faster code.
 
-*Does it replace ROS 2? Is this a wrapper?* No. It is a tool adding async capabilities. It gives you more choices, not less.
+> [!TIP]
+> `asyncio_for_robotics` interfaces do not replace their primary interfaces! We add capabilities, giving you more choices, not less.
+
 
 ## Install
 
@@ -26,7 +28,7 @@ Compatible with ROS 2 (`jazzy`,`humble` and newer) out of the box. This library 
 pip install asyncio_for_robotics
 ```
 
-### For Zenoh
+### Along with Zenoh
 
 ```bash
 pip install asyncio_for_robotics[zenoh]
@@ -37,13 +39,22 @@ pip install asyncio_for_robotics[zenoh]
 - [Detailed ROS 2 tutorial](https://github.com/2lian/asyncio-for-robotics/blob/main/using_with_ros.md)
 - [Detailed examples](https://github.com/2lian/asyncio-for-robotics/blob/main/asyncio_for_robotics/example)
   - [no talking 🦍 show me code 🦍](https://github.com/2lian/asyncio-for-robotics/blob/main/asyncio_for_robotics/example/ros2_pubsub.py)
-- [Usage for software testing](https://github.com/2lian/asyncio-for-robotics/blob/main/tests)
-- [Implement your own protocol](https://github.com/2lian/asyncio-for-robotics/blob/main/own_proto_example.md)
 - [Cross-Platform deployment even with ROS](https://github.com/2lian/asyncio-for-robotics/blob/main/cross_platform.md) [![Pixi Badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/prefix-dev/pixi/main/assets/badge/v0.json)](https://pixi.sh)
+- [Usage for software testing](https://github.com/2lian/asyncio-for-robotics/blob/main/tests)
+
+### Available interfaces:
+- **Rate**: Every tick of a clock. (native)
+- **TextIO**: `stdout` lines of a `Popen` process (and other `TextIO` files). (native)
+- **ROS 2**: Subscriber, Service Client, Service Server.
+- **Zenoh**: Subscriber.
+- [Implement your own interface!](https://github.com/2lian/asyncio-for-robotics/blob/main/own_proto_example.md)
+
+> [!TIP]
+> An interface is not required for every operation. ROS 2 native publishers and nodes work just fine. 
 
 ## Code sample
 
-Syntax is identical between ROS 2 and Zenoh.
+Syntax is identical between ROS 2, Zenoh, TextIO, Rate...
 
 ### Wait for messages one by one
 
@@ -51,6 +62,7 @@ Application:
 - Get the latest sensor data
 - Get clock value
 - Wait for trigger
+- Wait for next tick of the Rate
 - Wait for system to be operational
 
 ```python
@@ -71,6 +83,7 @@ next = await sub.wait_for_next()
 Application:
 - Process a whole data stream
 - React to changes in sensor data
+- Execute on every tick of the Rate
 
 ```python
 # Continuously process the latest messages
@@ -86,38 +99,14 @@ async for msg in sub.listen_reliable():
         break
 ```
 
-### Reliable, non-drifting Rate
-
-Application:
-- Periodic updates and actions
-
-```python
-# Rate is simply a subscriber triggering on every tick
-rate = afor.Rate(frequency=0.01, time_source=time.time_ns)
-
-# Wait for the next tick
-await rate.wait_for_new()
-
-# Executes after a tick
-async for _ in rate.listen():
-    foo(...)
-
-# Reliably executes for every tick
-async for _ in sub.listen_reliable():
-    foo(...)
-```
-
 ### Improved Services / Queryable for ROS 2
 
-Services are needlessly convoluted in ROS 2 and intrinsically not async
-(because the server callback function MUST return a response). `afor` overrides
-the ROS behavior, allowing for the response to be sent later. Implementing
-similar systems for other transport protocol should be very easy: The server is just a
-`asyncio_for_robotics.core.BaseSub` generating responder objects.
+> [NOTE]
+> This is only for ROS 2.
 
 Application:
 - Client request reply from a server.
-- Servers can delay their response without blocking (not possible in ROS 2)
+- Servers can delay their response without blocking (not possible in native ROS 2)
 
 ```python
 # Server is once again a afor subscriber, but generating responder objects

@@ -1,12 +1,18 @@
-# Implement your own protocol
+# Implement your own interface
 
-If you have a stream of data, you can use it through `afor`. This quick tutorial will implement a `afor` subscriber getting data from `stdout` of a process. So every line the process printed to the terminal will be available as a string.
+If you have a stream of data, you can use it through `afor`!
+
+This quick tutorial will implement a `afor` subscriber getting data from `stdout` of a process. So every line the process printed to the terminal will be available as a string.
+
+> [!NOTE]
+> Such subscriber is already implemented by [`asyncio_for_robotics.textio.from_proc_stdout`](./asyncio_for_robotics/textio/sub.py). We will redo it because it's simple, and fully native python.
 
 ## Code
 
 The following runs `ping localhost` and gets the process `stdout` to a `BaseSub` of asyncio_for_robotics.
 
-The final code is available in the examples: [asyncio_for_robotics.example.custom_stdout](./asyncio_for_robotics/example/custom_stdout.py). You can run it using `python3 -m asyncio_for_robotics.example.custom_stdout`.
+> [!TIP]
+> The final code is available in the examples: [asyncio_for_robotics.example.custom_stdout](./asyncio_for_robotics/example/custom_stdout.py). Run it with `python3 -m asyncio_for_robotics.example.custom_stdout`.
 
 ```python
 import asyncio
@@ -102,6 +108,7 @@ The following method from asyncio will call our `reader` callback every time som
     loop.add_reader(stdout.fileno(), reader)
 ```
 
-## Important Note: Be careful to not miss data!
-
-In this example `.readline()` reads the next line on each call, and `reader()` is called on every line change. So we cannot miss a line.
+> [!CAUTION]
+> *Be careful to not miss data!*
+>
+> In this example `.readline()` reads the next line on each call, and `reader()` is called on every line change. So we cannot miss a line.
