@@ -14,7 +14,7 @@ setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 def session() -> Generator[subprocess.Popen[str], Any, Any]:
     logger.info("Starting process")
     proc = subprocess.Popen(
@@ -31,7 +31,7 @@ def session() -> Generator[subprocess.Popen[str], Any, Any]:
     proc.wait()
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 def pub(session: subprocess.Popen[str]) -> Generator[Callable[[str], None], Any, Any]:
     def write_in_proc(input: str) -> None:
         assert session.stdin is not None
