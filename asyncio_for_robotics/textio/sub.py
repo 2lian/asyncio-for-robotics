@@ -34,7 +34,7 @@ class Sub(BaseSub[_MsgType]):
         self.pre_process = pre_process
         super().__init__()
         if sys.platform.startswith("win"):
-            self._thread = threading.Thread(target=self._reader_thread, daemon=True)
+            self._thread = threading.Thread(target=self._reader_thread, daemon=False)
         else:
             self._event_loop.add_reader(self.stream.fileno(), self._io_update_cbk)
         self.is_closed = False
