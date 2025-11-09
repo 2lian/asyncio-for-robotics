@@ -30,4 +30,4 @@ jobs:
         environments: zenoh
     - name: Test with pixi+pytest
       run: |
-        pixi run -e zenoh pytest ./tests -s
+        pixi run -e zenoh pytest ./tests -s -vv

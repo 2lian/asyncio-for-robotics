@@ -28,9 +28,6 @@ def session() -> Generator[subprocess.Popen[str], Any, Any]:
     )
     yield proc
     logger.info("Closing process")
-    proc.stdin.close()
-    proc.stdout.close()
-    proc.stderr.close()
     proc.terminate()
     proc.wait()
 
@@ -63,6 +60,7 @@ async def test_wait_for_value(pub: Callable[[str], None], sub: afor.Sub[str]):
     sample = await afor.soft_wait_for(sub.wait_for_value(), 1)
     logger.info("got data")
     assert not isinstance(sample, TimeoutError), f"Did not receive response in time"
+    logger.info(sample)
     assert sample == payload
     logger.info("passed")
 
