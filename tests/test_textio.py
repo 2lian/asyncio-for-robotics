@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import subprocess
+import sys
 import time
 import warnings
 from typing import Any, AsyncGenerator, Callable, Generator
@@ -18,7 +19,7 @@ logger = logging.getLogger("asyncio_for_robotics.test")
 def session() -> Generator[subprocess.Popen[str], Any, Any]:
     logger.info("Starting process")
     proc = subprocess.Popen(
-        "bash",
+        "cmd.exe" if sys.platform.startswith("win") else "bash",
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -27,6 +28,9 @@ def session() -> Generator[subprocess.Popen[str], Any, Any]:
     )
     yield proc
     logger.info("Closing process")
+    proc.stdin.close()
+    proc.stdout.close()
+    proc.stderr.close()
     proc.terminate()
     proc.wait()
 
