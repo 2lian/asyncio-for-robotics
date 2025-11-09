@@ -101,7 +101,7 @@ async for msg in sub.listen_reliable():
 
 ### Improved Services / Queryable for ROS 2
 
-> [NOTE]
+> [!NOTE]
 > This is only for ROS 2.
 
 Application:
