@@ -1,6 +1,8 @@
 import asyncio
 import logging
 import subprocess
+import sys
+import threading
 from typing import IO, Callable, TypeVar, Union
 
 from asyncio_for_robotics.core.sub import BaseSub
@@ -31,13 +33,28 @@ class Sub(BaseSub[_MsgType]):
         self.stream = stream
         self.pre_process = pre_process
         super().__init__()
-        self._event_loop.add_reader(self.stream.fileno(), self._io_update_cbk)
+        if sys.platform.startswith("win"):
+            self._thread = threading.Thread(target=self._reader_thread, daemon=True)
+        else:
+            self._event_loop.add_reader(self.stream.fileno(), self._io_update_cbk)
         self.is_closed = False
         self._close_event = asyncio.Event()
 
     @property
     def name(self) -> str:
         return f"sub io-{self.stream.name}"
+
+    def _reader_thread(self):
+        for line in self.stream:
+            # push callback into asyncio loop
+            self._event_loop.call_soon_threadsafe(self._win_io_update_cbk, line)
+
+    def _win_io_update_cbk(self, line):
+        healthy = True
+        if line is not None:
+            healthy = self.input_data(line)
+        if not healthy:
+            self.close()
 
     def _io_update_cbk(self):
         """Is called on updates to the IO file."""
@@ -55,7 +72,10 @@ class Sub(BaseSub[_MsgType]):
         logger.debug(f"closing {self.name}")
         self.is_closed = True
         self._close_event.set()
-        self._event_loop.remove_reader(self.stream.fileno())
+        if sys.platform.startswith("win"):
+            pass
+        else:
+            self._event_loop.remove_reader(self.stream.fileno())
 
 
 def from_proc_stdout(
@@ -75,7 +95,9 @@ def from_proc_stdout(
         textio sub of stdout.
     """
     if process.stdout is None:
-        raise TypeError("process.stdout is None. Please use `stdout=subprocess.PIPE` when calling Popen.")
+        raise TypeError(
+            "process.stdout is None. Please use `stdout=subprocess.PIPE` when calling Popen."
+        )
     stdout: IO[_MsgType] = process.stdout
     sub = Sub(stdout, pre_process)
 
