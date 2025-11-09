@@ -5,10 +5,7 @@ The tests of `asyncio_for_robotics` are great practical examples!
 For ROS 2 in particular, `test_ros2_pubsub_thrd.py` goes through every subscription method, then triggers and verifies their different outcome.
 
 > [!NOTE]
-> Install the dependencies required to run the tests with:
-> ```bash
-> pip install asyncio_for_robotics[zenoh,dev]
-> ```
+> Install the dependencies required to run the tests with: `pip install asyncio_for_robotics[zenoh,dev]`
 
 Notes about testing with asyncio:
 - Async test functions automatically use an `asyncio` event loop fixture.
