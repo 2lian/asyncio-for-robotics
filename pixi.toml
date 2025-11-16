@@ -8,15 +8,7 @@ preview = ["pixi-build"]
 
 [package] 
 name = "asyncio_for_robotics"
-version = "0.0.0"
-
-[package.build] 
-backend = { name = "pixi-build-python", version = "==0.4.0" }
-
-[package.host-dependencies] 
-setuptools = ">=58.2.0"
-
-[package.run-dependencies] 
+version = "1.1.0"
 
 # Dependencies used by all environments
 [dependencies]
@@ -77,3 +69,18 @@ channels = ["https://prefix.dev/robostack-kilted"]
 [feature.kilted.dependencies]
 ros-kilted-ros-core = "*"
 ros-kilted-rmw-zenoh-cpp = "*"
+
+[package.build] 
+backend = { name = "pixi-build-python", version = "==0.4.0" }
+
+[package.host-dependencies] 
+pip = "*"
+setuptools = ">=58.2.0"
+
+[package.run-dependencies] 
+python = ">=3.11"
+
+# [package.run-dependencies] 
+# python = "<3.10"
+# async-timeout = ">=3.0"
+# typing_extensions = "*"
