@@ -215,11 +215,11 @@ async def test_listen_too_fast(pub: Callable[[bool], None], sub: BaseSub[bool]):
         last_payload = binary(sample_count)
         pub(last_payload)
         put_count += 1
-        await asyncio.sleep(0.001)
+        await asyncio.sleep(0.005)
         last_payload = binary(sample_count)
         pub(last_payload)
         put_count += 1
-        await asyncio.sleep(0.001)
+        await asyncio.sleep(0.005)
 
     assert put_count / 2 == sample_count == max_iter
 
