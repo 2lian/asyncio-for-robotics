@@ -1,6 +1,7 @@
 import asyncio
 import copy
 import logging
+import sys
 from typing import Any, AsyncGenerator, Callable, Generator
 
 import pytest
@@ -201,12 +202,16 @@ async def test_listen_one_by_one(pub: Callable[[bool], None], sub: BaseSub[bool]
 
 
 async def test_listen_too_fast(pub: Callable[[bool], None], sub: BaseSub[bool]):
+    if sys.platform.startswith("win"):
+        sleep_time = 0.1
+    else:
+        sleep_time = 0.001
     last_payload = True
     pub(last_payload)
     sample_count = 0
     put_count = 2
     max_iter = 10
-    await asyncio.sleep(0.02)
+    await asyncio.sleep(0.01)
     async for sample in sub.listen():
         sample_count += 1
         assert sample == last_payload, f"failed on {sample_count=}"
@@ -215,11 +220,11 @@ async def test_listen_too_fast(pub: Callable[[bool], None], sub: BaseSub[bool]):
         last_payload = binary(sample_count)
         pub(last_payload)
         put_count += 1
-        await asyncio.sleep(0.02)
+        await asyncio.sleep(0.001)
         last_payload = binary(sample_count)
         pub(last_payload)
         put_count += 1
-        await asyncio.sleep(0.1)
+        await asyncio.sleep(sleep_time)
 
     assert sample_count == max_iter
 
