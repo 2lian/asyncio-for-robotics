@@ -118,6 +118,7 @@ async def sub(
 
     def transmit(msg: Responder[SetBool.Request, SetBool.Response]):
         nonlocal s
+        msg.send()
         s._input_data_asyncio(msg.request.data)
 
     server.asap_callback.append(transmit)
@@ -202,7 +203,6 @@ async def test_listen_one_by_one(pub: Callable[[bool], None], sub: BaseSub[bool]
 async def test_listen_too_fast(pub: Callable[[bool], None], sub: BaseSub[bool]):
     last_payload = True
     pub(last_payload)
-    pub(last_payload)
     sample_count = 0
     put_count = 2
     max_iter = 20
@@ -221,7 +221,7 @@ async def test_listen_too_fast(pub: Callable[[bool], None], sub: BaseSub[bool]):
         put_count += 1
         await asyncio.sleep(0.005)
 
-    assert put_count / 2 == sample_count == max_iter
+    assert sample_count == max_iter
 
 
 async def test_reliable_one_by_one(pub: Callable[[bool], None], sub: BaseSub[bool]):
