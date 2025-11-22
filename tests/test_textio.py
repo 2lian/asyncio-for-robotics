@@ -190,7 +190,6 @@ async def test_reliable_too_fast(pub: Callable[[str], None], sub: afor.Sub[str])
     await asyncio.sleep(0.001)
     pub(put_queue.pop())
     await asyncio.sleep(0.001)
-    pub(put_queue.pop())
     async with afor.soft_timeout(2):
         async for sample in listener:
             payload = int(sample)
@@ -217,7 +216,6 @@ async def test_reliable_extremely_fast(pub: Callable[[str], None], sub: afor.Sub
     put_queue.reverse()
     received_buf = []
     listener = sub.listen_reliable(fresh=True, queue_size=len(data) * 2)
-    pub(put_queue.pop())
     pub(put_queue.pop())
     async with afor.soft_timeout(2):
         async for sample in listener:

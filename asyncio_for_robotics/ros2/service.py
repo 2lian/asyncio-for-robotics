@@ -10,8 +10,9 @@ from rclpy.service import Service as RosService
 from rclpy.task import Future as RosFuture
 
 from ..core.sub import BaseSub
+from .future import asyncify_future
 from .session import BaseSession, auto_session
-from .utils import QOS_DEFAULT, TopicInfo, _MsgType
+from .utils import QOS_DEFAULT, TopicInfo
 
 logger = logging.getLogger(__name__)
 
@@ -77,7 +78,9 @@ class Responder(Generic[_ReqT, _ResT]):
             response,
             self._srv.srv_type.Response,  # type: ignore
         ):
-            raise TypeError(f"Response is of the wrong type: \n  - {type(response)=}\n  - {self._srv.srv_type.Response=}")
+            raise TypeError(
+                f"Response is of the wrong type: \n  - {type(response)=}\n  - {self._srv.srv_type.Response=}"
+            )
         with self._srv.handle:
             c_implementation = self._srv._Service__service  # type: ignore
             if isinstance(header, _rclpy.rmw_service_info_t):
@@ -120,10 +123,10 @@ class Server(BaseSub[Responder[_ReqT, _ResT]]):
         The response is then send using `Responder.send()`
 
         Args:
-            msg_type: 
-            topic: 
-            qos_profile: 
-            session: 
+            msg_type:
+            topic:
+            qos_profile:
+            session:
         """
         self.session: BaseSession = self._resolve_session(session)
         self.topic_info = TopicInfo(topic=topic, msg_type=msg_type, qos=qos_profile)
@@ -157,7 +160,7 @@ class Server(BaseSub[Responder[_ReqT, _ResT]]):
         return serv_modified
 
     def _incomming_request_cbk(self, request: _ReqT, response: _ResT) -> Responder:
-        """Fake service callback 
+        """Fake service callback
 
         actually returning the responder to be later intercepted, and the
         header to be later set.
@@ -168,7 +171,7 @@ class Server(BaseSub[Responder[_ReqT, _ResT]]):
 
         def execute_in_asyncio_thread():
             responder_for_user._header_ready.add_done_callback(
-                    lambda *_: self._differed_header_ready_cbk(responder_for_user)
+                lambda *_: self._differed_header_ready_cbk(responder_for_user)
             )
 
         self._event_loop.call_soon_threadsafe(execute_in_asyncio_thread)
@@ -226,6 +229,28 @@ class Client(Generic[_ReqT, _ResT]):
             )
         return client
 
+    async def wait_for_service(self, polling_rate: float = 0.25):
+        """
+        Wait for a service server to become ready.
+
+        .. Note:
+            By default in ROS 2 this is a busy wait in a while loop. Crazy unga
+            bunga. Me too unga bunga.
+
+        Args:
+            polling_rate: Rate (in s) at which to check for readiness.
+
+        Returns:
+            As soon as a server becomes ready.
+        """
+        logger.debug("%s waiting for server", self.name)
+        while 1:
+            if self.cli.service_is_ready():
+                logger.debug("%s server is here", self.name)
+                return
+            else:
+                await asyncio.sleep(polling_rate)
+
     def call(self, req: _ReqT) -> Future[_ResT]:
         """Calls the service and returns the response as asyncio.Future
 
@@ -235,19 +260,16 @@ class Client(Generic[_ReqT, _ResT]):
         Returns:
             response as an asyncio.Future
         """
-        response: Future[_ResT] = Future()
+        logger.debug("%s making request", self.name)
 
-        def ros_cbk(ros_response):
+        def dbg(ros_response):
             logger.debug("%s got response", self.name)
-            self._event_loop.call_soon_threadsafe(
-                response.set_result, ros_response.result()
-            )
 
         # lock not necessary, ros seems safe
-        logger.debug("%s making request", self.name)
-        fut: RosFuture = self.cli.call_async(req)
-        fut.add_done_callback(ros_cbk)
-        return response
+        ros_fut: RosFuture = self.cli.call_async(req)
+        future: Future[_ResT] = asyncify_future(ros_fut, self._event_loop)
+        future.add_done_callback(dbg)
+        return future
 
     @property
     def name(self) -> str:
