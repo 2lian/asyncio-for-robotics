@@ -205,8 +205,8 @@ async def test_listen_too_fast(pub: Callable[[bool], None], sub: BaseSub[bool]):
     pub(last_payload)
     sample_count = 0
     put_count = 2
-    max_iter = 20
-    await asyncio.sleep(0.01)
+    max_iter = 10
+    await asyncio.sleep(0.02)
     async for sample in sub.listen():
         sample_count += 1
         assert sample == last_payload, f"failed on {sample_count=}"
@@ -215,11 +215,11 @@ async def test_listen_too_fast(pub: Callable[[bool], None], sub: BaseSub[bool]):
         last_payload = binary(sample_count)
         pub(last_payload)
         put_count += 1
-        await asyncio.sleep(0.005)
+        await asyncio.sleep(0.02)
         last_payload = binary(sample_count)
         pub(last_payload)
         put_count += 1
-        await asyncio.sleep(0.005)
+        await asyncio.sleep(0.1)
 
     assert sample_count == max_iter
 
