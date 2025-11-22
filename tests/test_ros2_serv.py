@@ -37,10 +37,10 @@ def session() -> Generator[aros.BaseSession, Any, Any]:
 
 
 topic = aros.TopicInfo(
-    "test/something",
-    String,
+    "test/srv",
+    SetBool,
     QoSProfile(
-        depth=100,
+        depth=500,
     ),
 )
 
@@ -49,7 +49,7 @@ topic = aros.TopicInfo(
 async def server(
     session: aros.BaseSession,
 ) -> AsyncGenerator[Server[SetBool.Request, SetBool.Response], Any]:
-    server = Server(SetBool, "test/srv")
+    server = Server(**topic.as_kwarg())
     yield server
     server.close()
 
@@ -58,7 +58,7 @@ async def server(
 async def client(
     session: aros.BaseSession,
 ) -> AsyncGenerator[Client[SetBool.Request, SetBool.Response], Any]:
-    client = Client(SetBool, "test/srv")
+    client = Client(**topic.as_kwarg())
     yield client
     client.close()
 
@@ -209,7 +209,7 @@ async def test_listen_too_fast(pub: Callable[[bool], None], sub: BaseSub[bool]):
     await asyncio.sleep(0.01)
     async for sample in sub.listen():
         sample_count += 1
-        assert sample == last_payload
+        assert sample == last_payload, f"failed on {sample_count=}"
         if sample_count >= max_iter:
             break
         last_payload = binary(sample_count)
