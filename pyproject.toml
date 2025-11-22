@@ -1,11 +1,11 @@
 [project]
 name = "asyncio_for_robotics"
-version = "1.1.0"
+version = "1.2.0"
 description = "Asyncio interface for ROS 2, Zenoh, and other robotic middlewares."
 readme = "README.md"
 license = "MIT"
 authors = [
-  { name = "Elian", email = "no@no.com" }
+  { name = "Elian NEPPEL", email = "elian.dev@posteo.com" }
 ]
 requires-python = ">=3.10"
 keywords = ["asyncio", "robotics", "ros2", "zenoh", "publisher", "subscriber"]

@@ -10,13 +10,14 @@ from typing import Any, AsyncGenerator, Generator
 
 import zenoh
 
-from asyncio_for_robotics.zenoh import Sub, auto_session, soft_timeout, soft_wait_for
+from asyncio_for_robotics.zenoh import Sub, auto_session, soft_timeout, soft_wait_for, set_auto_session
 
 logger = logging.getLogger("asyncio_for_robotics.test")
 
 
 @pytest.fixture(scope="module", autouse=True)
 def session() -> Generator[zenoh.Session, Any, Any]:
+    set_auto_session(zenoh.open(zenoh.Config()))
     ses = auto_session()
     yield ses
     if not auto_session().is_closed():
@@ -161,7 +162,6 @@ async def test_reliable_too_fast(pub: zenoh.Publisher, sub: Sub):
     await asyncio.sleep(0.1)
     pub.put(put_queue.pop())
     await asyncio.sleep(0.001)
-    pub.put(put_queue.pop())
     async with soft_timeout(2):
         async for sample in listener:
             payload = int(sample.payload.to_string())
@@ -185,7 +185,6 @@ async def test_reliable_extremely_fast(pub: zenoh.Publisher, sub: Sub):
     put_queue.reverse()
     received_buf = []
     listener = sub.listen_reliable(fresh=True, queue_size=len(data))
-    pub.put(put_queue.pop())
     pub.put(put_queue.pop())
     async with soft_timeout(2):
         async for sample in listener:

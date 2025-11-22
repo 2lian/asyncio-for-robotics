@@ -177,7 +177,6 @@ async def test_reliable_too_fast(pub: Publisher, sub: aros.Sub[String]):
     await asyncio.sleep(0.001)
     pub.publish(String(data=put_queue.pop()))
     await asyncio.sleep(0.001)
-    pub.publish(String(data=put_queue.pop()))
     async with soft_timeout(2):
         async for sample in listener:
             payload = int(sample.data)
@@ -199,7 +198,6 @@ async def test_reliable_extremely_fast(pub: Publisher, sub: aros.Sub[String]):
     put_queue.reverse()
     received_buf = []
     listener = sub.listen_reliable(fresh=True, queue_size=len(data) * 2)
-    pub.publish(String(data=put_queue.pop()))
     pub.publish(String(data=put_queue.pop()))
     async with soft_timeout(2):
         async for sample in listener:

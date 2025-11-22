@@ -1,5 +1,5 @@
 [workspace]
-authors = ["Elian <no@no.com>"]
+authors = ["Elian NEPPEL <elian.dev@posteo.com>"]
 channels = ["robostack-humble", "conda-forge"]
 name = "afor"
 platforms = ["linux-64", "win-64", "osx-64", "osx-arm64", "linux-aarch64"]
@@ -8,7 +8,7 @@ preview = ["pixi-build"]
 
 [package] 
 name = "asyncio_for_robotics"
-version = "1.1.0"
+version = "1.2.0"
 
 # Dependencies used by all environments
 [dependencies]
@@ -30,6 +30,7 @@ libgl-devel = "*"
 # Each environment corresponds to a different ROS distribution
 # and can be activated using the `pixi run/shell -e <environment>` command.
 [environments]
+default = { features = ["jazzy", "dev", "zenoh"] }
 humble = { features = ["humble", "dev", "zenoh"] }
 jazzy = { features = ["jazzy", "dev", "zenoh"] }
 kilted = { features = ["kilted", "dev", "zenoh"] }
