@@ -51,7 +51,8 @@ class Sub(BaseSub[_MsgType]):
         if line is not None:
             healthy = self.input_data(line)
         if not healthy:
-            self._event_loop.call_soon_threadsafe(self.close)
+            return
+            # self._event_loop.call_soon_threadsafe(self.close)
 
     def _io_update_cbk(self):
         """Is called on updates to the IO file."""
@@ -70,7 +71,6 @@ class Sub(BaseSub[_MsgType]):
         self.is_closed = True
         self._close_event.set()
         self._event_loop.remove_reader(self.stream.fileno())
-
 
 def from_proc_stdout(
     process: subprocess.Popen[_MsgType],
@@ -100,6 +100,7 @@ def from_proc_stdout(
         # await asyncio.to_thread(process.wait)
         while process.poll() is None:
             await asyncio.sleep(1)
+        logger.debug(f"{sub.name} closed because of process end.")
         sub.close()
 
     proc_wait_task = asyncio.create_task(close_reader())
@@ -107,7 +108,9 @@ def from_proc_stdout(
     async def closed_so_stop_waiting():
         nonlocal proc_wait_task
         await sub._close_event.wait()
+        logger.debug(f"{sub.name} closed cancelling process monitoring task")
         proc_wait_task.cancel()
+        await proc_wait_task
 
     closed_wait_task = asyncio.create_task(closed_so_stop_waiting())
     return sub
