@@ -36,6 +36,7 @@ async def soft_wait_for(coro: Awaitable[_T], timeout: float) -> _T | TimeoutErro
     if task.done():
         return task.result()
     else:
+        task.cancel()
         return TimeoutError("afor.soft_wait_for")
 
 
