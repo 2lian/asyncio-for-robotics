@@ -3,45 +3,55 @@ authors = ["Elian NEPPEL <elian.dev@posteo.com>"]
 channels = ["robostack-humble", "conda-forge"]
 name = "afor"
 platforms = ["linux-64", "win-64", "osx-64", "osx-arm64", "linux-aarch64"]
-version = "0.0.0"
 preview = ["pixi-build"]
 
-# Dependencies used by all environments
 [dependencies]
 python = ">=3.10,<=3.14"
-# Build tools
-compilers = "*"
-cmake = "*"
-pkg-config = "*"
-make = "*"
-ninja = "*"
-# ROS specific tools
-rosdep = "*"
-colcon-common-extensions = "*"
 
-[target.linux.dependencies]
-libgl-devel = "*"
-
-# Define all the different ROS environments
-# Each environment corresponds to a different ROS distribution
-# and can be activated using the `pixi run/shell -e <environment>` command.
 [environments]
 default = { features = ["jazzy", "dev", "zenoh"] }
 humble = { features = ["humble", "dev", "zenoh"] }
 jazzy = { features = ["jazzy", "dev", "zenoh"] }
 kilted = { features = ["kilted", "dev", "zenoh"] }
+py310 = {features = ["zenoh", "dev", "py310"]}
+py311 = {features = ["zenoh", "dev", "py311"]}
+py312 = {features = ["zenoh", "dev", "py312"]}
+py313 = {features = ["zenoh", "dev", "py313"]}
+py314 = {features = ["zenoh", "dev", "py314"]}
 zenoh = { features = ["zenoh", "dev"] }
 dev = { features = ["dev"] }
 
-[pypi-dependencies]
-asyncio-for-robotics = { path=".", editable = true }
+[feature.py310.dependencies]
+python = "==3.10"
+async-timeout = ">=3.0"
+typing_extensions = ">=4.0"
 
+[feature.py311.dependencies]
+python = "==3.11"
 
-[feature.dev.pypi-dependencies]
-asyncio-for-robotics = { path=".", extras = ["dev"] , editable = true }
+[feature.py312.dependencies]
+python = "==3.12"
+
+[feature.py313.dependencies]
+python = "==3.13"
+
+[feature.py314.dependencies]
+python = "==3.14"
+
+[feature.zenoh.dependencies]
+zenoh = "*"
 
 [feature.zenoh.pypi-dependencies]
-asyncio-for-robotics = { path=".", extras = ["zenoh"] , editable = true }
+eclipse-zenoh = "*"
+
+[feature.dev.dependencies]
+colorama = "*"
+pytest = "*"
+pytest-asyncio = "*"
+
+[feature.dev.pypi-dependencies]
+asyncio_for_robotics = { path = ".", editable=true}
+
 
 ### ROS Humble ####
 [feature.humble]
@@ -69,19 +79,9 @@ ros-kilted-rmw-zenoh-cpp = "*"
 
 [package] 
 name = "asyncio_for_robotics"
-version = "1.2.1"
 
-[package.build] 
-backend = { name = "pixi-build-python", version = "==0.4.0" }
+[package.build]
+backend = { name = "pixi-build-rattler-build", version = "0.3.*" }
 
-[package.host-dependencies] 
-pip = "*"
-setuptools = ">=58.2.0"
-
-[package.run-dependencies] 
-python = ">=3.11"
-
-# [package.run-dependencies] 
-# python = "<3.11"
-# async-timeout = ">=3.0"
-# typing_extensions = "*"
+# [package.run-dependencies]
+# asyncio_for_robotics = { path = "."}
