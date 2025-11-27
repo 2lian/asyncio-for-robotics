@@ -2,6 +2,7 @@
 Session.vim
 asyncio_for_robotics.egg-info
 **/__pycache__
+**/*pycache*
 **cache**
 **log**
 build/
@@ -9,3 +10,5 @@ install/
 log/
 uv.lock
 .pixi
+output/
+*.conda

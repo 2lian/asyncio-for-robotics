@@ -1,0 +1,61 @@
+context:
+  version: 1.2.1
+
+package:
+  name: asyncio_for_robotics
+  version: ${{ version }}
+
+source:
+  path: .
+  use_gitignore: true 
+
+# source:
+# - url: https://pypi.org/packages/source/a/asyncio_for_robotics/asyncio_for_robotics-${{ version }}.tar.gz
+#   sha256: a5ab38ff40b36897c0acd89836e803f706046543304b878a69746a0a20d5e7ef
+
+build:
+  script: ${{ PYTHON }} -m pip install .
+  # files:
+  #   exclude:
+  #     - ./**cache**
+  #     - ./**/*.pyc
+  #     - asyncio_for_robotics/**/*cache*/**
+  # noarch: python
+  # version_independent: false
+
+requirements:
+  host:
+  - python # == 3.14
+  - setuptools >= 58.2.0
+  - pip
+  run:
+  # - python >= 3.10
+  - python
+  - if: python <= "3.10" 
+    then: 
+      - typing_extensions
+      - async-timeout
+
+tests:
+- python:
+    imports:
+    - asyncio_for_robotics
+    - asyncio_for_robotics.core
+    - asyncio_for_robotics.core.logger
+    - asyncio_for_robotics.core.sub
+    - asyncio_for_robotics.core.utils
+    # - asyncio_for_robotics.example
+    # - asyncio_for_robotics.ros2
+    # - asyncio_for_robotics.zenoh
+    - asyncio_for_robotics.textio
+    pip_check: true
+# - script:
+#     - pytest ./tests
+#   requirements:  
+#     run:
+#       - pytest
+#       - pytest-asyncio
+#       - colorama
+#   files:  
+#     source:
+#       - tests/
