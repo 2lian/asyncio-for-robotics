@@ -40,15 +40,18 @@ dependencies = [
 requires = ["setuptools >= 58.2.0"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = [
-    "asyncio_for_robotics",
-    "asyncio_for_robotics.core",
-    "asyncio_for_robotics.example",
-    "asyncio_for_robotics.ros2",
-    "asyncio_for_robotics.zenoh",
-    "asyncio_for_robotics.textio",
-]
+[tool.setuptools.packages.find]
+include = ["asyncio_for_robotics", "asyncio_for_robotics.*"]
+
+# [tool.setuptools]
+# packages = [
+#     "asyncio_for_robotics",
+#     "asyncio_for_robotics.core",
+#     "asyncio_for_robotics.example",
+#     "asyncio_for_robotics.ros2",
+#     "asyncio_for_robotics.zenoh",
+#     "asyncio_for_robotics.textio",
+# ]
 
 [project.optional-dependencies]
 zenoh = ["eclipse-zenoh>=1.0.0"]

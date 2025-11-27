@@ -37,6 +37,7 @@ tests:
     - asyncio_for_robotics.core.sub
     - asyncio_for_robotics.core.utils
     - asyncio_for_robotics.textio
+    - asyncio_for_robotics.example.custom_stdout
     pip_check: true
 - script:
     - python3 -m pytest ./tests
