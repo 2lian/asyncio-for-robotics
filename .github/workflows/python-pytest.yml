@@ -28,4 +28,4 @@ jobs:
         python -m pip install .[dev,zenoh]
     - name: Test with pytest
       run: |
-        pytest ./tests
+        pytest ./tests -s -vv

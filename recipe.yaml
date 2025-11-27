@@ -1,5 +1,5 @@
 context:
-  version: 1.2.1
+  version: 1.2.4
 
 package:
   name: asyncio_for_robotics
@@ -15,21 +15,14 @@ source:
 
 build:
   script: ${{ PYTHON }} -m pip install .
-  # files:
-  #   exclude:
-  #     - ./**cache**
-  #     - ./**/*.pyc
-  #     - asyncio_for_robotics/**/*cache*/**
-  # noarch: python
-  # version_independent: false
+  noarch: python
 
 requirements:
   host:
-  - python # == 3.14
+  - python >= 3.10
   - setuptools >= 58.2.0
   - pip
   run:
-  # - python >= 3.10
   - python
   - if: python <= "3.10" 
     then: 
@@ -41,21 +34,17 @@ tests:
     imports:
     - asyncio_for_robotics
     - asyncio_for_robotics.core
-    - asyncio_for_robotics.core.logger
     - asyncio_for_robotics.core.sub
     - asyncio_for_robotics.core.utils
-    # - asyncio_for_robotics.example
-    # - asyncio_for_robotics.ros2
-    # - asyncio_for_robotics.zenoh
     - asyncio_for_robotics.textio
     pip_check: true
-# - script:
-#     - pytest ./tests
-#   requirements:  
-#     run:
-#       - pytest
-#       - pytest-asyncio
-#       - colorama
-#   files:  
-#     source:
-#       - tests/
+- script:
+    - python3 -m pytest ./tests
+  requirements:  
+    run:
+      - pytest
+      - pytest-asyncio
+      - colorama
+  files:  
+    source:
+      - tests/
