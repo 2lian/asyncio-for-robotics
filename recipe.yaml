@@ -39,10 +39,28 @@ tests:
     - asyncio_for_robotics.textio
     - asyncio_for_robotics.example.custom_stdout
     pip_check: true
+    python_version: [
+      "3.10.*",
+      "3.11.*",
+      "3.12.*",
+      "3.13.*",
+      "3.14.*"]
 - script:
     - python3 -m pytest ./tests
   requirements:  
     run:
+      - python >= 3.14
+      - pytest
+      - pytest-asyncio
+      - colorama
+  files:  
+    source:
+      - tests/
+- script:
+    - python3 -m pytest ./tests
+  requirements:  
+    run:
+      - python <= 3.10
       - pytest
       - pytest-asyncio
       - colorama

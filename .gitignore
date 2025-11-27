@@ -4,7 +4,7 @@ asyncio_for_robotics.egg-info
 **/__pycache__
 **/*pycache*
 **cache**
-**.log
+**.log*
 build/
 install/
 log/
