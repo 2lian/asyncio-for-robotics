@@ -3,7 +3,7 @@ name = "asyncio_for_robotics"
 version = "1.2.1"
 description = "Asyncio interface for ROS 2, Zenoh, and other robotic middlewares."
 readme = "README.md"
-license = { text = "MIT" }
+license = "MIT"
 authors = [
   { name = "Elian NEPPEL", email = "elian.dev@posteo.com" }
 ]
@@ -39,8 +39,15 @@ dependencies = [
 requires = ["setuptools >= 58.2.0"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools.packages.find]
-include = ["asyncio_for_robotics", "asyncio_for_robotics.*"]
+[tool.setuptools]
+packages = [
+    "asyncio_for_robotics",
+    "asyncio_for_robotics.core",
+    "asyncio_for_robotics.example",
+    "asyncio_for_robotics.ros2",
+    "asyncio_for_robotics.zenoh",
+    "asyncio_for_robotics.textio",
+]
 
 [project.optional-dependencies]
 zenoh = ["eclipse-zenoh>=1.0.0"]

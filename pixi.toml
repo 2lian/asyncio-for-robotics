@@ -33,8 +33,8 @@ kilted = { features = ["kilted", "dev", "zenoh"] }
 zenoh = { features = ["zenoh", "dev"] }
 dev = { features = ["dev"] }
 
-[pypi-dependencies]
-asyncio-for-robotics = { path=".", editable = true }
+# [pypi-dependencies]
+# asyncio-for-robotics = { path=".", editable = true }
 
 
 [feature.dev.pypi-dependencies]
@@ -69,19 +69,18 @@ ros-kilted-rmw-zenoh-cpp = "*"
 
 [package] 
 name = "asyncio_for_robotics"
-version = "1.2.1"
+version = "1.2.3.11"
 
 [package.build] 
 backend = { name = "pixi-build-python", version = "==0.4.0" }
 
 [package.host-dependencies] 
-pip = "*"
 setuptools = ">=58.2.0"
 
 [package.run-dependencies] 
-python = ">=3.11"
+python = ">=3.11, <=3.14"
 
 # [package.run-dependencies] 
-# python = "<3.11"
+# python = ">=3.10, <3.11"
 # async-timeout = ">=3.0"
-# typing_extensions = "*"
+# typing_extensions = ">=4.0"
