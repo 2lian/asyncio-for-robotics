@@ -1,7 +1,7 @@
 # Asyncio For Robotics Examples
 
 This directory contains runtime examples demonstrating the usage of
-`asyncio_for_robotics` with ROS 2 and Zenoh.
+`asyncio_for_robotics` with ROS 2, Zenoh and the `stdout` of a ping command.
 
 The examples are intentionally verbose and well-documented in the code.  
 
