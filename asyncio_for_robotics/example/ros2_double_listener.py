@@ -38,7 +38,6 @@ async def main():
         # waits for a message on any of the topics
         await asyncio.wait([task1, task2], return_when=asyncio.FIRST_COMPLETED)
 
-        # waits for 0.2s for all topics to maybe have a new message
         # this waits for an additional 0.2s after receiving the first message
         # However it continues immediately once all messages are received!
         async with soft_timeout(0.2):
