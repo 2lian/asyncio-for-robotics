@@ -14,30 +14,32 @@ TOPIC = afor.TopicInfo(msg_type=String, topic="topic")
 
 
 async def hello_world_publisher():
-    # create the publisher safely
+    # creates a standard ROS 2 publisher safely
     with afor.auto_session().lock() as node:
         pub = node.create_publisher(TOPIC.msg_type, TOPIC.topic, TOPIC.qos)
-
-    i = 0
-    last_t = None
-    async for t in Rate(frequency=2).listen_reliable():  # stable timer
-        if last_t is None:
-            last_t = t
-        data = f"[Hello World! timestamp: {(t-last_t)/1e9}s]"
-        i += 1
-        print(f"Publishing: {data}")
-        pub.publish(String(data=data))  # sends data (lock is not necessary)
+    start_time = None
+    
+    # Async for loop, itterating for every tick of a 2Hz timer
+    async for t_ns in Rate(frequency=2).listen_reliable():  
+        if start_time is None:
+            start_time = t_ns
+        payload = f"[Hello World! timestamp: {(t_ns-start_time)/1e9}s]"
+        print(f"Publishing: {payload}")
+        pub.publish(String(data=payload))  # sends payload (lock not necessary)
 
 
 async def hello_world_subscriber():
-    # creates sub on the given topic
+    # creates an afor subscriber for a ROS 2 topic
     sub = afor.Sub(TOPIC.msg_type, TOPIC.topic, TOPIC.qos)
-    # async for loop itterating every messages
+    
+    # async for loop itterating for every messages received by the sub
     async for message in sub.listen_reliable():
         print(f"Received: {message.data}")
 
 
 async def hello_world_pubsub():
+    # starts both tasks.
+    # Notice how easy it is to compose behaviors.
     sub_task = asyncio.create_task(hello_world_subscriber())
     pub_task = asyncio.create_task(hello_world_publisher())
     await asyncio.wait([pub_task, sub_task])
