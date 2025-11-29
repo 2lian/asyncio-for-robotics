@@ -65,8 +65,6 @@ class Responder(Generic[_ReqT, _ResT]):
 
         This reimplement the `Service.send_response` of ros, because we overode
         it previously with `response_overide`.
-
-        This needs to be async because we need to wait for the header data.
         """
         if response is None:
             response = self.response
