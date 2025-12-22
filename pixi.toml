@@ -59,6 +59,7 @@ channels = ["https://prefix.dev/robostack-humble"]
 
 [feature.humble.dependencies]
 ros-humble-ros-core = "*"
+ros-humble-demo-nodes-py = "*"
 ros-humble-rmw-zenoh-cpp = "*"
 
 ### ROS Jazzy ####
@@ -67,6 +68,7 @@ channels = ["https://prefix.dev/robostack-jazzy"]
 
 [feature.jazzy.dependencies]
 ros-jazzy-ros-core = "*"
+ros-jazzy-demo-nodes-py = "*"
 ros-jazzy-rmw-zenoh-cpp = "*"
 
 ### ROS Kilted ####
@@ -75,6 +77,7 @@ channels = ["https://prefix.dev/robostack-kilted"]
 
 [feature.kilted.dependencies]
 ros-kilted-ros-core = "*"
+ros-kilted-demo-nodes-py = "*"
 ros-kilted-rmw-zenoh-cpp = "*"
 
 [package] 
