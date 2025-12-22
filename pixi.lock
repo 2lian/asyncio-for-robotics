@@ -7011,7 +7011,7 @@ packages:
 - pypi: ./
   name: asyncio-for-robotics
   version: 1.2.4
-  sha256: 2763cd0aae1e5fc28edb6caa81868dc85b1b7279fb203db6d37d898d091c01bd
+  sha256: 2e275cf89a950c62cacf61a47ede19cfee10e4fc0420a2209f97805e304b1ae3
   requires_dist:
   - typing-extensions>=4.0 ; python_full_version < '3.11'
   - async-timeout ; python_full_version < '3.11'
@@ -7023,7 +7023,7 @@ packages:
   - uvloop ; extra == 'benchmarks'
   - build ; extra == 'build'
   - twine ; extra == 'build'
-  requires_python: '>=3.10,<=3.14'
+  requires_python: '>=3.10,<3.15'
   editable: true
 - conda: https://conda.anaconda.org/conda-forge/linux-64/attr-2.5.2-h39aace5_0.conda
   sha256: a9c114cbfeda42a226e2db1809a538929d2f118ef855372293bd188f71711c48
