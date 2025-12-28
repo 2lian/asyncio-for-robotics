@@ -36,7 +36,7 @@ class Sub(BaseSub[_MsgType]):
         self.pre_process = pre_process
         super().__init__()
         if sys.platform.startswith("win"):
-            warnings.warn("Not implemented for windows.")
+            warnings.warn("Windows requires changing the asyncio loop type")
         else:
             self._event_loop.add_reader(self.stream.fileno(), self._io_update_cbk)
         self.is_closed = False

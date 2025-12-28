@@ -1,23 +1,27 @@
-import logging
-from typing import Any, AsyncGenerator, Generator
-
 import pytest
+
 pytest.importorskip("rclpy")
 pytest.importorskip("yaml")
+
+import logging
+from typing import Any, AsyncGenerator, Callable, Generator
+
 import rclpy
 from rclpy.publisher import Publisher
 from rclpy.qos import QoSProfile
 from std_msgs.msg import String
 from test_ros2_pubsub_thr import (
+    TOPIC,
+    sub,
     test_freshness,
     test_listen_one_by_one,
     test_listen_too_fast,
+    test_reliable_extremely_fast,
     test_reliable_one_by_one,
     test_reliable_too_fast,
     test_wait_for_value,
     test_wait_new,
     test_wait_next,
-    test_reliable_extremely_fast,
 )
 
 import asyncio_for_robotics.ros2 as aros
@@ -45,26 +49,14 @@ async def session(rclpy_init) -> AsyncGenerator[aros.BaseSession, Any]:
     ses.close()
 
 
-TOPIC = aros.TopicInfo(
-    "test/something",
-    String,
-    QoSProfile(
-        depth=100,
-    ),
-)
-
-
-@pytest.fixture
-def pub(session: aros.BaseSession) -> Generator[Publisher, Any, Any]:
+@pytest.fixture(scope="function")
+def pub(session: aros.BaseSession) -> Generator[Callable[[str], None], Any, Any]:
     with session.lock() as node:
-        p: Publisher = node.create_publisher(**TOPIC.as_kwarg())
-    yield p
+        publisher = node.create_publisher(*TOPIC.as_arg())
+
+    def write_in_proc(input: str) -> None:
+        publisher.publish(String(data=input))
+
+    yield write_in_proc
     with session.lock() as node:
-        node.destroy_publisher(p)
-
-
-@pytest.fixture
-async def sub(session) -> AsyncGenerator[aros.Sub[String], Any]:
-    s: aros.Sub = aros.Sub(**TOPIC.as_kwarg())
-    yield s
-    s.close()
+        node.destroy_publisher(publisher)
