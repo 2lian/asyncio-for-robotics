@@ -26,7 +26,6 @@ from base_tests import (
     test_wait_next,
 )
 from std_msgs.msg import String
-
 import asyncio_for_robotics.ros2 as afor
 import asyncio_for_robotics.textio as afor_io
 from asyncio_for_robotics.core._logger import setup_logger
