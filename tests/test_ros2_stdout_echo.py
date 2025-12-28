@@ -32,6 +32,14 @@ import asyncio_for_robotics.ros2 as afor
 import asyncio_for_robotics.textio as afor_io
 from asyncio_for_robotics.core._logger import setup_logger
 
+is_win = (
+    sys.version_info[0] == 3
+    and sys.version_info[1] >= 8
+    and sys.platform.startswith("win")
+)
+
+pytestmark = pytest.mark.skipif(is_win, reason="Requires a special EvenLoop")
+
 setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
 
