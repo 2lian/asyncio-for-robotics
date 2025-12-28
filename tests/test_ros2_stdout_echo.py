@@ -2,6 +2,10 @@
 Tests ROS2 and stdout using the talker/listened nodes
 """
 
+import pytest
+
+pytest.importorskip("rclpy")
+
 import asyncio
 import logging
 import subprocess
@@ -9,12 +13,8 @@ import sys
 from os import environ
 from typing import Any, AsyncGenerator, Callable, Generator
 
-import pytest
-
-pytest.importorskip("rclpy")
 import rclpy
-from std_msgs.msg import String
-from test_textio import (
+from base_tests import (
     test_freshness,
     test_listen_one_by_one,
     test_listen_too_fast,
@@ -25,10 +25,20 @@ from test_textio import (
     test_wait_new,
     test_wait_next,
 )
+from rclpy.qos import QoSProfile
+from std_msgs.msg import String
 
 import asyncio_for_robotics.ros2 as afor
 import asyncio_for_robotics.textio as afor_io
 from asyncio_for_robotics.core._logger import setup_logger
+
+is_win = (
+    sys.version_info[0] == 3
+    and sys.version_info[1] >= 8
+    and sys.platform.startswith("win")
+)
+
+pytestmark = pytest.mark.skipif(is_win, reason="Requires a special EvenLoop")
 
 setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
@@ -90,7 +100,13 @@ def node_process(zenoh_router):
     logger.info("Closed ros node")
 
 
-TOPIC = afor.TopicInfo(topic="/chatter", msg_type=String)
+TOPIC = afor.TopicInfo(
+    topic="/chatter",
+    msg_type=String,
+    qos=QoSProfile(
+        depth=10000,
+    ),
+)
 
 
 @pytest.fixture(scope="module")
@@ -102,6 +118,8 @@ def pub(session: afor.BaseSession) -> Generator[Callable[[str], None], Any, Any]
         publisher.publish(String(data=input))
 
     yield write_in_proc
+    with session.lock() as node:
+        node.destroy_publisher(publisher)
 
 
 @pytest.fixture
