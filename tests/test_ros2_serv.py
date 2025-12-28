@@ -1,13 +1,13 @@
+import pytest
+
+pytest.importorskip("rclpy")
+
 import asyncio
 import copy
 import logging
 import sys
 from typing import Any, AsyncGenerator, Callable, Generator
 
-import pytest
-
-pytest.importorskip("rclpy")
-pytest.importorskip("yaml")
 import rclpy
 from rclpy.publisher import Publisher
 from rclpy.qos import QoSProfile

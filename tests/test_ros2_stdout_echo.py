@@ -2,6 +2,10 @@
 Tests ROS2 and stdout using the talker/listened nodes
 """
 
+import pytest
+
+pytest.importorskip("rclpy")
+
 import asyncio
 import logging
 import subprocess
@@ -9,10 +13,6 @@ import sys
 from os import environ
 from typing import Any, AsyncGenerator, Callable, Generator
 
-import pytest
-from rclpy.qos import QoSProfile
-
-pytest.importorskip("rclpy")
 import rclpy
 from base_tests import (
     test_freshness,
@@ -25,7 +25,9 @@ from base_tests import (
     test_wait_new,
     test_wait_next,
 )
+from rclpy.qos import QoSProfile
 from std_msgs.msg import String
+
 import asyncio_for_robotics.ros2 as afor
 import asyncio_for_robotics.textio as afor_io
 from asyncio_for_robotics.core._logger import setup_logger

@@ -1,9 +1,10 @@
-import logging
-from typing import Any, AsyncGenerator, Callable, Generator, Optional
-
 import pytest
 
 pytest.importorskip("rclpy")
+
+import logging
+from typing import Any, AsyncGenerator, Callable, Generator, Optional
+
 import rclpy
 from base_tests import (
     test_freshness,
@@ -48,6 +49,7 @@ topic = aros.TopicInfo(
     ),
 )
 TOPIC = topic
+
 
 class SubProcessed(BaseSub[str]):
     def __init__(
