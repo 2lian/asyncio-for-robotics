@@ -1,5 +1,6 @@
+# run using `rattler-build build` then upload ./output/noarch/asyncio_for_robotics-1.2.5-pyh4616a5c_0.conda
 context:
-  version: 1.2.4
+  version: 1.2.5
 
 package:
   name: asyncio_for_robotics
@@ -8,10 +9,6 @@ package:
 source:
   path: .
   use_gitignore: true 
-
-# source:
-# - url: https://pypi.org/packages/source/a/asyncio_for_robotics/asyncio_for_robotics-${{ version }}.tar.gz
-#   sha256: a5ab38ff40b36897c0acd89836e803f706046543304b878a69746a0a20d5e7ef
 
 build:
   script: ${{ PYTHON }} -m pip install .
