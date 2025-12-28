@@ -14,12 +14,14 @@ from base_tests import (test_freshness, test_listen_one_by_one,
 import asyncio_for_robotics.textio as afor
 from asyncio_for_robotics.core._logger import setup_logger
 
-if sys.version_info[0]==3 and sys.version_info[1] >= 8 and sys.platform.startswith('win'):
-    @pytest.fixture(
-        scope="session",
-    )
-    def event_loop_policy(request):
+@pytest.fixture(
+    scope="module",
+)
+def event_loop_policy(request):
+    if sys.version_info[0]==3 and sys.version_info[1] >= 8 and sys.platform.startswith('win'):
         return asyncio.WindowsSelectorEventLoopPolicy()
+    else:
+        return asyncio.DefaultEventLoopPolicy()
 
 setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
