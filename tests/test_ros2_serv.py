@@ -271,7 +271,7 @@ async def test_reliable_too_fast(pub: Callable[[bool], None], sub: BaseSub[bool]
     assert data == received_buf
 
 
-@pytest.mark.xfail
+@pytest.mark.xfail(strict=False, reason="flaky depending on platform, middleware ...")
 async def test_reliable_extremely_fast(pub: Callable[[bool], None], sub: BaseSub[bool]):
     data = [binary(n) for n in range(30)]
     put_queue: list[bool] = [b for b in data]

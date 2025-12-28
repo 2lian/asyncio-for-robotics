@@ -10,11 +10,11 @@ from os import environ
 from typing import Any, AsyncGenerator, Callable, Generator
 
 import pytest
+from rclpy.qos import QoSProfile
 
 pytest.importorskip("rclpy")
 import rclpy
-from std_msgs.msg import String
-from test_textio import (
+from base_tests import (
     test_freshness,
     test_listen_one_by_one,
     test_listen_too_fast,
@@ -25,6 +25,7 @@ from test_textio import (
     test_wait_new,
     test_wait_next,
 )
+from std_msgs.msg import String
 
 import asyncio_for_robotics.ros2 as afor
 import asyncio_for_robotics.textio as afor_io
@@ -90,7 +91,13 @@ def node_process(zenoh_router):
     logger.info("Closed ros node")
 
 
-TOPIC = afor.TopicInfo(topic="/chatter", msg_type=String)
+TOPIC = afor.TopicInfo(
+    topic="/chatter",
+    msg_type=String,
+    qos=QoSProfile(
+        depth=10000,
+    ),
+)
 
 
 @pytest.fixture(scope="module")
@@ -102,6 +109,8 @@ def pub(session: afor.BaseSession) -> Generator[Callable[[str], None], Any, Any]
         publisher.publish(String(data=input))
 
     yield write_in_proc
+    with session.lock() as node:
+        node.destroy_publisher(publisher)
 
 
 @pytest.fixture
