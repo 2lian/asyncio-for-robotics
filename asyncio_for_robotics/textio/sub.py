@@ -1,27 +1,29 @@
 import asyncio
+from contextlib import suppress
 import logging
+import os
 import subprocess
 import sys
-import threading
-import time
-from typing import IO, Callable, TypeVar, Union
 import warnings
+from typing import IO, Callable, TypeVar, Union
+
+from asyncio.constants import SENDFILE_FALLBACK_READBUFFER_SIZE
 
 from asyncio_for_robotics.core.sub import BaseSub
 
-_MsgType = TypeVar("_MsgType", str, bytes)
+_StrOrBytes = TypeVar("_StrOrBytes", str, bytes)
 logger = logging.getLogger(__name__)
 
 
-def default_preprocess(input: _MsgType) -> _MsgType:
-    return input.strip()
+def default_preprocess(input: bytes) -> str:
+    return input.decode().strip()
 
 
-class Sub(BaseSub[_MsgType]):
+class Sub(BaseSub[_StrOrBytes]):
     def __init__(
         self,
-        stream: IO[_MsgType],
-        pre_process: Callable[[_MsgType], Union[_MsgType, None]] = default_preprocess,
+        stream: IO,
+        pre_process: Callable[[bytes], Union[_StrOrBytes, None]] = default_preprocess,
     ) -> None:
         """Subscriber streaming updates of a file.
 
@@ -32,50 +34,59 @@ class Sub(BaseSub[_MsgType]):
             pre_process: Function applied before any other processing. If
                 returns None, line is skipped.
         """
-        self.stream = stream
-        self.pre_process = pre_process
+        fd = os.dup(stream.fileno())
+        stream = os.fdopen(fd, 'rb', closefd=True)
+        self.stream: IO = stream
+        self.pre_process: Callable[[bytes], Union[_StrOrBytes, None]] = pre_process
         super().__init__()
         if sys.platform.startswith("win"):
             warnings.warn("Windows requires changing the asyncio loop type")
-        else:
-            self._event_loop.add_reader(self.stream.fileno(), self._io_update_cbk)
-        self.is_closed = False
-        self._close_event = asyncio.Event()
+        self.is_closed: bool = False
+        self._close_event: asyncio.Event = asyncio.Event()
+        self._read_task: asyncio.Task = asyncio.create_task(self._read_loop())
+
+    async def _read_loop(self):
+        reader = asyncio.StreamReader()
+        protocol = asyncio.StreamReaderProtocol(reader)
+        tra, _ = await self._event_loop.connect_read_pipe(lambda: protocol, self.stream)
+
+        try:
+            async for line in reader:
+                self._io_update_cbk(line)
+        except asyncio.CancelledError:
+            pass
+        finally:
+            protocol.connection_lost(None)
+            tra.close()
 
     @property
     def name(self) -> str:
         return f"sub io-{self.stream.name}"
 
-    def _win_io_update_cbk(self, line):
-        healthy = True
-        if line is not None:
-            healthy = self.input_data(line)
-        if not healthy:
-            return
-            # self._event_loop.call_soon_threadsafe(self.close)
-
-    def _io_update_cbk(self):
+    def _io_update_cbk(self, line_bytes: bytes):
         """Is called on updates to the IO file."""
-        line = self.pre_process(self.stream.readline())
+        line = self.pre_process(line_bytes)
         healthy = True
         if line is not None:
             healthy = self.input_data(line)
         if not healthy:
             self.close()
 
-    def close(self):
+    def close(self) -> asyncio.Task:
         """Closes the file reader (not the file)."""
         if self.is_closed:
-            return
+            return self._read_task
+        self._read_task.cancel()
         logger.debug(f"closing {self.name}")
         self.is_closed = True
         self._close_event.set()
-        self._event_loop.remove_reader(self.stream.fileno())
+        return self._read_task
+
 
 def from_proc_stdout(
-    process: subprocess.Popen[_MsgType],
-    pre_process: Callable[[_MsgType], Union[_MsgType, None]] = default_preprocess,
-) -> Sub[_MsgType]:
+    process: subprocess.Popen,
+    pre_process: Callable[[bytes], Union[_StrOrBytes, None]] = default_preprocess,
+) -> Sub[_StrOrBytes]:
     """Creates a textio sub, relaying the lines printed in the process stdout.
 
     Automatically closes the sub when the process finishes
@@ -92,7 +103,7 @@ def from_proc_stdout(
         raise TypeError(
             "process.stdout is None. Please use `stdout=subprocess.PIPE` when calling Popen."
         )
-    stdout: IO[_MsgType] = process.stdout
+    stdout: IO = process.stdout
     sub = Sub(stdout, pre_process)
 
     async def close_reader():
