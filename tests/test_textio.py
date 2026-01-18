@@ -27,7 +27,7 @@ is_win = (
     and sys.platform.startswith("win")
 )
 
-pytestmark = pytest.mark.skipif(is_win, reason="Requires a special EvenLoop")
+# pytestmark = pytest.mark.skipif(is_win, reason="Requires a special EvenLoop")
 
 setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
