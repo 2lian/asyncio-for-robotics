@@ -4,6 +4,8 @@ Tests ROS2 and stdout using the talker/listened nodes
 
 import pytest
 
+from asyncio_for_robotics.textio.sub import default_preprocess
+
 pytest.importorskip("rclpy")
 
 import asyncio
@@ -11,7 +13,7 @@ import logging
 import subprocess
 import sys
 from os import environ
-from typing import Any, AsyncGenerator, Callable, Generator
+from typing import Any, AsyncGenerator, Callable, Generator, Union
 
 import rclpy
 from base_tests import (
@@ -128,17 +130,17 @@ async def sub(
 ) -> AsyncGenerator[afor_io.Sub[str], Any]:
     assert node_process.stdout is not None
 
-    def pre_process(input: str):
+    def pre_process(input_raw: bytes) -> Union[str, None]:
+        input = default_preprocess(input_raw)
         if "I heard: " not in input:
             return None
-        input = input.strip()
         input = input.split("I heard: [")[1]
         input = input.removesuffix("]")
         return input
 
     s = afor_io.from_proc_stdout(node_process, pre_process)
     yield s
-    s.close()
+    await s.close()
 
 
 @pytest.fixture(autouse=True)
