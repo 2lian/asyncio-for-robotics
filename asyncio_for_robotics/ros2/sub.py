@@ -1,5 +1,4 @@
 import logging
-
 from typing import Callable, Dict, Generic, Optional, Type, TypeVar, Union
 
 from rclpy.qos import QoSProfile
