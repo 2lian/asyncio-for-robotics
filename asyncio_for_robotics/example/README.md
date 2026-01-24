@@ -23,7 +23,7 @@ require convoluted timers, callback chaining, and manual future management.
 . .venv/bin/activate               # (if using a virtual environment)
 ```
 
-### 1. `ros2_discusion.py` or `zenoh_discusion.py` 
+### `ros2_discusion.py` or `zenoh_discusion.py` 
 
 - Verbose runtime examples demonstrating session creation and cleanup
 - Illustrates all subscriber methods for consuming messages on a data stream.
@@ -38,7 +38,7 @@ python3 -m asyncio_for_robotics.example.zenoh_discussion
 python3 -m asyncio_for_robotics.example.ros2_discussion
 ```
 
-### 2. `ros2_talker.py` and `ros2_listener.py`
+### `ros2_talker.py` and `ros2_listener.py`
 
 - Simple talker/listener pair demonstrating basic async publishing and subscribing.
 
@@ -55,7 +55,7 @@ Or run both simultaneously in the same terminal using:
 python3 -m asyncio_for_robotics.example.ros2_pubsub
 ```
 
-### 3. `ros2_double_talker.py` and `ros2_double_listener.py`
+### `ros2_double_talker.py` and `ros2_double_listener.py`
 
 - Publishes and listens to two data stream simultaneously.
 - Demonstrates advanced asyncio usage, including concurrent async tasks and
@@ -71,7 +71,7 @@ python3 -m asyncio_for_robotics.example.ros2_double_talker
 python3 -m asyncio_for_robotics.example.ros2_double_listener
 ```
 
-### 4. `ros2_service_client.py` and `ros2_service_server.py`
+### `ros2_service_client.py` and `ros2_service_server.py`
 
 - Simple client / server implementing `add_two_int` example and the
   Fibonacci sequence.
@@ -84,7 +84,22 @@ python3 -m asyncio_for_robotics.example.ros2_service_server
 python3 -m asyncio_for_robotics.example.ros2_service_client
 ```
 
-### 5. `custom_stdout.py`
+### `ros2_event_callback.py`
+
+- Uses a `BaseSub` to accumulate a generic datastream.
+- `asyncio_for_robotics` subscriptions with ROS 2 subscription event callbacks
+  (e.g. matched publishers, lost messages).
+- Same method can work with other ROS2 objects (pub, sub, service, client...)
+
+```bash
+# Terminal #1
+python3 -m asyncio_for_robotics.example.ros2_event_callback
+
+# Terminal #2
+ros2 topic pub /example std_msgs/msg/String "data: hey"
+```
+
+### `custom_stdout.py`
 
 - Implements a custom subscriber capturing the `stdout` of `ping localhost`
 
