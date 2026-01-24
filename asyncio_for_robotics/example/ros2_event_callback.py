@@ -107,7 +107,6 @@ async def verbose_match_event(match_sub: BaseSub[QoSSubscriptionMatchedInfo]):
             print(f"{Fore.GREEN}Match publisher{Fore.RESET}")
         if event.current_count_change < 0:
             print(f"{Fore.YELLOW}Unmatch publisher{Fore.RESET}")
-        # pprint(dir(event))
         pprint(
             {
                 name: value
@@ -135,7 +134,9 @@ async def event_example():
     lost_sub: BaseSub[QoSMessageLostInfo] = BaseSub()
     match_sub: BaseSub[QoSSubscriptionMatchedInfo] = BaseSub()
     event_cbk = SubscriptionEventCallbacks(
-        message_lost=lost_sub.input_data, matched=match_sub.input_data  # type: ignore
+        message_lost=lost_sub.input_data,  # type: ignore
+        matched=match_sub.input_data,  # type: ignore
+        # more event types can be added
     )
     sub = AdvancedSub(
         **TOPIC.as_kwarg(),
