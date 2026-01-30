@@ -52,8 +52,8 @@ pip install asyncio_for_robotics[zenoh]
 > [!TIP]
 > An interface is not required for every operation. ROS 2 native publishers and
 > nodes work just fine. Furthermore, advanced behavior can be composed of
-> generic `afor` object, this is done in our [ROS2 Event Callback
-> Example](./asyncio_for_robotics/example/ros2_event_callback.py).
+> generic `afor` object (see [ROS2 Event Callback
+> Example](./asyncio_for_robotics/example/ros2_event_callback.py)).
 
 ## Code sample
 
