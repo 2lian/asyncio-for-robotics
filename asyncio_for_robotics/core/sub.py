@@ -24,6 +24,7 @@ class SubClosedError(RuntimeError):
 
 
 _MsgType = TypeVar("_MsgType")
+_T = TypeVar("_T")
 
 
 class BaseSub(Generic[_MsgType]):
@@ -97,13 +98,7 @@ class BaseSub(Generic[_MsgType]):
         Returns:
             The latest message (if none, awaits the first message)
         """
-        _, _ = await asyncio.wait(
-            [
-                asyncio.ensure_future(self._value_flag.wait()),
-                asyncio.ensure_future(self._closed.wait()),
-            ],
-            return_when=asyncio.FIRST_COMPLETED,
-        )
+        await self._wait_or_closed(self._value_flag.wait())
         if self._closed.is_set():
             raise SubClosedError(f"Subscriber '{self.name}' is closed")
         assert self._value is not None
@@ -125,22 +120,7 @@ class BaseSub(Generic[_MsgType]):
 
         async def func() -> _MsgType:
             async with self.new_value_cond:
-                done, pending = await asyncio.wait(
-                    [
-                        asyncio.create_task(self.new_value_cond.wait()),
-                        asyncio.create_task(self._closed.wait()),
-                    ],
-                    return_when=asyncio.FIRST_COMPLETED,
-                )
-
-                # Cancel the unfinished task to avoid leaks
-                for task in pending:
-                    task.cancel()
-
-                if self._closed.is_set():
-                    raise SubClosedError(
-                        f"Subscriber '{self.name}' is closed"
-                    )
+                await self._wait_or_closed(self.new_value_cond.wait())
             assert self._value is not None
             return self._value
 
@@ -161,7 +141,7 @@ class BaseSub(Generic[_MsgType]):
 
         async def func() -> _MsgType:
             try:
-                val_top = await q.get()
+                val_top = await self._wait_or_closed(q.get())
                 if q.empty():
                     val_deep = val_top
                 else:
@@ -225,7 +205,7 @@ class BaseSub(Generic[_MsgType]):
         try:
             while True:
                 # logger.debug("Reliable listener waiting data %s", self.name)
-                msg = await queue.get()
+                msg = await self._wait_or_closed(queue.get())
                 # logger.debug("Reliable listener got data %s", self.name)
                 yield msg
                 # logger.debug("Reliable listener yielded data %s", self.name)
@@ -262,6 +242,33 @@ class BaseSub(Generic[_MsgType]):
         """fires new_value_cond"""
         async with self.new_value_cond:
             self.new_value_cond.notify_all()
+
+    async def _wait_or_closed(
+        self, awaitable: Coroutine[Any, Any, _T] | Awaitable[_T]
+    ) -> _T:
+        """Wait for an awaitable or raise exception on subscriber shutdown.
+
+        Raises:
+            SubClosedError: if the subscriber is closed before completion.
+            Exception: any exception raised by the awaitable.
+
+        Returns:
+            Awaited awaitable
+        """
+        main_task = asyncio.ensure_future(awaitable)
+        close_task = asyncio.ensure_future(self._closed.wait())
+        done, pending = await asyncio.wait(
+            [main_task, close_task],
+            return_when=asyncio.FIRST_COMPLETED,
+        )
+        for task in pending:
+            task.cancel()
+
+        if close_task in done:
+            if not main_task.done():
+                main_task.cancel()
+            raise SubClosedError(f"Subscriber '{self.name}' is closed")
+        return main_task.result()
 
 
 _InType = TypeVar("_InType")
