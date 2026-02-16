@@ -1,9 +1,6 @@
 import asyncio
 import logging
-from abc import ABC, abstractmethod
 from asyncio.queues import Queue
-from collections import deque
-from types import CoroutineType
 from typing import (
     Any,
     AsyncGenerator,
@@ -21,10 +18,15 @@ from typing import (
 
 logger = logging.getLogger(__name__)
 
+
+class SubClosedError(RuntimeError):
+    """Raised when awaiting data from a closed subscriber."""
+
+
 _MsgType = TypeVar("_MsgType")
 
 
-class BaseSub(Generic[_MsgType], ABC):
+class BaseSub(Generic[_MsgType]):
     def __init__(
         self,
     ) -> None:
@@ -39,7 +41,7 @@ class BaseSub(Generic[_MsgType], ABC):
         implementation.
 
         To implements your own sheduling methods (new type of queue, buffer,
-        genrator ...), please either: 
+        genrator ...), please either:
 
             - inherit from this class, then overide self._input_data_asyncio
             - put a callback inside self.asap_callback
@@ -60,6 +62,8 @@ class BaseSub(Generic[_MsgType], ABC):
         self._value_flag: asyncio.Event = asyncio.Event()
         #: Lastest message value
         self._value: Optional[_MsgType] = None
+        #: Event when closing the sub
+        self._closed = asyncio.Event()
         logger.debug("created sub %s", self.name)
 
     @property
@@ -87,14 +91,21 @@ class BaseSub(Generic[_MsgType], ABC):
         self._event_loop.call_soon_threadsafe(self._input_data_asyncio, data)
         return True
 
-
     async def wait_for_value(self) -> _MsgType:
         """Latest message.
 
         Returns:
             The latest message (if none, awaits the first message)
         """
-        await self._value_flag.wait()
+        _, _ = await asyncio.wait(
+            [
+                asyncio.ensure_future(self._value_flag.wait()),
+                asyncio.ensure_future(self._closed.wait()),
+            ],
+            return_when=asyncio.FIRST_COMPLETED,
+        )
+        if self._closed.is_set():
+            raise SubClosedError(f"Subscriber '{self.name}' is closed")
         assert self._value is not None
         return self._value
 
@@ -114,7 +125,22 @@ class BaseSub(Generic[_MsgType], ABC):
 
         async def func() -> _MsgType:
             async with self.new_value_cond:
-                await self.new_value_cond.wait_for(lambda: self.msg_count > last_count)
+                done, pending = await asyncio.wait(
+                    [
+                        asyncio.create_task(self.new_value_cond.wait()),
+                        asyncio.create_task(self._closed.wait()),
+                    ],
+                    return_when=asyncio.FIRST_COMPLETED,
+                )
+
+                # Cancel the unfinished task to avoid leaks
+                for task in pending:
+                    task.cancel()
+
+                if self._closed.is_set():
+                    raise SubClosedError(
+                        f"Subscriber '{self.name}' is closed"
+                    )
             assert self._value is not None
             return self._value
 
@@ -236,3 +262,45 @@ class BaseSub(Generic[_MsgType], ABC):
         """fires new_value_cond"""
         async with self.new_value_cond:
             self.new_value_cond.notify_all()
+
+
+_InType = TypeVar("_InType")
+_OutType = TypeVar("_OutType")
+
+
+class ConverterSub(BaseSub[_OutType]):
+    def __init__(
+        self, sub: BaseSub[_InType], convert_func: Callable[[_InType], _OutType]
+    ) -> None:
+        """Subscriber that applies a transformation to another subscriber.
+
+        This subscriber listens reliably to an upstream ``BaseSub`` and
+        publishes transformed messages as a new ``BaseSub`` instance. The
+        original subscriber is left unchanged.
+
+        Args:
+            sub: Upstream subscriber to listen to.
+            convert_func: Function applied to each incoming message.
+        """
+        #: Upstream subscriber
+        self.sub: BaseSub = sub
+        #: Transformation applied to each received message
+        self.convert_func = convert_func
+        super().__init__()
+        #: Background task running the conversion loop
+        self._loop_task = asyncio.create_task(self._converter_loop())
+        #: Optional callback invoked on close (typically upstream close).
+        self.callback_on_close: Optional[Callable[[], Any]] = None
+        if hasattr(self.sub, "close"):
+            if callable(self.sub.close):
+                self.callback_on_close = self.sub.close
+
+    async def _converter_loop(self):
+        async for msg in self.sub.listen_reliable():
+            new = self.convert_func(msg)
+            self._input_data_asyncio(new)
+
+    def close(self):
+        self._loop_task.cancel()
+        if self.callback_on_close is not None:
+            self.callback_on_close()
