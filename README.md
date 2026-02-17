@@ -31,7 +31,7 @@ pip install asyncio_for_robotics
 ### Along with Zenoh
 
 ```bash
-pip install asyncio_for_robotics[zenoh]
+pip install asyncio_for_robotics eclipse-zenoh
 ```
 
 ## Read more
@@ -157,6 +157,19 @@ async with afor.soft_timeout(1):
 
 last_second_average = sum/total
 assert last_second_average == pytest.approx(expected_average)
+```
+
+### Apply pre-processing to a data-stream
+
+Application:
+- Parse payload of different transport into a common type.
+
+```python
+# ROS2 String type afor subscriber
+inner_sub: Sub[String] = asyncio_for_robotics.ros2.Sub(String, "topic_name")
+# converted into a subscriber generating python `str`
+ros2str_func = lambda msg: msg.data
+sub: Sub[str] = ConverterSub(sub=inner_sub, convert_func=ros2str_func)
 ```
 
 ## About Speed
