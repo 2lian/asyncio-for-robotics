@@ -10,6 +10,7 @@ from base_tests import (
     test_freshness,
     test_listen_one_by_one,
     test_listen_too_fast,
+    test_loop_cancellation,
     test_reliable_extremely_fast,
     test_reliable_one_by_one,
     test_reliable_too_fast,

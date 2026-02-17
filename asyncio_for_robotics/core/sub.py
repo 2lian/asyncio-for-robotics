@@ -172,7 +172,11 @@ class BaseSub(Generic[_MsgType]):
         return self.listen_reliable(fresh, 1, False)
 
     def listen_reliable(
-        self, fresh=False, queue_size: int = 10, lifo=False
+        self,
+        fresh=False,
+        queue_size: int = 10,
+        lifo=False,
+        exit_on_close: bool = False,
     ) -> AsyncGenerator[_MsgType, None]:
         """Itterates over every incomming messages. (does not miss messages)
 
@@ -185,6 +189,8 @@ class BaseSub(Generic[_MsgType]):
             fresh: If false, first yield can be the latest value
             queue_size: size of the queue of values
             lifo: If True, uses a last in first out queue instead of default fifo.
+            return_on_close: If True, the async for loop will exit when
+                `.close()` is called. Else, exception will be raised (default)
 
         Returns:
             Async generator itterating over every incomming message.
@@ -198,19 +204,21 @@ class BaseSub(Generic[_MsgType]):
         if self._value_flag.is_set() and not fresh:
             assert self._value is not None, "impossible if flag set"
             q.put_nowait(self._value)
-        return self._unprimed_listen_reliable(q)
+        return self._unprimed_listen_reliable(q, exit_on_close)
 
     async def _unprimed_listen_reliable(
-        self, queue: asyncio.Queue
+        self, queue: asyncio.Queue, exit_on_close: bool = False
     ) -> AsyncGenerator[_MsgType, None]:
         logger.debug("Reliable listener first iter %s", self.name)
         try:
             while True:
-                # logger.debug("Reliable listener waiting data %s", self.name)
                 msg = await self._wait_or_raise_closed(queue.get())
-                # logger.debug("Reliable listener got data %s", self.name)
                 yield msg
-                # logger.debug("Reliable listener yielded data %s", self.name)
+        except Exception as e:
+            if e == self._raise_on_close_exc and exit_on_close:
+                return
+            else:
+                raise e
         finally:
             self._dyncamic_queues.discard(queue)
             logger.debug("Reliable listener closed %s", self.name)

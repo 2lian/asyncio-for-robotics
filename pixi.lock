@@ -7028,8 +7028,8 @@ packages:
   timestamp: 1767290444597
 - pypi: ./
   name: asyncio-for-robotics
-  version: 1.3.0
-  sha256: 7c07618e447fed95b2bbe3840273c3681b75c1c8f82b6a67be4995968d3d0bc3
+  version: 1.3.1
+  sha256: d3c7a66051a4cdfbb7638ca6b14918802d84a5a5cbdcf8da4b8d29b99df4de0b
   requires_dist:
   - typing-extensions>=4.0 ; python_full_version < '3.11'
   - async-timeout ; python_full_version < '3.11'

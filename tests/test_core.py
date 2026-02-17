@@ -11,6 +11,7 @@ from base_tests import (
     test_reliable_one_by_one,
     test_reliable_too_fast,
     test_wait_cancellation,
+    test_loop_cancellation,
     test_wait_for_value,
     test_wait_new,
     test_wait_next,

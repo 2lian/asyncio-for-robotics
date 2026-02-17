@@ -23,8 +23,18 @@ async def test_wait_cancellation(pub: Callable[[str], None], sub: afor.BaseSub[s
     sub.close()
     pub("hey")
     with pytest.raises(SubClosedException):
-        await t
         r = await asyncio.wait_for(t, 0.5)
+
+async def test_loop_cancellation(pub: Callable[[str], None], sub: afor.BaseSub[str]):
+    iterator = sub.listen_reliable(exit_on_close=True)
+    sub.close()
+    pub("hey")
+    done = False
+    async with afor.soft_timeout(0.5):
+        async for k in iterator:
+            pytest.fail("should not itterate")
+        done = True
+    assert done == True
 
 
 async def test_wait_for_value(pub: Callable[[str], None], sub: afor.BaseSub[str]):
