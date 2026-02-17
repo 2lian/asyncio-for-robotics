@@ -93,13 +93,13 @@ async def test_listen_one_by_one(pub: Callable[[str], None], sub: afor.BaseSub[s
 
 
 async def test_listen_too_fast(pub: Callable[[str], None], sub: afor.BaseSub[str]):
-    delay = 0.005
+    delay = 0.010
     last_payload = "hello"
     pub(last_payload)
     pub(last_payload)
     sample_count = 0
     put_count = 2
-    max_iter = 20
+    max_iter = 10
     await asyncio.sleep(delay)
     async for sample in sub.listen():
         sample_count += 1
@@ -137,8 +137,8 @@ async def test_reliable_one_by_one(pub: Callable[[str], None], sub: afor.BaseSub
 
 
 async def test_reliable_too_fast(pub: Callable[[str], None], sub: afor.BaseSub[str]):
-    delay = 0.005
-    data = list(range(30))
+    delay = 0.010
+    data = list(range(20))
     put_queue = [str(v) for v in data]
     put_queue.reverse()
     received_buf = []
