@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import sys
 from typing import Any, AsyncGenerator, Callable, Generator
 
 import pytest
@@ -11,6 +12,11 @@ from asyncio_for_robotics.core.sub import SubClosedException
 setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
 
+is_win = (
+    sys.version_info[0] == 3
+    and sys.version_info[1] >= 8
+    and sys.platform.startswith("win")
+)
 
 async def test_wait_cancellation(pub: Callable[[str], None], sub: afor.BaseSub[str]):
     t = sub.wait_for_next()
@@ -93,13 +99,13 @@ async def test_listen_one_by_one(pub: Callable[[str], None], sub: afor.BaseSub[s
 
 
 async def test_listen_too_fast(pub: Callable[[str], None], sub: afor.BaseSub[str]):
-    delay = 0.1
+    delay = 0.005 if not is_win else 0.1 # windows slow and unreliable af
     last_payload = "hello"
     pub(last_payload)
     pub(last_payload)
     sample_count = 0
     put_count = 2
-    max_iter = 10
+    max_iter = 20
     await asyncio.sleep(delay)
     async for sample in sub.listen():
         sample_count += 1
@@ -137,8 +143,8 @@ async def test_reliable_one_by_one(pub: Callable[[str], None], sub: afor.BaseSub
 
 
 async def test_reliable_too_fast(pub: Callable[[str], None], sub: afor.BaseSub[str]):
-    delay = 0.010
-    data = list(range(20))
+    delay = 0.005
+    data = list(range(30))
     put_queue = [str(v) for v in data]
     put_queue.reverse()
     received_buf = []
