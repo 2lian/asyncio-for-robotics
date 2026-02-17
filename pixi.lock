@@ -7029,7 +7029,7 @@ packages:
 - pypi: ./
   name: asyncio-for-robotics
   version: 1.3.1
-  sha256: d3c7a66051a4cdfbb7638ca6b14918802d84a5a5cbdcf8da4b8d29b99df4de0b
+  sha256: 7efb43d27f3392e6124323e8449bf5d9236a1f67a718ecaf74489fa644b80288
   requires_dist:
   - typing-extensions>=4.0 ; python_full_version < '3.11'
   - async-timeout ; python_full_version < '3.11'
@@ -12612,7 +12612,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/pyyaml?source=hash-mapping
+  - pkg:pypi/pyyaml?source=compressed-mapping
   size: 194735
   timestamp: 1770223769285
 - conda: https://conda.anaconda.org/conda-forge/osx-64/pyyaml-6.0.3-py312h51361c1_1.conda
