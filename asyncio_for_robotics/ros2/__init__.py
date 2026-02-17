@@ -1,4 +1,4 @@
-from ..core.utils import Rate, soft_timeout, soft_wait_for
+from .. import ConverterSub, Rate, soft_timeout, soft_wait_for
 from .service import Client, Server
 from .session import (
     GLOBAL_SESSION,
@@ -12,6 +12,7 @@ from .sub import Sub
 from .utils import QOS_DEFAULT, QOS_TRANSIENT, TopicInfo
 
 __all__ = [
+    "ConverterSub",
     "soft_wait_for",
     "soft_timeout",
     "Rate",

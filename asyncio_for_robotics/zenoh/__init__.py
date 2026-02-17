@@ -3,7 +3,7 @@ from .session import (
     auto_session,
 )
 from .sub import Sub
-from ..core.utils import soft_timeout, soft_wait_for, Rate
+from .. import soft_timeout, soft_wait_for, Rate, ConverterSub
 
 __all__ = [
     "soft_wait_for",
@@ -12,4 +12,5 @@ __all__ = [
     "auto_session",
     "set_auto_session",
     "Sub",
+    "ConverterSub",
 ]

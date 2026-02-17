@@ -1,5 +1,7 @@
 import pytest
 
+from asyncio_for_robotics.core.sub import ConverterSub
+
 pytest.importorskip("rclpy")
 
 import logging
@@ -10,9 +12,11 @@ from base_tests import (
     test_freshness,
     test_listen_one_by_one,
     test_listen_too_fast,
+    test_loop_cancellation,
     test_reliable_extremely_fast,
     test_reliable_one_by_one,
     test_reliable_too_fast,
+    test_wait_cancellation,
     test_wait_for_value,
     test_wait_new,
     test_wait_next,
@@ -51,22 +55,6 @@ topic = aros.TopicInfo(
 TOPIC = topic
 
 
-class SubProcessed(BaseSub[str]):
-    def __init__(
-        self,
-        msg_type: type[String],
-        topic: str,
-        qos_profile: QoSProfile = aros.QOS_DEFAULT,
-        session: Optional[aros.BaseSession] = None,
-    ) -> None:
-        super().__init__()
-        self.ros_sub = aros.Sub(msg_type, topic, qos_profile, session)
-        self.ros_sub.asap_callback.append(lambda x: self._input_data_asyncio(x.data))
-
-    def close(self):
-        self.ros_sub.close()
-
-
 @pytest.fixture(scope="module")
 def pub(session: aros.BaseSession) -> Generator[Callable[[str], None], Any, Any]:
     with session.lock() as node:
@@ -82,6 +70,7 @@ def pub(session: aros.BaseSession) -> Generator[Callable[[str], None], Any, Any]
 
 @pytest.fixture
 async def sub(session) -> AsyncGenerator[BaseSub[str], Any]:
-    s: BaseSub[str] = SubProcessed(*TOPIC.as_arg())
+    inner_sub = aros.Sub(*TOPIC.as_arg())
+    s: BaseSub[str] = ConverterSub(inner_sub, lambda msg: msg.data)
     yield s
     s.close()

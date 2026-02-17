@@ -10,9 +10,11 @@ from base_tests import (
     test_freshness,
     test_listen_one_by_one,
     test_listen_too_fast,
+    test_loop_cancellation,
     test_reliable_extremely_fast,
     test_reliable_one_by_one,
     test_reliable_too_fast,
+    test_wait_cancellation,
     test_wait_for_value,
     test_wait_new,
     test_wait_next,
@@ -64,17 +66,3 @@ async def sub(session: subprocess.Popen[str]) -> AsyncGenerator[afor.Sub[str], A
     s = afor.from_proc_stdout(session)
     yield s
     s.close()
-
-
-# for f in [
-#     test_freshness,
-#     test_listen_one_by_one,
-#     test_listen_too_fast,
-#     test_reliable_extremely_fast,
-#     test_reliable_one_by_one,
-#     test_reliable_too_fast,
-#     test_wait_for_value,
-#     test_wait_new,
-#     test_wait_next,
-#         ]:
-#     pytestmark(f)
