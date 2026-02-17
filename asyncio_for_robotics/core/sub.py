@@ -1,6 +1,7 @@
 import asyncio
 import logging
 from asyncio.queues import Queue
+from contextlib import suppress
 from typing import (
     Any,
     AsyncGenerator,
@@ -19,7 +20,7 @@ from typing import (
 logger = logging.getLogger(__name__)
 
 
-class SubClosedError(RuntimeError):
+class SubClosedException(RuntimeError):
     """Raised when awaiting data from a closed subscriber."""
 
 
@@ -65,6 +66,9 @@ class BaseSub(Generic[_MsgType]):
         self._value: Optional[_MsgType] = None
         #: Event when closing the sub
         self._closed = asyncio.Event()
+        self._raise_on_close_exc: Exception = SubClosedException(
+            f"Subscriber '{self.name}' has been closed"
+        )
         logger.debug("created sub %s", self.name)
 
     @property
@@ -98,9 +102,7 @@ class BaseSub(Generic[_MsgType]):
         Returns:
             The latest message (if none, awaits the first message)
         """
-        await self._wait_or_closed(self._value_flag.wait())
-        if self._closed.is_set():
-            raise SubClosedError(f"Subscriber '{self.name}' is closed")
+        await self._wait_or_raise_closed(self._value_flag.wait())
         assert self._value is not None
         return self._value
 
@@ -120,13 +122,13 @@ class BaseSub(Generic[_MsgType]):
 
         async def func() -> _MsgType:
             async with self.new_value_cond:
-                await self._wait_or_closed(self.new_value_cond.wait())
+                await self.new_value_cond.wait_for(lambda: self.msg_count > last_count)
             assert self._value is not None
             return self._value
 
-        return func()
+        return self._wait_or_raise_closed(func())
 
-    def wait_for_next(self) -> Awaitable[_MsgType]:
+    def wait_for_next(self) -> Coroutine[Any, Any, _MsgType]:
         """Awaits exactly the next value.
 
         .. Note:
@@ -141,7 +143,7 @@ class BaseSub(Generic[_MsgType]):
 
         async def func() -> _MsgType:
             try:
-                val_top = await self._wait_or_closed(q.get())
+                val_top = await q.get()
                 if q.empty():
                     val_deep = val_top
                 else:
@@ -150,7 +152,7 @@ class BaseSub(Generic[_MsgType]):
             finally:
                 self._dyncamic_queues.discard(q)
 
-        return func()
+        return self._wait_or_raise_closed(func())
 
     def listen(self, fresh=False) -> AsyncGenerator[_MsgType, None]:
         """Itterates over the newest message.
@@ -205,7 +207,7 @@ class BaseSub(Generic[_MsgType]):
         try:
             while True:
                 # logger.debug("Reliable listener waiting data %s", self.name)
-                msg = await self._wait_or_closed(queue.get())
+                msg = await self._wait_or_raise_closed(queue.get())
                 # logger.debug("Reliable listener got data %s", self.name)
                 yield msg
                 # logger.debug("Reliable listener yielded data %s", self.name)
@@ -243,7 +245,7 @@ class BaseSub(Generic[_MsgType]):
         async with self.new_value_cond:
             self.new_value_cond.notify_all()
 
-    async def _wait_or_closed(
+    async def _wait_or_raise_closed(
         self, awaitable: Coroutine[Any, Any, _T] | Awaitable[_T]
     ) -> _T:
         """Wait for an awaitable or raise exception on subscriber shutdown.
@@ -261,14 +263,20 @@ class BaseSub(Generic[_MsgType]):
             [main_task, close_task],
             return_when=asyncio.FIRST_COMPLETED,
         )
-        for task in pending:
-            task.cancel()
+        try:
+            if close_task in done:
+                logger.info(f"Terminating task because sub is closed")
+                raise self._raise_on_close_exc
+            return await main_task
+        finally:
+            for task in pending:
+                task.cancel()
+            if len(pending) != 0:
+                with suppress(asyncio.CancelledError):
+                    await asyncio.wait(pending)
 
-        if close_task in done:
-            if not main_task.done():
-                main_task.cancel()
-            raise SubClosedError(f"Subscriber '{self.name}' is closed")
-        return main_task.result()
+    def close(self):
+        self._closed.set()
 
 
 _InType = TypeVar("_InType")
@@ -277,7 +285,9 @@ _OutType = TypeVar("_OutType")
 
 class ConverterSub(BaseSub[_OutType]):
     def __init__(
-        self, sub: BaseSub[_InType], convert_func: Callable[[_InType], _OutType]
+        self,
+        sub: BaseSub[_InType],
+        convert_func: Callable[[_InType], _OutType] = lambda x: x,
     ) -> None:
         """Subscriber that applies a transformation to another subscriber.
 
@@ -287,7 +297,8 @@ class ConverterSub(BaseSub[_OutType]):
 
         Args:
             sub: Upstream subscriber to listen to.
-            convert_func: Function applied to each incoming message.
+            convert_func: Function applied to each incoming message. Identity
+                by default.
         """
         #: Upstream subscriber
         self.sub: BaseSub = sub
@@ -311,3 +322,4 @@ class ConverterSub(BaseSub[_OutType]):
         self._loop_task.cancel()
         if self.callback_on_close is not None:
             self.callback_on_close()
+        super().close()

@@ -6,9 +6,20 @@ import pytest
 
 import asyncio_for_robotics.core as afor
 from asyncio_for_robotics.core._logger import setup_logger
+from asyncio_for_robotics.core.sub import SubClosedException
 
 setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
+
+
+async def test_wait_cancellation(pub: Callable[[str], None], sub: afor.BaseSub[str]):
+    t = sub.wait_for_next()
+    sub.close()
+    pub("hey")
+    with pytest.raises(SubClosedException):
+        await t
+        r = await asyncio.wait_for(t, 0.5)
+
 
 async def test_wait_for_value(pub: Callable[[str], None], sub: afor.BaseSub[str]):
     logger.info("entered test")
@@ -52,14 +63,15 @@ async def test_wait_next(pub: Callable[[str], None], sub: afor.BaseSub[str]):
     assert isinstance(new_sample, TimeoutError), f"Should not get a message"
 
     wait_task = sub.wait_for_next()
-    pub(first_payload)
+    second_payload = "hello2"
+    pub(second_payload)
     for other_payload in range(10):
         await asyncio.sleep(0.005)
-        pub(str(other_payload))
+        pub(f"Later payload #{other_payload}")
 
     new_sample = await afor.soft_wait_for(wait_task, 0.1)
     assert not isinstance(new_sample, TimeoutError), f"Should get the message"
-    assert new_sample == first_payload
+    assert new_sample == second_payload, f"{new_sample} different from {second_payload}"
 
 
 async def test_listen_one_by_one(pub: Callable[[str], None], sub: afor.BaseSub[str]):
@@ -151,7 +163,9 @@ async def test_reliable_too_fast(pub: Callable[[str], None], sub: afor.BaseSub[s
 
 
 @pytest.mark.xfail(strict=False, reason="flaky depending on platform, middleware ...")
-async def test_reliable_extremely_fast(pub: Callable[[str], None], sub: afor.BaseSub[str]):
+async def test_reliable_extremely_fast(
+    pub: Callable[[str], None], sub: afor.BaseSub[str]
+):
     data = list(range(30))
     put_queue = [str(v) for v in data]
     put_queue.reverse()
@@ -200,4 +214,3 @@ async def test_freshness(pub: Callable[[str], None], sub: afor.BaseSub[str]):
     await new
     sample = await afor.soft_wait_for(anext(sub.listen_reliable(fresh=True)), 0.1)
     assert isinstance(sample, TimeoutError), f"Should NOT get the message"
-

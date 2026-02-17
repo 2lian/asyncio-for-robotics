@@ -71,6 +71,7 @@ class Sub(BaseSub[_MsgType]):
             logger.error(e)
 
     def close(self):
+        super().close()
         with self.session.lock() as node:
             if not node.executor.context.ok():
                 return

@@ -1,5 +1,5 @@
-from contextlib import suppress
 import logging
+from contextlib import suppress
 from typing import Callable, Dict, Generic, Optional, Type, TypeVar, Union
 
 import zenoh
@@ -8,6 +8,7 @@ from ..core.sub import BaseSub
 from .session import auto_session
 
 logger = logging.getLogger(__name__)
+
 
 class Sub(BaseSub[zenoh.Sample]):
     def __init__(
@@ -24,8 +25,7 @@ class Sub(BaseSub[zenoh.Sample]):
         """
         self.session = self._resolve_session(session)
         self.sub = self._resolve_sub(key_expr)
-        self._name =f"zenoh-{self.sub.key_expr}" 
-        self._is_closed: bool = False
+        self._name = f"zenoh-{self.sub.key_expr}"
         super().__init__()
 
     @property
@@ -42,7 +42,7 @@ class Sub(BaseSub[zenoh.Sample]):
 
     def callback_for_sub(self, sample: zenoh.Sample):
         """Zenoh callback happening on the Zenoh thread"""
-        if self._is_closed:
+        if self._closed.is_set():
             return
         try:
             healty = self.input_data(sample)
@@ -53,11 +53,9 @@ class Sub(BaseSub[zenoh.Sample]):
 
     def close(self):
         """Undeclares the subscriber on the zenoh session"""
-        if self._is_closed:
-            return
-        logger.debug("Closing %s", self.name)
-        if not self.session.is_closed():
-            self.sub.undeclare()
-        else:
-            logger.debug("Zenoh session already closed for %s", self.name)
-        self._is_closed=True
+        if not self._closed.is_set():
+            if not self.session.is_closed():
+                self.sub.undeclare()
+            else:
+                logger.debug("Zenoh session already closed for %s", self.name)
+        super().close()

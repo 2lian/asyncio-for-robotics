@@ -19,6 +19,7 @@ from test_ros2_pubsub_thr import (
     test_reliable_extremely_fast,
     test_reliable_one_by_one,
     test_reliable_too_fast,
+    test_wait_cancellation,
     test_wait_for_value,
     test_wait_new,
     test_wait_next,

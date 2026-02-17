@@ -39,8 +39,6 @@ class Sub(BaseSub[_MsgType]):
             warnings.warn("Windows requires changing the asyncio loop type")
         else:
             self._event_loop.add_reader(self.stream.fileno(), self._io_update_cbk)
-        self.is_closed = False
-        self._close_event = asyncio.Event()
 
     @property
     def name(self) -> str:
@@ -52,7 +50,6 @@ class Sub(BaseSub[_MsgType]):
             healthy = self.input_data(line)
         if not healthy:
             return
-            # self._event_loop.call_soon_threadsafe(self.close)
 
     def _io_update_cbk(self):
         """Is called on updates to the IO file."""
@@ -65,12 +62,10 @@ class Sub(BaseSub[_MsgType]):
 
     def close(self):
         """Closes the file reader (not the file)."""
-        if self.is_closed:
+        if self._closed.is_set():
             return
-        logger.debug(f"closing {self.name}")
-        self.is_closed = True
-        self._close_event.set()
         self._event_loop.remove_reader(self.stream.fileno())
+        super().close()
 
 def from_proc_stdout(
     process: subprocess.Popen[_MsgType],
@@ -107,7 +102,7 @@ def from_proc_stdout(
 
     async def closed_so_stop_waiting():
         nonlocal proc_wait_task
-        await sub._close_event.wait()
+        await sub._closed.wait()
         logger.debug(f"{sub.name} closed cancelling process monitoring task")
         proc_wait_task.cancel()
         await proc_wait_task
