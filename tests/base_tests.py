@@ -93,7 +93,7 @@ async def test_listen_one_by_one(pub: Callable[[str], None], sub: afor.BaseSub[s
 
 
 async def test_listen_too_fast(pub: Callable[[str], None], sub: afor.BaseSub[str]):
-    delay = 0.010
+    delay = 0.1
     last_payload = "hello"
     pub(last_payload)
     pub(last_payload)
