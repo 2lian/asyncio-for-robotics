@@ -166,10 +166,10 @@ Application:
 
 ```python
 # ROS2 String type afor subscriber
-inner_sub: Sub[String] = asyncio_for_robotics.ros2.Sub(String, "topic_name")
+inner_sub: Sub[String] = afor.ros2.Sub(String, "topic_name")
 # converted into a subscriber generating python `str`
 ros2str_func = lambda msg: msg.data
-sub: Sub[str] = ConverterSub(sub=inner_sub, convert_func=ros2str_func)
+sub: Sub[str] = afor.ConverterSub(sub=inner_sub, convert_func=ros2str_func)
 ```
 
 ## About Speed
