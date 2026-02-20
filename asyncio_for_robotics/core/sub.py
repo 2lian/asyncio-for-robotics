@@ -322,7 +322,7 @@ class ConverterSub(BaseSub[_OutType]):
                 self.callback_on_close = self.sub.close
 
     async def _converter_loop(self):
-        async for msg in self.sub.listen_reliable():
+        async for msg in self.sub.listen_reliable(queue_size=0):
             new = self.convert_func(msg)
             self._input_data_asyncio(new)
 

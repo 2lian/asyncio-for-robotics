@@ -8,6 +8,9 @@ preview = ["pixi-build"]
 [dependencies]
 python = ">=3.10,<3.15"
 
+[tasks]
+test = "python3 -m pytest ./tests"
+
 [environments]
 default = { features = ["jazzy", "dev", "zenoh"] }
 humble = { features = ["humble", "dev", "zenoh"] }
