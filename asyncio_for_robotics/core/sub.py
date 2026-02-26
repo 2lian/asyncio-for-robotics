@@ -266,7 +266,9 @@ class BaseSub(Generic[_MsgType]):
             Awaited awaitable
         """
         main_task = asyncio.ensure_future(awaitable)
+        main_task.set_name("afor_wait_or_close_main")
         close_task = asyncio.ensure_future(self._closed.wait())
+        close_task.set_name("afor_close_task")
         done, pending = await asyncio.wait(
             [main_task, close_task],
             return_when=asyncio.FIRST_COMPLETED,
@@ -279,9 +281,10 @@ class BaseSub(Generic[_MsgType]):
         finally:
             for task in pending:
                 task.cancel()
-            if len(pending) != 0:
-                with suppress(asyncio.CancelledError):
-                    await asyncio.wait(pending)
+            # leads to bug somehow, sometime
+            # if len(pending) != 0:
+            # with suppress(asyncio.CancelledError):
+            # await asyncio.wait(pending)
 
     def close(self):
         self._closed.set()
@@ -314,7 +317,9 @@ class ConverterSub(BaseSub[_OutType]):
         self.convert_func = convert_func
         super().__init__()
         #: Background task running the conversion loop
-        self._loop_task = asyncio.create_task(self._converter_loop())
+        self._loop_task = asyncio.create_task(
+            self._converter_loop(), name="afor_converter"
+        )
         #: Optional callback invoked on close (typically upstream close).
         self.callback_on_close: Optional[Callable[[], Any]] = None
         if hasattr(self.sub, "close"):
