@@ -47,7 +47,7 @@ class BaseSession(ABC):
             executor = GLOBAL_SESSION_DEFAULT_EXEC()
         self._executor: Union[SingleThreadedExecutor, MultiThreadedExecutor] = executor
         self._executor.add_node(self._node)
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
 
     def set_global_session(self) -> None:
         """Make this object instance the global session used by default with auto_session."""

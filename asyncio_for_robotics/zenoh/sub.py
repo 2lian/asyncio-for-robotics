@@ -19,6 +19,8 @@ class Sub(BaseSub[zenoh.Sample]):
         """
         asyncio_for_robotics implementation of a Zenoh subscriber.
 
+        Refere to the base class (BaseSub) for details.
+
         Args:
             key_expr:
             session:
@@ -33,9 +35,17 @@ class Sub(BaseSub[zenoh.Sample]):
         return self._name
 
     def _resolve_session(self, session: Optional[zenoh.Session]) -> zenoh.Session:
+        """Called at __init__ to get the Session.
+
+        Usefull to overide in a child class and change the Node behavior.
+        """
         return auto_session(session)
 
     def _resolve_sub(self, key_expr: Union[zenoh.KeyExpr, str]):
+        """Called at __init__ to create the subscriber.
+
+        Usefull to overide in a child class and change the Subscription behavior.
+        """
         return self.session.declare_subscriber(
             key_expr=key_expr, handler=self.callback_for_sub
         )

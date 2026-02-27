@@ -287,6 +287,10 @@ class BaseSub(Generic[_MsgType]):
             # await asyncio.wait(pending)
 
     def close(self):
+        """Stops everything waiting on data.
+
+        Raises exception inside all coroutines/tasks waiting on the next data.
+        Async for loops will exit (if setup to do so)."""
         self._closed.set()
 
 

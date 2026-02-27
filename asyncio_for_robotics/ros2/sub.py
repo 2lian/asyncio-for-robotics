@@ -25,12 +25,16 @@ class Sub(BaseSub[_MsgType]):
         session: Optional[BaseSession] = None,
     ) -> None:
         """
-        Simple implementation of a Zenoh subscriber.
+        Implementation of a asyncio ROS2 subscriber.
+
+        Refere to the base class (BaseSub) for details.
 
         Args:
-            key_expr:
-            session:
-            buff_size:
+            msg_type: The type of ROS messages the subscription will subscribe to.
+            topic: The name of the topic the subscription will subscribe to.
+            qos: A QoSProfile to apply to the subscription.
+            session: The ROS 2 node to use. If not provided, will use
+                auto_session to create/get one.
         """
         self.session: BaseSession = self._resolve_session(session)
         self.topic_info = TopicInfo(topic=topic, msg_type=msg_type, qos=qos_profile)
@@ -39,10 +43,14 @@ class Sub(BaseSub[_MsgType]):
 
     @classmethod
     def from_info(
-        cls: type[Self],
+        cls,
         topic_info: TopicInfo,
         session: Optional[BaseSession] = None,
     ) -> Self:
+        """Creates the sub from a topic info directly.
+
+        TypeHinting doesn't work with that so... I don't like it
+        """
         return cls(**topic_info.as_kwarg(), session=session)
 
     @property
@@ -53,18 +61,33 @@ class Sub(BaseSub[_MsgType]):
             return f"ROS2-{self.topic_info.topic}"
 
     def _resolve_session(self, session: Optional[BaseSession]) -> BaseSession:
+        """Called at __init__ to get the Node.
+
+        Usefull to overide in a child class and change the Node behavior.
+        """
         return auto_session(session)
 
     def _resolve_sub(self, topic_info: TopicInfo) -> Subscription:
+        """Called at __init__ to create the subscriber.
+
+        Usefull to overide in a child class and change the Subscription behavior.
+        """
         with self.session.lock() as node:
             return node.create_subscription(
                 **topic_info.as_kwarg(),
                 callback=self.callback_for_sub,
             )
 
-    def callback_for_sub(self, sample: _MsgType):
+    def callback_for_sub(self, msg: _MsgType):
+        """Callback of the ROS 2 Subscriber.
+
+        This might be executed in another thread.
+
+        Args:
+            sample: incoming message
+        """
         try:
-            healty = self.input_data(sample)
+            healty = self.input_data(msg)
             if not healty:
                 self.session._node.destroy_subscription(self.sub)
         except Exception as e:

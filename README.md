@@ -55,6 +55,10 @@ pip install asyncio_for_robotics eclipse-zenoh
 > generic `afor` object (see [ROS2 Event Callback
 > Example](./asyncio_for_robotics/example/ros2_event_callback.py)).
 
+### Additional Projects and Interfaces
+- **[gogo_keyboard](https://github.com/2lian/gogo_keyboard)**: Subscribe to keyboard key presses and release.
+- **[asyncio_gazebo](https://github.com/2lian/asyncio-gazebo)**: Subscribe to Gazebo transport.
+
 ## Code sample
 
 Syntax is identical between ROS 2, Zenoh, TextIO, Rate...
@@ -71,13 +75,13 @@ Application:
 ```python
 sub = afor.Sub(...)
 
-# get the latest message
+# Get the latest message
 latest = await sub.wait_for_value()
 
-# get a new message
+# Get a new message
 new = await sub.wait_for_new()
 
-# get the next message received
+# Get the next message received
 next = await sub.wait_for_next()
 ```
 
