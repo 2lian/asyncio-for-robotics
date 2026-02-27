@@ -42,7 +42,7 @@ pip install asyncio_for_robotics eclipse-zenoh
 - [Cross-Platform deployment even with ROS](https://github.com/2lian/asyncio-for-robotics/blob/main/cross_platform.md) [![Pixi Badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/prefix-dev/pixi/main/assets/badge/v0.json)](https://pixi.sh)
 - [Usage for software testing](https://github.com/2lian/asyncio-for-robotics/blob/main/tests)
 
-### Available interfaces:
+## Available interfaces:
 - **Rate**: Every tick of a clock. (native)
 - **TextIO**: `stdout` lines of a `Popen` process (and other `TextIO` files). (native)
 - **ROS 2**: Subscriber, Service Client, Service Server.
