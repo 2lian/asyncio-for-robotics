@@ -9,7 +9,7 @@ The Asyncio For Robotics (`afor`) library makes `asyncio` usable with ROS 2, Zen
 - Only native python: Better docs and support.
 - Simplifies testing.
 
-*Will this make my code slower?* [No.](https://github.com/2lian/asyncio-for-robotics/tree/main/README.md#about-speed)
+*Will this make my code slower?* [Likely not.](https://github.com/2lian/asyncio-for-robotics/tree/main/README.md#about-speed)
 
 *Will this make my code faster?* No. However, `asyncio` will help YOU write
 better, faster code.
@@ -178,44 +178,36 @@ sub: Sub[str] = afor.ConverterSub(sub=inner_sub, convert_func=ros2str_func)
 
 ## About Speed
 
-The inevitable question: *“But isn’t this slower than the ROS 2 executor? ROS 2 is the best!”*
+The obvious question is whether this adds latency compared to native ROS 2.
 
-In short: `rclpy`'s executor is the bottleneck. 
-- Comparing to the best ROS 2 Jazzy can do (`SingleThreadedExecutor`), `afor` increases latency from 110us to 150us.
-- Comparing to other execution methods, `afor` is equivalent if not faster.
-- If you find it slow, you should use C++ or Zenoh (or contribute to this repo?).
+In this benchmark, the answer is: a little on ROS 2, very little on Zenoh.
 
-Benchmark code is available in [`./tests/bench/`](https://github.com/2lian/asyncio-for-robotics/blob/main/tests/bench/), it consists in two pairs of pub/sub infinitely echoing a message (using one single node). The messaging rate, thus measures the request to response latency. 
+- On ROS 2 Jazzy with `SingleThreadedExecutor` and `rmw_zenoh_cpp`, trip
+  duration increases from 70 μs to 430 μs when using afor, for an added
+  overhead of about 66 μs.
+- On Zenoh, `afor` adds only about 7 μs over the native path.
+  This suggests that most of the ROS 2 cost comes from cross-thread operations
+  with the `rclpy` machinery.
+- Even with this added overhead, Zenoh + `afor` remains about an order of
+  magnitude faster than ROS 2 + `rclpy` in this benchmark.
+- For many Python robotics applications, an extra few dozen microseconds is
+  negligible relative to the benefits of a uniform `asyncio` interface.
+- This benchmark measures latency; it **does not measure throughput**. A *2x*
+  latency increase, does not imply a *2x* throughput decrease.
 
-| With `afor`  | Transport | Executor                        | | Frequency (kHz) | Latency (ms) |
-|:----------:|:----------|:----------------------------------|-|---------:|---------:|
-| ✔️         | Zenoh     | None                              | | **95** | **0.01** |
-| ✔️         | ROS 2     | [Experimental Asyncio](https://github.com/ros2/rclpy/pull/1399)              | | **17** | **0.06** |
-| ❌         | ROS 2     | [Experimental Asyncio](https://github.com/ros2/rclpy/pull/1399)              | | 13 | 0.08 |
-| ❌         | ROS 2     | SingleThreaded                    | | 9 | 0.11 |
-| ✔️         | ROS 2     | SingleThreaded                    | | **7**  | **0.15** |
-| ✔️         | ROS 2     | MultiThreaded                     | | **3**  | **0.3** |
-| ❌         | ROS 2     | MultiThreaded                     | | **3**  | **0.3** |
-| ✔️         | ROS 2     | [`ros_loop` Method](https://github.com/m2-farzan/ros2-asyncio)                     | | 3  | 0.3 |
+| Backend         | Interface     | Latency (μs) |
+| :---------      | :------------ | -----------: | 
+| No-backend      | `afor`        |            4 |
+| Zenoh           | *native*      |            3 |
+| Zenoh           | `afor`        |           10 |
+| ROS Single Thrd | *native*      |           70 |
+| ROS Single Thrd | `afor`        |          136 |
+| ROS Multi Thrd  | *native*      |          125 |
+| ROS Multi Thrd  | `afor`        |          217 |
+| [`ros_loop` Method](https://github.com/m2-farzan/ros2-asyncio)  | [`afor`](https://github.com/2lian/asyncio-for-robotics/blob/main/asyncio_for_robotics/ros2/session.py#L211C7-L211C25)        |          280 |
 
+Benchmark code is available at
+[https://github.com/2lian/afor_benchmarks](https://github.com/2lian/afor_benchmarks).
+The benchmark uses two pub/sub pairs that continuously echo messages on
+localhost, with a single participant and a local Zenoh router.
 
-Details:
-- `uvloop` was used, replacing the asyncio executor (more or less doubles the performances for Zenoh)
-- RMW was set to `rmw_zenoh_cpp`
-- ROS2 benchmarks uses `afor`'s `ros2.ThreadedSession` (the default in `afor`). 
-- Only the Benchmark of the [`ros_loop` method](https://github.com/m2-farzan/ros2-asyncio) uses `afor`'s second type of session: `ros2.SynchronousSession`.
-- ROS 2 executors can easily be changed in `afor` when creating a session.
-- The experimental `AsyncioExecutor` PR on ros rolling by nadavelkabets is incredible [https://github.com/ros2/rclpy/pull/1399](https://github.com/ros2/rclpy/pull/1399). Maybe I will add proper support for it (but only a few will want to use an unmerged experimental PR of ROS 2 rolling).
-- If there is interest in those benchmarks I will improve them, so others can run them all easily.
-
-Analysis:
-- Zenoh is extremely fast, proving that `afor` is not the bottleneck.
-- This `AsyncioExecutor` having better perf when using `afor` is interesting, because `afor` does not bypass code.
-  - I think this is due to `AsyncioExecutor` having some overhead that affects its own callback.
-  - Without `afor` the ROS 2 callback executes some code and publishes.
-  - With `afor` the ROS 2 callback returns immediately, and fully delegates execution to `asyncio`.
-- The increase of latency on the `SingleThreaded` executors proves that getting data in and out of the `rclpy` executor and thread is the main bottleneck. 
-  - `AsyncioExecutor` does not have such thread, thus can directly communicate.
-  - Zenoh has its own thread, however it is built exclusively for multi-thread operations, without any executor. Thus achieves far superior performances.
-- `MultiThreadedExecutor` is just famously slow.
-- Very surprisingly, the well known `ros_loop` method detailed here [https://github.com/m2-farzan/ros2-asyncio](https://github.com/m2-farzan/ros2-asyncio) is slow.
