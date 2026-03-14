@@ -183,8 +183,8 @@ The obvious question is whether this adds latency compared to native ROS 2.
 In this benchmark, the answer is: a little on ROS 2, very little on Zenoh.
 
 - On ROS 2 Jazzy with `SingleThreadedExecutor` and `rmw_zenoh_cpp`, trip
-  duration increases from 70 μs to 430 μs when using afor, for an added
-  overhead of about 66 μs.
+  duration increases from 70 μs to 140 μs when using afor, for an added
+  overhead of about 70 μs.
 - On Zenoh, `afor` adds only about 7 μs over the native path.
   This suggests that most of the ROS 2 cost comes from cross-thread operations
   with the `rclpy` machinery.
