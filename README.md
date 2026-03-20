@@ -49,16 +49,16 @@ pip install asyncio_for_robotics eclipse-zenoh
 - **Zenoh**: Subscriber.
 - [Implement your own interface!](https://github.com/2lian/asyncio-for-robotics/blob/main/own_proto_example.md)
 
+### Additional Projects and Interfaces
+- **[gogo_keyboard](https://github.com/2lian/gogo_keyboard)**: Subscribe to keyboard key presses and release.
+- **[asyncio_gazebo](https://github.com/2lian/asyncio-gazebo)**: Subscribe to Gazebo transport.
+
 > [!TIP]
 > An interface is not required for every operation. ROS 2 native publishers and
 > nodes work just fine. Furthermore, advanced behavior can be composed of
 > generic `afor` object (see [ROS2 Event Callback
 > Example](./asyncio_for_robotics/example/ros2_event_callback.py)).
-
-### Additional Projects and Interfaces
-- **[gogo_keyboard](https://github.com/2lian/gogo_keyboard)**: Subscribe to keyboard key presses and release.
-- **[asyncio_gazebo](https://github.com/2lian/asyncio-gazebo)**: Subscribe to Gazebo transport.
-
+> 
 ## Code sample
 
 Syntax is identical between ROS 2, Zenoh, TextIO, Rate...
