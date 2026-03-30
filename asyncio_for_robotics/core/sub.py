@@ -304,10 +304,10 @@ class ConverterSub(BaseSub[_OutType]):
         sub: BaseSub[_InType],
         convert_func: Callable[[_InType], _OutType] = lambda x: x,
     ) -> None:
-        """Subscriber that applies a transformation to another subscriber.
+        """Subscriber that applies a function to another subscriber.
 
         This subscriber listens reliably to an upstream ``BaseSub`` and
-        publishes transformed messages as a new ``BaseSub`` instance. The
+        publishes converted messages as a new ``BaseSub`` instance. The
         original subscriber is left unchanged.
 
         Args:
