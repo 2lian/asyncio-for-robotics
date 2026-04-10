@@ -18,6 +18,7 @@ is_win = (
     and sys.platform.startswith("win")
 )
 
+@pytest.mark.skip("deprecated, should use lifetime instead")
 async def test_wait_cancellation(pub: Callable[[str], None], sub: afor.BaseSub[str]):
     t = sub.wait_for_next()
     sub.close()
@@ -25,6 +26,7 @@ async def test_wait_cancellation(pub: Callable[[str], None], sub: afor.BaseSub[s
     with pytest.raises(SubClosedException):
         r = await asyncio.wait_for(t, 0.5)
 
+@pytest.mark.skip("deprecated, should use lifetime instead")
 async def test_loop_cancellation(pub: Callable[[str], None], sub: afor.BaseSub[str]):
     iterator = sub.listen_reliable(exit_on_close=True)
     sub.close()

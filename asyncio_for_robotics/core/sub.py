@@ -52,8 +52,6 @@ class BaseSub(Generic[_MsgType]):
         self.asap_callback: List[Callable[[_MsgType], Any]] = []
         #: Event triggering when the first message is received
         self.alive: asyncio.Event = asyncio.Event()
-        #: Number of messages received since start
-        self.msg_count: int = 0
         #: Condition that fires on new data
         self.new_value_cond = asyncio.Condition()
         #: queues associated with the generators
@@ -66,15 +64,57 @@ class BaseSub(Generic[_MsgType]):
         self._value: Optional[_MsgType] = None
         #: Event when closing the sub
         self._closed = asyncio.Event()
-        self._raise_on_close_exc: Exception = SubClosedException(
-            f"Subscriber '{self.name}' has been closed"
-        )
+        self.lifetime: asyncio.Future[bool] = asyncio.Future()
         logger.debug("created sub %s", self.name)
 
     @property
     def name(self) -> str:
         """The friendly name of you subscriber"""
         return "no_name"
+
+    def async_bind(self) -> Coroutine[None, None, None]:
+        """This code was a test implementation
+
+        Binds the lifetime to a coroutine (for an asyncio task).
+
+        This is especially useful to capture and propagate exception happening
+        in the background input tasks.
+
+        The coroutine returns when the sub is closed or raises any exception
+        happening in the internal `call_soon`. Canceling this coroutine
+        (through a taskgroup or manually) will close this sub.
+
+        Returns: 
+            A coroutine representing the lifetime of this sub and
+            propagating exceptions.
+
+        Example:
+            async with asyncio.TaskGroup() as tg:
+                sub = BaseSub(...)
+                tg.create_task(node.async_bind())
+        """
+        async def bind():
+            try:
+                await self.lifetime
+            finally:
+                self.close()
+
+        return bind()
+
+    def _wrap_input_lifetime(self, data: _MsgType):
+        """This code was a test implementation
+
+        Calls self._input_data_asyncio, propagating exception to
+        self.lifetime and guarding if lifetime is done.
+        """
+        if self.lifetime.done():
+            print("done")
+            return
+        try:
+            self._input_data_asyncio(data)
+        except Exception as e:
+            print("exc")
+            self.lifetime.set_exception(e)
 
     def input_data(self, data: _MsgType) -> bool:
         """Processes incomming data.
@@ -91,9 +131,13 @@ class BaseSub(Generic[_MsgType]):
                 problem making this sub unable to work.
         """
         if self._event_loop.is_closed():
+            print("dead")
             logger.info("Event loop closed, for sub: %s", self.name)
             return False
-        self._event_loop.call_soon_threadsafe(self._input_data_asyncio, data)
+        try:
+            self._event_loop.call_soon_threadsafe(self._wrap_input_lifetime, data)
+        except:
+            return False
         return True
 
     async def wait_for_value(self) -> _MsgType:
@@ -102,7 +146,7 @@ class BaseSub(Generic[_MsgType]):
         Returns:
             The latest message (if none, awaits the first message)
         """
-        await self._wait_or_raise_closed(self._value_flag.wait())
+        await self._value_flag.wait()
         assert self._value is not None
         return self._value
 
@@ -118,15 +162,13 @@ class BaseSub(Generic[_MsgType]):
         Returns:
             Coroutine holding a message more recent than the one at time of the call
         """
-        last_count = self.msg_count
+        iterato = self.listen(fresh=True)
 
         async def func() -> _MsgType:
-            async with self.new_value_cond:
-                await self.new_value_cond.wait_for(lambda: self.msg_count > last_count)
-            assert self._value is not None
-            return self._value
+            async for payload in iterato:
+                return payload
 
-        return self._wait_or_raise_closed(func())
+        return func()
 
     def wait_for_next(self) -> Coroutine[Any, Any, _MsgType]:
         """Awaits exactly the next value.
@@ -152,7 +194,7 @@ class BaseSub(Generic[_MsgType]):
             finally:
                 self._dyncamic_queues.discard(q)
 
-        return self._wait_or_raise_closed(func())
+        return func()
 
     def listen(self, fresh=False) -> AsyncGenerator[_MsgType, None]:
         """Itterates over the newest message.
@@ -212,13 +254,8 @@ class BaseSub(Generic[_MsgType]):
         logger.debug("Reliable listener first iter %s", self.name)
         try:
             while True:
-                msg = await self._wait_or_raise_closed(queue.get())
+                msg = await queue.get()
                 yield msg
-        except Exception as e:
-            if e == self._raise_on_close_exc and exit_on_close:
-                return
-            else:
-                raise e
         finally:
             self._dyncamic_queues.discard(queue)
             logger.debug("Reliable listener closed %s", self.name)
@@ -242,49 +279,9 @@ class BaseSub(Generic[_MsgType]):
             q.put_nowait(msg)
         self._value = msg
         self._value_flag.set()
-        self.msg_count += 1
-        asyncio.create_task(self._wakeup_new())
         if not self.alive.is_set():
             logger.debug("%s is receiving data", self.name)
             self.alive.set()
-
-    async def _wakeup_new(self):
-        """fires new_value_cond"""
-        async with self.new_value_cond:
-            self.new_value_cond.notify_all()
-
-    async def _wait_or_raise_closed(
-        self, awaitable: Coroutine[Any, Any, _T] | Awaitable[_T]
-    ) -> _T:
-        """Wait for an awaitable or raise exception on subscriber shutdown.
-
-        Raises:
-            SubClosedError: if the subscriber is closed before completion.
-            Exception: any exception raised by the awaitable.
-
-        Returns:
-            Awaited awaitable
-        """
-        main_task = asyncio.ensure_future(awaitable)
-        main_task.set_name("afor_wait_or_close_main")
-        close_task = asyncio.ensure_future(self._closed.wait())
-        close_task.set_name("afor_close_task")
-        done, pending = await asyncio.wait(
-            [main_task, close_task],
-            return_when=asyncio.FIRST_COMPLETED,
-        )
-        try:
-            if close_task in done:
-                logger.info(f"Terminating task because sub is closed")
-                raise self._raise_on_close_exc
-            return await main_task
-        finally:
-            for task in pending:
-                task.cancel()
-            # leads to bug somehow, sometime
-            # if len(pending) != 0:
-            # with suppress(asyncio.CancelledError):
-            # await asyncio.wait(pending)
 
     def close(self):
         """Stops everything waiting on data.
@@ -292,6 +289,8 @@ class BaseSub(Generic[_MsgType]):
         Raises exception inside all coroutines/tasks waiting on the next data.
         Async for loops will exit (if setup to do so)."""
         self._closed.set()
+        if not self.lifetime.done():
+            self.lifetime.set_result(True)
 
 
 _InType = TypeVar("_InType")
