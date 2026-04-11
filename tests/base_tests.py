@@ -136,7 +136,8 @@ async def test_listen_too_fast(pub: Callable[[str], None], sub: afor.BaseSub[str
             put_count += 1
             await asyncio.sleep(delay)
 
-    assert put_count / 2 == max_iter
+    put_count_trgt = put_count/2
+    assert put_count_trgt == max_iter
     assert sample_count == max_iter
 
 
