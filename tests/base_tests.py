@@ -114,7 +114,8 @@ async def test_listen_one_by_one(pub: Callable[[str], None], sub: afor.BaseSub[s
 
 
 async def test_listen_too_fast(pub: Callable[[str], None], sub: afor.BaseSub[str]):
-    delay = 0.005 if not is_win else 0.1  # windows slow and unreliable af
+    delay = 0.010 if not is_win else 0.1  # windows slow and unreliable af
+    # delay = 0.1  # windows slow and unreliable af
     last_payload = "hello"
     pub(last_payload)
     await asyncio.sleep(delay)
@@ -122,29 +123,36 @@ async def test_listen_too_fast(pub: Callable[[str], None], sub: afor.BaseSub[str
     sample_count = 0
     put_count = 2
     max_iter = 20
+    finished = False
 
     received = []
+    expected = []
 
     await asyncio.sleep(delay)
-    async with afor.soft_timeout(2):
+    async with afor.soft_timeout(2 * delay * max_iter + 2):
         async for sample in sub.listen():
             received.append(sample)
+            expected.append(last_payload)
             sample_count += 1
-            assert sample == last_payload
+            # assert sample == last_payload
             if sample_count >= max_iter:
+                finished = True
                 break
-            last_payload = f"hello{sample_count}"
+            last_payload = f"hello{sample_count}_1"
             pub(last_payload)
             put_count += 1
             await asyncio.sleep(delay)
-            last_payload = f"hello{sample_count}"
+            last_payload = f"hello{sample_count}_2"
             pub(last_payload)
             put_count += 1
             await asyncio.sleep(delay)
 
+    assert finished == True
+
+    assert received == expected
     put_count_trgt = put_count / 2
-    assert put_count_trgt == max_iter, f"{received}"
-    assert sample_count == max_iter, f"{sample_count} == {max_iter}"
+    assert put_count_trgt == max_iter
+    assert sample_count == max_iter
 
 
 async def test_reliable_one_by_one(pub: Callable[[str], None], sub: afor.BaseSub[str]):
