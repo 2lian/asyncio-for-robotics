@@ -10,7 +10,17 @@ from contextlib import suppress
 from typing import Any, AsyncGenerator, Callable, Generator, Optional, Union
 
 import zenoh
-from base_tests import (
+
+from asyncio_for_robotics.core import BaseSub
+from asyncio_for_robotics.zenoh import (
+    Sub,
+    auto_session,
+    session_context,
+    soft_timeout,
+    soft_wait_for,
+)
+
+from .base_tests import (
     test_freshness,
     test_listen_one_by_one,
     test_listen_too_fast,
@@ -22,15 +32,6 @@ from base_tests import (
     test_wait_for_value,
     test_wait_new,
     test_wait_next,
-)
-
-from asyncio_for_robotics.core import BaseSub
-from asyncio_for_robotics.zenoh import (
-    Sub,
-    auto_session,
-    session_context,
-    soft_timeout,
-    soft_wait_for,
 )
 
 logger = logging.getLogger("asyncio_for_robotics.test")

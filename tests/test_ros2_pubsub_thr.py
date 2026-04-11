@@ -8,7 +8,15 @@ import logging
 from typing import Any, AsyncGenerator, Callable, Generator, Optional
 
 import rclpy
-from base_tests import (
+from rclpy.qos import QoSProfile
+from std_msgs.msg import String
+
+import asyncio_for_robotics.ros2 as afor
+from asyncio_for_robotics.core import BaseSub
+from asyncio_for_robotics.core._logger import setup_logger
+from asyncio_for_robotics.ros2.session import ThreadedSession
+
+from .base_tests import (
     test_freshness,
     test_listen_one_by_one,
     test_listen_too_fast,
@@ -21,13 +29,6 @@ from base_tests import (
     test_wait_new,
     test_wait_next,
 )
-from rclpy.qos import QoSProfile
-from std_msgs.msg import String
-
-import asyncio_for_robotics.ros2 as afor
-from asyncio_for_robotics.core import BaseSub
-from asyncio_for_robotics.core._logger import setup_logger
-from asyncio_for_robotics.ros2.session import ThreadedSession
 
 setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")

@@ -10,7 +10,11 @@ import rclpy
 from rclpy.publisher import Publisher
 from rclpy.qos import QoSProfile
 from std_msgs.msg import String
-from test_ros2_pubsub_thr import (
+
+import asyncio_for_robotics.ros2 as afor
+from asyncio_for_robotics.ros2.session import SynchronousSession
+
+from .test_ros2_pubsub_thr import (
     TOPIC,
     sub,
     test_freshness,
@@ -25,9 +29,6 @@ from test_ros2_pubsub_thr import (
     test_wait_new,
     test_wait_next,
 )
-
-import asyncio_for_robotics.ros2 as afor
-from asyncio_for_robotics.ros2.session import SynchronousSession
 
 logger = logging.getLogger("asyncio_for_robotics.test")
 

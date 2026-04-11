@@ -122,9 +122,13 @@ async def test_listen_too_fast(pub: Callable[[str], None], sub: afor.BaseSub[str
     sample_count = 0
     put_count = 2
     max_iter = 20
+
+    received = []
+
     await asyncio.sleep(delay)
     async with afor.soft_timeout(2):
         async for sample in sub.listen():
+            received.append(sample)
             sample_count += 1
             assert sample == last_payload
             if sample_count >= max_iter:
@@ -139,7 +143,7 @@ async def test_listen_too_fast(pub: Callable[[str], None], sub: afor.BaseSub[str
             await asyncio.sleep(delay)
 
     put_count_trgt = put_count / 2
-    assert put_count_trgt == max_iter, f"{put_count_trgt} == {max_iter}"
+    assert put_count_trgt == max_iter, f"{received}"
     assert sample_count == max_iter, f"{sample_count} == {max_iter}"
 
 
