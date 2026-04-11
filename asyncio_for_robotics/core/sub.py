@@ -344,7 +344,7 @@ class ConverterSub(BaseSub[_OutType], Generic[_OutType, _InType]):
         *,
         scope: Scope | None | object = _AUTO_SCOPE,
     ) -> None:
-        """Subscriber that applies a transformation to another subscriber.
+        """Subscriber that applies a function to another subscriber.
 
         This subscriber forwards messages from an upstream ``BaseSub``
         through ``convert_func`` and publishes the transformed values as a new
