@@ -1,8 +1,14 @@
 import asyncio
+import sys
 
 import pytest
 
 import asyncio_for_robotics as afor
+
+pytestmark = pytest.mark.skipif(
+    sys.version_info < (3, 11),
+    reason="requires Python 3.11+",
+)
 
 
 def _flatten_exceptions(exc: BaseException) -> list[BaseException]:

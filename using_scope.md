@@ -3,8 +3,6 @@
 > [!NOTE]
 > Scopes are optional, but strongly recommended. Long-running asyncio tasks,
 > subscriptions, and helper threads are not garbage collected by Python.
-> Without an explicit lifetime owner, they can keep running longer than you
-> intended.
 
 `afor.Scope` is the normal lifetime owner for active `afor` objects.
 
@@ -34,6 +32,15 @@ async with afor.Scope():
 All three objects belong to the same lexical lifetime. Leaving the block closes
 them automatically and releases all of their ressources (ROS 2 subscriptions,
 client, server; Zenoh sub ...).
+
+> [!WARNING]
+> Scopes do not support Python 3.10 or earlier. They rely on asyncio.TaskGroup
+> and other modern asyncio features that are incomplete or unavailable on
+> Python 3.10.
+> 
+> We strongly recommend Python 3.11 or newer. Our support for Python 3.10 may be
+> dropped in the future if it continues to create maintenance problems.
+
 
 ## `@afor.scoped`
 

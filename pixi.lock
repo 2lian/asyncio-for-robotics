@@ -289,11 +289,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/uncrustify-0.81.0-h5888daf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/yaml-0.2.5-h280c20c_3.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/yaml-cpp-0.8.0-h3f2d84a_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.8.0-ha770c72_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.8.0-hf6b7bf5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.8.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.9.0-ha770c72_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.9.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.9.0-hf6b7bf5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-rust-abi-1.7.2.1.85.0-h8619998_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.8.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.9.0-hf6b7bf5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
       - pypi: https://files.pythonhosted.org/packages/58/1b/2a074d4f4595bd37c3d12f1b2ad49bceef5c8cd0962cbfd97d1d39f32e1f/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
@@ -351,7 +351,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgomp-15.2.0-h8acb6b2_18.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libiconv-1.18-h90929bb_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblapack-3.11.0-6_h88aeb00_openblas.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.2-he30d5cf_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.3-he30d5cf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libnghttp2-1.68.1-hd3077d7_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libnsl-2.0.1-h86ecc28_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libopenblas-0.3.32-pthreads_h9d3fd7e_0.conda
@@ -578,11 +578,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/uncrustify-0.81.0-h5ad3122_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/yaml-0.2.5-h80f16a2_3.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/yaml-cpp-0.8.0-h5ad3122_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.8.0-h8af1aa0_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.8.0-hcf48332_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.8.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.9.0-h8af1aa0_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.9.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.9.0-hcf48332_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-rust-abi-1.7.2.1.85.0-h4d6d557_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.8.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.9.0-hcf48332_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zstd-1.5.7-h85ac4a6_6.conda
       - pypi: https://files.pythonhosted.org/packages/ab/33/c3116f1bf7647ee0ea8972efbe0fe5710ae75ea7226440a8fda7f04a4cbc/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_28_aarch64.whl
@@ -634,7 +634,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libgfortran5-15.2.0-hd16e46c_18.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libiconv-1.18-h57a12c2_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/liblapack-3.11.0-6_h859234e_openblas.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.2-h11316ed_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.3-hbb4bfdb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libnghttp2-1.68.1-h70048d4_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libopenblas-0.3.32-openmp_h9e49c7b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libsqlite-3.53.0-h8f8c405_0.conda
@@ -854,11 +854,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/uncrustify-0.81.0-h240833e_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/yaml-0.2.5-h4132b18_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/yaml-cpp-0.8.0-h92383a6_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.8.0-h694c41f_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.8.0-hee1b4f9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.8.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.9.0-h694c41f_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.9.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.9.0-hee1b4f9_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-rust-abi-1.7.2.1.85.0-hb5babb9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.8.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.9.0-hee1b4f9_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h3eecb57_6.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
@@ -912,7 +912,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libiconv-1.18-h23cfdf5_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libintl-0.25.1-h493aca8_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblapack-3.11.0-6_hd9741b5_openblas.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.2-h8088a28_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.3-h8088a28_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libnghttp2-1.68.1-h8f3e76b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libopenblas-0.3.32-openmp_he657e61_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsqlite-3.53.0-h1b79a29_0.conda
@@ -1133,11 +1133,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/uncrustify-0.81.0-h286801f_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/yaml-0.2.5-h925e9cb_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/yaml-cpp-0.8.0-ha1acc90_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.8.0-hce30654_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.8.0-h614a2b4_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.8.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.9.0-hce30654_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.9.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.9.0-h614a2b4_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-rust-abi-1.7.2.1.85.0-h2abaa9c_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.8.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.9.0-h614a2b4_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-hbf9d68e_6.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
@@ -1183,7 +1183,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/libiconv-1.18-hc1393d2_2.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libintl-0.22.5-h5728263_3.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/liblapack-3.11.0-6_hf9ab0e9_mkl.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.2-hfd05255_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.3-hfd05255_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.53.0-hf5d6505_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libssh2-1.11.1-h9aa295b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libuv-1.51.0-hfd05255_1.conda
@@ -1407,11 +1407,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/vs2015_runtime-14.44.35208-h38c0c73_34.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/yaml-0.2.5-h6a83c73_3.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/yaml-cpp-0.8.0-he0c23c2_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.8.0-h57928b3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.8.0-h531bba3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.8.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.9.0-h57928b3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.9.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.9.0-h531bba3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-rust-abi-1.7.2.1.85.0-h1107ac9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.8.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.9.0-h531bba3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda
       - pypi: https://files.pythonhosted.org/packages/26/16/a94c4f37e3a088faadf4b5fbc64e5f69dea1023dc7efc49b3be0e0ecc953/eclipse_zenoh-1.9.0-cp39-abi3-win_amd64.whl
@@ -1474,7 +1474,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libffi-3.5.2-h376a255_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgcc-15.2.0-h8acb6b2_18.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgomp-15.2.0-h8acb6b2_18.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.2-he30d5cf_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.3-he30d5cf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libmpdec-4.0.0-he30d5cf_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libsqlite-3.53.0-h022381a_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libuuid-2.42-h1022ec0_0.conda
@@ -1505,7 +1505,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libexpat-2.7.5-hcc62823_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libffi-3.5.2-hd1f9c09_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.2-h11316ed_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.3-hbb4bfdb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libmpdec-4.0.0-hf3981d6_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libsqlite-3.53.0-h8f8c405_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libzlib-1.3.2-hbb4bfdb_2.conda
@@ -1534,7 +1534,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libexpat-2.7.5-hf6b4638_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libffi-3.5.2-hcf2aa1b_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.2-h8088a28_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.3-h8088a28_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libmpdec-4.0.0-h84a0fba_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsqlite-3.53.0-h1b79a29_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libzlib-1.3.2-h8088a28_2.conda
@@ -1563,7 +1563,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libexpat-2.7.5-hac47afa_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libffi-3.5.2-h3d046cb_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.2-hfd05255_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.3-hfd05255_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libmpdec-4.0.0-hfd05255_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.53.0-hf5d6505_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libzlib-1.3.2-hfd05255_2.conda
@@ -1860,11 +1860,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/uncrustify-0.81.0-h5888daf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/yaml-0.2.5-h280c20c_3.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/yaml-cpp-0.8.0-h3f2d84a_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.8.0-ha770c72_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.8.0-hf6b7bf5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.8.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.9.0-ha770c72_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.9.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.9.0-hf6b7bf5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-rust-abi-1.7.2.1.85.0-h8619998_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.8.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.9.0-hf6b7bf5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
       - pypi: https://files.pythonhosted.org/packages/58/1b/2a074d4f4595bd37c3d12f1b2ad49bceef5c8cd0962cbfd97d1d39f32e1f/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
@@ -1916,7 +1916,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgomp-15.2.0-h8acb6b2_18.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libiconv-1.18-h90929bb_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblapack-3.11.0-6_h88aeb00_openblas.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.2-he30d5cf_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.3-he30d5cf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libnghttp2-1.68.1-hd3077d7_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libnsl-2.0.1-h86ecc28_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libopenblas-0.3.32-pthreads_h9d3fd7e_0.conda
@@ -2133,11 +2133,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/uncrustify-0.81.0-h5ad3122_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/yaml-0.2.5-h80f16a2_3.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/yaml-cpp-0.8.0-h5ad3122_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.8.0-h8af1aa0_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.8.0-hcf48332_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.8.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.9.0-h8af1aa0_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.9.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.9.0-hcf48332_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-rust-abi-1.7.2.1.85.0-h4d6d557_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.8.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.9.0-hcf48332_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zstd-1.5.7-h85ac4a6_6.conda
       - pypi: https://files.pythonhosted.org/packages/ab/33/c3116f1bf7647ee0ea8972efbe0fe5710ae75ea7226440a8fda7f04a4cbc/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_28_aarch64.whl
@@ -2184,7 +2184,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libgfortran5-15.2.0-hd16e46c_18.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libiconv-1.18-h57a12c2_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/liblapack-3.11.0-6_h859234e_openblas.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.2-h11316ed_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.3-hbb4bfdb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libnghttp2-1.68.1-h70048d4_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libopenblas-0.3.32-openmp_h9e49c7b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libsqlite-3.53.0-h8f8c405_0.conda
@@ -2397,11 +2397,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/uncrustify-0.81.0-h240833e_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/yaml-0.2.5-h4132b18_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/yaml-cpp-0.8.0-h92383a6_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.8.0-h694c41f_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.8.0-hee1b4f9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.8.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.9.0-h694c41f_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.9.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.9.0-hee1b4f9_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-rust-abi-1.7.2.1.85.0-hb5babb9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.8.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.9.0-hee1b4f9_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h3eecb57_6.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
@@ -2448,7 +2448,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libgfortran5-15.2.0-hdae7583_18.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libiconv-1.18-h23cfdf5_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblapack-3.11.0-6_hd9741b5_openblas.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.2-h8088a28_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.3-h8088a28_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libnghttp2-1.68.1-h8f3e76b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libopenblas-0.3.32-openmp_he657e61_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsqlite-3.53.0-h1b79a29_0.conda
@@ -2661,11 +2661,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/uncrustify-0.81.0-h286801f_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/yaml-0.2.5-h925e9cb_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/yaml-cpp-0.8.0-ha1acc90_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.8.0-hce30654_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.8.0-h614a2b4_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.8.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.9.0-hce30654_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.9.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.9.0-h614a2b4_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-rust-abi-1.7.2.1.85.0-h2abaa9c_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.8.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.9.0-h614a2b4_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-hbf9d68e_6.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
@@ -2704,7 +2704,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/libhwloc-2.12.2-default_h4379cf1_1000.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libiconv-1.18-hc1393d2_2.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/liblapack-3.11.0-6_hf9ab0e9_mkl.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.2-hfd05255_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.3-hfd05255_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.53.0-hf5d6505_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libssh2-1.11.1-h9aa295b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libuv-1.51.0-hfd05255_1.conda
@@ -2920,11 +2920,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/vs2015_runtime-14.44.35208-h38c0c73_34.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/yaml-0.2.5-h6a83c73_3.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/yaml-cpp-0.8.0-he0c23c2_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.8.0-h57928b3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.8.0-h531bba3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.8.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.9.0-h57928b3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.9.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.9.0-h531bba3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-rust-abi-1.7.2.1.85.0-h1107ac9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.8.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.9.0-h531bba3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda
       - pypi: https://files.pythonhosted.org/packages/26/16/a94c4f37e3a088faadf4b5fbc64e5f69dea1023dc7efc49b3be0e0ecc953/eclipse_zenoh-1.9.0-cp39-abi3-win_amd64.whl
@@ -3218,11 +3218,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/uncrustify-0.81.0-h5888daf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/yaml-0.2.5-h280c20c_3.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/yaml-cpp-0.8.0-h3f2d84a_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.8.0-ha770c72_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.8.0-hf6b7bf5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.8.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.9.0-ha770c72_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.9.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.9.0-hf6b7bf5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-rust-abi-1.7.2.1.85.0-h8619998_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.8.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.9.0-hf6b7bf5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
       - pypi: https://files.pythonhosted.org/packages/58/1b/2a074d4f4595bd37c3d12f1b2ad49bceef5c8cd0962cbfd97d1d39f32e1f/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
@@ -3280,7 +3280,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgomp-15.2.0-h8acb6b2_18.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libiconv-1.18-h90929bb_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblapack-3.11.0-6_h88aeb00_openblas.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.2-he30d5cf_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.3-he30d5cf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libnghttp2-1.68.1-hd3077d7_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libnsl-2.0.1-h86ecc28_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libopenblas-0.3.32-pthreads_h9d3fd7e_0.conda
@@ -3507,11 +3507,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/uncrustify-0.81.0-h5ad3122_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/yaml-0.2.5-h80f16a2_3.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/yaml-cpp-0.8.0-h5ad3122_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.8.0-h8af1aa0_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.8.0-hcf48332_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.8.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.9.0-h8af1aa0_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.9.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.9.0-hcf48332_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-rust-abi-1.7.2.1.85.0-h4d6d557_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.8.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.9.0-hcf48332_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zstd-1.5.7-h85ac4a6_6.conda
       - pypi: https://files.pythonhosted.org/packages/ab/33/c3116f1bf7647ee0ea8972efbe0fe5710ae75ea7226440a8fda7f04a4cbc/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_28_aarch64.whl
@@ -3563,7 +3563,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libgfortran5-15.2.0-hd16e46c_18.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libiconv-1.18-h57a12c2_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/liblapack-3.11.0-6_h859234e_openblas.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.2-h11316ed_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.3-hbb4bfdb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libnghttp2-1.68.1-h70048d4_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libopenblas-0.3.32-openmp_h9e49c7b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libsqlite-3.53.0-h8f8c405_0.conda
@@ -3783,11 +3783,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/uncrustify-0.81.0-h240833e_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/yaml-0.2.5-h4132b18_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/yaml-cpp-0.8.0-h92383a6_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.8.0-h694c41f_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.8.0-hee1b4f9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.8.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.9.0-h694c41f_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.9.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.9.0-hee1b4f9_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-rust-abi-1.7.2.1.85.0-hb5babb9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.8.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.9.0-hee1b4f9_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h3eecb57_6.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
@@ -3841,7 +3841,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libiconv-1.18-h23cfdf5_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libintl-0.25.1-h493aca8_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblapack-3.11.0-6_hd9741b5_openblas.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.2-h8088a28_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.3-h8088a28_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libnghttp2-1.68.1-h8f3e76b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libopenblas-0.3.32-openmp_he657e61_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsqlite-3.53.0-h1b79a29_0.conda
@@ -4062,11 +4062,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/uncrustify-0.81.0-h286801f_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/yaml-0.2.5-h925e9cb_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/yaml-cpp-0.8.0-ha1acc90_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.8.0-hce30654_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.8.0-h614a2b4_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.8.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.9.0-hce30654_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.9.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.9.0-h614a2b4_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-rust-abi-1.7.2.1.85.0-h2abaa9c_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.8.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.9.0-h614a2b4_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-hbf9d68e_6.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
@@ -4112,7 +4112,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/libiconv-1.18-hc1393d2_2.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libintl-0.22.5-h5728263_3.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/liblapack-3.11.0-6_hf9ab0e9_mkl.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.2-hfd05255_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.3-hfd05255_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.53.0-hf5d6505_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libssh2-1.11.1-h9aa295b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libuv-1.51.0-hfd05255_1.conda
@@ -4336,11 +4336,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/vs2015_runtime-14.44.35208-h38c0c73_34.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/yaml-0.2.5-h6a83c73_3.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/yaml-cpp-0.8.0-he0c23c2_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.8.0-h57928b3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.8.0-h531bba3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.8.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.9.0-h57928b3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.9.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.9.0-h531bba3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-rust-abi-1.7.2.1.85.0-h1107ac9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.8.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.9.0-h531bba3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda
       - pypi: https://files.pythonhosted.org/packages/26/16/a94c4f37e3a088faadf4b5fbc64e5f69dea1023dc7efc49b3be0e0ecc953/eclipse_zenoh-1.9.0-cp39-abi3-win_amd64.whl
@@ -4636,11 +4636,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/uncrustify-0.81.0-h5888daf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/yaml-0.2.5-h280c20c_3.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/yaml-cpp-0.8.0-h3f2d84a_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.8.0-ha770c72_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.8.0-hf6b7bf5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.8.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.9.0-ha770c72_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.9.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.9.0-hf6b7bf5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-rust-abi-1.7.2.1.85.0-h8619998_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.8.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.9.0-hf6b7bf5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
       - pypi: https://files.pythonhosted.org/packages/58/1b/2a074d4f4595bd37c3d12f1b2ad49bceef5c8cd0962cbfd97d1d39f32e1f/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
@@ -4698,7 +4698,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgomp-15.2.0-h8acb6b2_18.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libiconv-1.18-h90929bb_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblapack-3.11.0-6_h88aeb00_openblas.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.2-he30d5cf_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.3-he30d5cf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libnghttp2-1.68.1-hd3077d7_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libnsl-2.0.1-h86ecc28_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libopenblas-0.3.32-pthreads_h9d3fd7e_0.conda
@@ -4927,11 +4927,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/uncrustify-0.81.0-h5ad3122_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/yaml-0.2.5-h80f16a2_3.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/yaml-cpp-0.8.0-h5ad3122_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.8.0-h8af1aa0_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.8.0-hcf48332_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.8.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.9.0-h8af1aa0_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.9.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.9.0-hcf48332_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-rust-abi-1.7.2.1.85.0-h4d6d557_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.8.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.9.0-hcf48332_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zstd-1.5.7-h85ac4a6_6.conda
       - pypi: https://files.pythonhosted.org/packages/ab/33/c3116f1bf7647ee0ea8972efbe0fe5710ae75ea7226440a8fda7f04a4cbc/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_28_aarch64.whl
@@ -4983,7 +4983,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libgfortran5-15.2.0-hd16e46c_18.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libiconv-1.18-h57a12c2_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/liblapack-3.11.0-6_h859234e_openblas.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.2-h11316ed_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.3-hbb4bfdb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libnghttp2-1.68.1-h70048d4_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libopenblas-0.3.32-openmp_h9e49c7b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libsqlite-3.53.0-h8f8c405_0.conda
@@ -5205,11 +5205,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/uncrustify-0.81.0-h240833e_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/yaml-0.2.5-h4132b18_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/yaml-cpp-0.8.0-h92383a6_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.8.0-h694c41f_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.8.0-hee1b4f9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.8.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.9.0-h694c41f_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.9.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.9.0-hee1b4f9_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-rust-abi-1.7.2.1.85.0-hb5babb9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.8.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.9.0-hee1b4f9_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h3eecb57_6.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
@@ -5263,7 +5263,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libiconv-1.18-h23cfdf5_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libintl-0.25.1-h493aca8_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblapack-3.11.0-6_hd9741b5_openblas.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.2-h8088a28_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.3-h8088a28_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libnghttp2-1.68.1-h8f3e76b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libopenblas-0.3.32-openmp_he657e61_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsqlite-3.53.0-h1b79a29_0.conda
@@ -5486,11 +5486,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/uncrustify-0.81.0-h286801f_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/yaml-0.2.5-h925e9cb_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/yaml-cpp-0.8.0-ha1acc90_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.8.0-hce30654_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.8.0-h614a2b4_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.8.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.9.0-hce30654_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.9.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.9.0-h614a2b4_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-rust-abi-1.7.2.1.85.0-h2abaa9c_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.8.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.9.0-h614a2b4_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-hbf9d68e_6.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
@@ -5536,7 +5536,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/libiconv-1.18-hc1393d2_2.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libintl-0.22.5-h5728263_3.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/liblapack-3.11.0-6_hf9ab0e9_mkl.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.2-hfd05255_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.3-hfd05255_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.53.0-hf5d6505_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libssh2-1.11.1-h9aa295b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libuv-1.51.0-hfd05255_1.conda
@@ -5762,11 +5762,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/vs2015_runtime-14.44.35208-h38c0c73_34.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/yaml-0.2.5-h6a83c73_3.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/yaml-cpp-0.8.0-he0c23c2_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.8.0-h57928b3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.8.0-h531bba3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.8.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.9.0-h57928b3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.9.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.9.0-h531bba3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-rust-abi-1.7.2.1.85.0-h1107ac9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.8.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.9.0-h531bba3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda
       - pypi: https://files.pythonhosted.org/packages/26/16/a94c4f37e3a088faadf4b5fbc64e5f69dea1023dc7efc49b3be0e0ecc953/eclipse_zenoh-1.9.0-cp39-abi3-win_amd64.whl
@@ -5782,7 +5782,6 @@ environments:
     packages:
       linux-64:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/_openmp_mutex-4.5-20_gnu.conda
-      - conda: https://conda.anaconda.org/conda-forge/noarch/async-timeout-5.0.1-pyhcf101f3_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/backports.asyncio.runner-1.2.0-pyhe01879c_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/bzip2-1.0.8-hda65f42_9.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.2.25-hbd8a1cb_0.conda
@@ -5816,17 +5815,17 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.8.0-ha770c72_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.8.0-hf6b7bf5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.8.0-hf6b7bf5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.8.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.9.0-ha770c72_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.9.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.9.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.9.0-hf6b7bf5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
+      - pypi: https://files.pythonhosted.org/packages/fe/ba/e2081de779ca30d473f21f5b30e0e737c438205440784c7dfc81efc2b029/async_timeout-5.0.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/58/1b/2a074d4f4595bd37c3d12f1b2ad49bceef5c8cd0962cbfd97d1d39f32e1f/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/d1/b1/74babcc824a57904e919f3af16d86c08b524c0691504baf038ef2d7f655c/taskgroup-0.2.2-py2.py3-none-any.whl
       - pypi: ./
       linux-aarch64:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/_openmp_mutex-4.5-20_gnu.conda
-      - conda: https://conda.anaconda.org/conda-forge/noarch/async-timeout-5.0.1-pyhcf101f3_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/backports.asyncio.runner-1.2.0-pyhe01879c_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/bzip2-1.0.8-h4777abc_9.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.2.25-hbd8a1cb_0.conda
@@ -5839,7 +5838,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgcc-15.2.0-h8acb6b2_18.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgcc-ng-15.2.0-he9431aa_18.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgomp-15.2.0-h8acb6b2_18.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.2-he30d5cf_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.3-he30d5cf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libnsl-2.0.1-h86ecc28_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libsqlite-3.53.0-h022381a_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libuuid-2.42-h1022ec0_0.conda
@@ -5858,16 +5857,16 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.8.0-h8af1aa0_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.8.0-hcf48332_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.8.0-hcf48332_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.8.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.9.0-h8af1aa0_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.9.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.9.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.9.0-hcf48332_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zstd-1.5.7-h85ac4a6_6.conda
+      - pypi: https://files.pythonhosted.org/packages/fe/ba/e2081de779ca30d473f21f5b30e0e737c438205440784c7dfc81efc2b029/async_timeout-5.0.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/ab/33/c3116f1bf7647ee0ea8972efbe0fe5710ae75ea7226440a8fda7f04a4cbc/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_28_aarch64.whl
       - pypi: https://files.pythonhosted.org/packages/d1/b1/74babcc824a57904e919f3af16d86c08b524c0691504baf038ef2d7f655c/taskgroup-0.2.2-py2.py3-none-any.whl
       - pypi: ./
       osx-64:
-      - conda: https://conda.anaconda.org/conda-forge/noarch/async-timeout-5.0.1-pyhcf101f3_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/backports.asyncio.runner-1.2.0-pyhe01879c_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/bzip2-1.0.8-h500dc9f_9.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.2.25-hbd8a1cb_0.conda
@@ -5877,7 +5876,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libexpat-2.7.5-hcc62823_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libffi-3.5.2-hd1f9c09_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.2-h11316ed_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.3-hbb4bfdb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libsqlite-3.53.0-h8f8c405_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libzlib-1.3.2-hbb4bfdb_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/ncurses-6.5-h0622a9a_3.conda
@@ -5893,15 +5892,15 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.8.0-h694c41f_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.8.0-hee1b4f9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.8.0-hee1b4f9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.8.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.9.0-h694c41f_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.9.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.9.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.9.0-hee1b4f9_0.conda
+      - pypi: https://files.pythonhosted.org/packages/fe/ba/e2081de779ca30d473f21f5b30e0e737c438205440784c7dfc81efc2b029/async_timeout-5.0.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
       - pypi: https://files.pythonhosted.org/packages/d1/b1/74babcc824a57904e919f3af16d86c08b524c0691504baf038ef2d7f655c/taskgroup-0.2.2-py2.py3-none-any.whl
       - pypi: ./
       osx-arm64:
-      - conda: https://conda.anaconda.org/conda-forge/noarch/async-timeout-5.0.1-pyhcf101f3_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/backports.asyncio.runner-1.2.0-pyhe01879c_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/bzip2-1.0.8-hd037594_9.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.2.25-hbd8a1cb_0.conda
@@ -5910,7 +5909,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libexpat-2.7.5-hf6b4638_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libffi-3.5.2-hcf2aa1b_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.2-h8088a28_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.3-h8088a28_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsqlite-3.53.0-h1b79a29_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libzlib-1.3.2-h8088a28_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/ncurses-6.5-h5e97a16_3.conda
@@ -5926,15 +5925,15 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.8.0-hce30654_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.8.0-h614a2b4_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.8.0-h614a2b4_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.8.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.9.0-hce30654_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.9.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.9.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.9.0-h614a2b4_0.conda
+      - pypi: https://files.pythonhosted.org/packages/fe/ba/e2081de779ca30d473f21f5b30e0e737c438205440784c7dfc81efc2b029/async_timeout-5.0.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
       - pypi: https://files.pythonhosted.org/packages/d1/b1/74babcc824a57904e919f3af16d86c08b524c0691504baf038ef2d7f655c/taskgroup-0.2.2-py2.py3-none-any.whl
       - pypi: ./
       win-64:
-      - conda: https://conda.anaconda.org/conda-forge/noarch/async-timeout-5.0.1-pyhcf101f3_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/backports.asyncio.runner-1.2.0-pyhe01879c_2.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/bzip2-1.0.8-h0ad9c76_9.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.2.25-h4c7d964_0.conda
@@ -5943,7 +5942,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libexpat-2.7.5-hac47afa_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libffi-3.5.2-h3d046cb_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.2-hfd05255_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.3-hfd05255_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.53.0-hf5d6505_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libzlib-1.3.2-hfd05255_2.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/openssl-3.6.2-hf411b9b_0.conda
@@ -5961,10 +5960,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc-14.3-h41ae7f8_34.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc14_runtime-14.44.35208-h818238b_34.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vcomp14-14.44.35208-h818238b_34.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.8.0-h57928b3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.8.0-h531bba3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.8.0-h531bba3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.8.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.9.0-h57928b3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.9.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.9.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.9.0-h531bba3_0.conda
+      - pypi: https://files.pythonhosted.org/packages/fe/ba/e2081de779ca30d473f21f5b30e0e737c438205440784c7dfc81efc2b029/async_timeout-5.0.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/26/16/a94c4f37e3a088faadf4b5fbc64e5f69dea1023dc7efc49b3be0e0ecc953/eclipse_zenoh-1.9.0-cp39-abi3-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/d1/b1/74babcc824a57904e919f3af16d86c08b524c0691504baf038ef2d7f655c/taskgroup-0.2.2-py2.py3-none-any.whl
       - pypi: ./
@@ -6012,10 +6012,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.8.0-ha770c72_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.8.0-hf6b7bf5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.8.0-hf6b7bf5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.8.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.9.0-ha770c72_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.9.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.9.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.9.0-hf6b7bf5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
       - pypi: https://files.pythonhosted.org/packages/58/1b/2a074d4f4595bd37c3d12f1b2ad49bceef5c8cd0962cbfd97d1d39f32e1f/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: ./
@@ -6033,7 +6033,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgcc-15.2.0-h8acb6b2_18.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgcc-ng-15.2.0-he9431aa_18.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgomp-15.2.0-h8acb6b2_18.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.2-he30d5cf_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.3-he30d5cf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libnsl-2.0.1-h86ecc28_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libsqlite-3.53.0-h022381a_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libuuid-2.42-h1022ec0_0.conda
@@ -6052,10 +6052,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.8.0-h8af1aa0_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.8.0-hcf48332_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.8.0-hcf48332_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.8.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.9.0-h8af1aa0_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.9.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.9.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.9.0-hcf48332_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zstd-1.5.7-h85ac4a6_6.conda
       - pypi: https://files.pythonhosted.org/packages/ab/33/c3116f1bf7647ee0ea8972efbe0fe5710ae75ea7226440a8fda7f04a4cbc/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_28_aarch64.whl
       - pypi: ./
@@ -6069,7 +6069,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libexpat-2.7.5-hcc62823_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libffi-3.5.2-hd1f9c09_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.2-h11316ed_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.3-hbb4bfdb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libsqlite-3.53.0-h8f8c405_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libzlib-1.3.2-hbb4bfdb_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/ncurses-6.5-h0622a9a_3.conda
@@ -6085,10 +6085,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.8.0-h694c41f_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.8.0-hee1b4f9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.8.0-hee1b4f9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.8.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.9.0-h694c41f_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.9.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.9.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.9.0-hee1b4f9_0.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
       - pypi: ./
       osx-arm64:
@@ -6100,7 +6100,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libexpat-2.7.5-hf6b4638_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libffi-3.5.2-hcf2aa1b_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.2-h8088a28_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.3-h8088a28_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsqlite-3.53.0-h1b79a29_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libzlib-1.3.2-h8088a28_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/ncurses-6.5-h5e97a16_3.conda
@@ -6116,10 +6116,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.8.0-hce30654_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.8.0-h614a2b4_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.8.0-h614a2b4_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.8.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.9.0-hce30654_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.9.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.9.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.9.0-h614a2b4_0.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
       - pypi: ./
       win-64:
@@ -6131,7 +6131,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libexpat-2.7.5-hac47afa_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libffi-3.5.2-h3d046cb_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.2-hfd05255_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.3-hfd05255_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.53.0-hf5d6505_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libzlib-1.3.2-hfd05255_2.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/openssl-3.6.2-hf411b9b_0.conda
@@ -6149,10 +6149,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc-14.3-h41ae7f8_34.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc14_runtime-14.44.35208-h818238b_34.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vcomp14-14.44.35208-h818238b_34.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.8.0-h57928b3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.8.0-h531bba3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.8.0-h531bba3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.8.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.9.0-h57928b3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.9.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.9.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.9.0-h531bba3_0.conda
       - pypi: https://files.pythonhosted.org/packages/26/16/a94c4f37e3a088faadf4b5fbc64e5f69dea1023dc7efc49b3be0e0ecc953/eclipse_zenoh-1.9.0-cp39-abi3-win_amd64.whl
       - pypi: ./
   py312:
@@ -6199,10 +6199,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.8.0-ha770c72_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.8.0-hf6b7bf5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.8.0-hf6b7bf5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.8.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.9.0-ha770c72_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.9.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.9.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.9.0-hf6b7bf5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
       - pypi: https://files.pythonhosted.org/packages/58/1b/2a074d4f4595bd37c3d12f1b2ad49bceef5c8cd0962cbfd97d1d39f32e1f/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: ./
@@ -6220,7 +6220,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgcc-15.2.0-h8acb6b2_18.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgcc-ng-15.2.0-he9431aa_18.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgomp-15.2.0-h8acb6b2_18.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.2-he30d5cf_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.3-he30d5cf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libnsl-2.0.1-h86ecc28_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libsqlite-3.53.0-h022381a_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libuuid-2.42-h1022ec0_0.conda
@@ -6239,10 +6239,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.8.0-h8af1aa0_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.8.0-hcf48332_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.8.0-hcf48332_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.8.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.9.0-h8af1aa0_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.9.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.9.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.9.0-hcf48332_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zstd-1.5.7-h85ac4a6_6.conda
       - pypi: https://files.pythonhosted.org/packages/ab/33/c3116f1bf7647ee0ea8972efbe0fe5710ae75ea7226440a8fda7f04a4cbc/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_28_aarch64.whl
       - pypi: ./
@@ -6256,7 +6256,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libexpat-2.7.5-hcc62823_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libffi-3.5.2-hd1f9c09_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.2-h11316ed_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.3-hbb4bfdb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libsqlite-3.53.0-h8f8c405_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libzlib-1.3.2-hbb4bfdb_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/ncurses-6.5-h0622a9a_3.conda
@@ -6272,10 +6272,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.8.0-h694c41f_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.8.0-hee1b4f9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.8.0-hee1b4f9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.8.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.9.0-h694c41f_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.9.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.9.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.9.0-hee1b4f9_0.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
       - pypi: ./
       osx-arm64:
@@ -6287,7 +6287,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libexpat-2.7.5-hf6b4638_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libffi-3.5.2-hcf2aa1b_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.2-h8088a28_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.3-h8088a28_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsqlite-3.53.0-h1b79a29_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libzlib-1.3.2-h8088a28_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/ncurses-6.5-h5e97a16_3.conda
@@ -6303,10 +6303,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.8.0-hce30654_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.8.0-h614a2b4_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.8.0-h614a2b4_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.8.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.9.0-hce30654_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.9.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.9.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.9.0-h614a2b4_0.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
       - pypi: ./
       win-64:
@@ -6318,7 +6318,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libexpat-2.7.5-hac47afa_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libffi-3.5.2-h3d046cb_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.2-hfd05255_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.3-hfd05255_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.53.0-hf5d6505_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libzlib-1.3.2-hfd05255_2.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/openssl-3.6.2-hf411b9b_0.conda
@@ -6336,10 +6336,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc-14.3-h41ae7f8_34.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc14_runtime-14.44.35208-h818238b_34.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vcomp14-14.44.35208-h818238b_34.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.8.0-h57928b3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.8.0-h531bba3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.8.0-h531bba3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.8.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.9.0-h57928b3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.9.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.9.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.9.0-h531bba3_0.conda
       - pypi: https://files.pythonhosted.org/packages/26/16/a94c4f37e3a088faadf4b5fbc64e5f69dea1023dc7efc49b3be0e0ecc953/eclipse_zenoh-1.9.0-cp39-abi3-win_amd64.whl
       - pypi: ./
   py313:
@@ -6385,10 +6385,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.8.0-ha770c72_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.8.0-hf6b7bf5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.8.0-hf6b7bf5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.8.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.9.0-ha770c72_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.9.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.9.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.9.0-hf6b7bf5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
       - pypi: https://files.pythonhosted.org/packages/58/1b/2a074d4f4595bd37c3d12f1b2ad49bceef5c8cd0962cbfd97d1d39f32e1f/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: ./
@@ -6405,7 +6405,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libffi-3.5.2-h376a255_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgcc-15.2.0-h8acb6b2_18.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgomp-15.2.0-h8acb6b2_18.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.2-he30d5cf_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.3-he30d5cf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libmpdec-4.0.0-he30d5cf_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libsqlite-3.53.0-h022381a_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libuuid-2.42-h1022ec0_0.conda
@@ -6424,10 +6424,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.8.0-h8af1aa0_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.8.0-hcf48332_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.8.0-hcf48332_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.8.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.9.0-h8af1aa0_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.9.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.9.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.9.0-hcf48332_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zstd-1.5.7-h85ac4a6_6.conda
       - pypi: https://files.pythonhosted.org/packages/ab/33/c3116f1bf7647ee0ea8972efbe0fe5710ae75ea7226440a8fda7f04a4cbc/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_28_aarch64.whl
       - pypi: ./
@@ -6441,7 +6441,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libexpat-2.7.5-hcc62823_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libffi-3.5.2-hd1f9c09_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.2-h11316ed_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.3-hbb4bfdb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libmpdec-4.0.0-hf3981d6_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libsqlite-3.53.0-h8f8c405_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libzlib-1.3.2-hbb4bfdb_2.conda
@@ -6459,10 +6459,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.8.0-h694c41f_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.8.0-hee1b4f9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.8.0-hee1b4f9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.8.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.9.0-h694c41f_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.9.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.9.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.9.0-hee1b4f9_0.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
       - pypi: ./
       osx-arm64:
@@ -6474,7 +6474,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libexpat-2.7.5-hf6b4638_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libffi-3.5.2-hcf2aa1b_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.2-h8088a28_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.3-h8088a28_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libmpdec-4.0.0-h84a0fba_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsqlite-3.53.0-h1b79a29_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libzlib-1.3.2-h8088a28_2.conda
@@ -6492,10 +6492,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.8.0-hce30654_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.8.0-h614a2b4_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.8.0-h614a2b4_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.8.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.9.0-hce30654_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.9.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.9.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.9.0-h614a2b4_0.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
       - pypi: ./
       win-64:
@@ -6507,7 +6507,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libexpat-2.7.5-hac47afa_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libffi-3.5.2-h3d046cb_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.2-hfd05255_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.3-hfd05255_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libmpdec-4.0.0-hfd05255_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.53.0-hf5d6505_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libzlib-1.3.2-hfd05255_2.conda
@@ -6527,10 +6527,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc-14.3-h41ae7f8_34.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc14_runtime-14.44.35208-h818238b_34.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vcomp14-14.44.35208-h818238b_34.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.8.0-h57928b3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.8.0-h531bba3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.8.0-h531bba3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.8.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.9.0-h57928b3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.9.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.9.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.9.0-h531bba3_0.conda
       - pypi: https://files.pythonhosted.org/packages/26/16/a94c4f37e3a088faadf4b5fbc64e5f69dea1023dc7efc49b3be0e0ecc953/eclipse_zenoh-1.9.0-cp39-abi3-win_amd64.whl
       - pypi: ./
   py314:
@@ -6576,10 +6576,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.8.0-ha770c72_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.8.0-hf6b7bf5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.8.0-hf6b7bf5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.8.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.9.0-ha770c72_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.9.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.9.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.9.0-hf6b7bf5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
       - pypi: https://files.pythonhosted.org/packages/58/1b/2a074d4f4595bd37c3d12f1b2ad49bceef5c8cd0962cbfd97d1d39f32e1f/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: ./
@@ -6596,7 +6596,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libffi-3.5.2-h376a255_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgcc-15.2.0-h8acb6b2_18.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgomp-15.2.0-h8acb6b2_18.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.2-he30d5cf_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.3-he30d5cf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libmpdec-4.0.0-he30d5cf_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libsqlite-3.53.0-h022381a_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libuuid-2.42-h1022ec0_0.conda
@@ -6615,10 +6615,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.8.0-h8af1aa0_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.8.0-hcf48332_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.8.0-hcf48332_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.8.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.9.0-h8af1aa0_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.9.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.9.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.9.0-hcf48332_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zstd-1.5.7-h85ac4a6_6.conda
       - pypi: https://files.pythonhosted.org/packages/ab/33/c3116f1bf7647ee0ea8972efbe0fe5710ae75ea7226440a8fda7f04a4cbc/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_28_aarch64.whl
       - pypi: ./
@@ -6632,7 +6632,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libexpat-2.7.5-hcc62823_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libffi-3.5.2-hd1f9c09_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.2-h11316ed_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.3-hbb4bfdb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libmpdec-4.0.0-hf3981d6_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libsqlite-3.53.0-h8f8c405_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libzlib-1.3.2-hbb4bfdb_2.conda
@@ -6650,10 +6650,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.8.0-h694c41f_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.8.0-hee1b4f9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.8.0-hee1b4f9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.8.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.9.0-h694c41f_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.9.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.9.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.9.0-hee1b4f9_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h3eecb57_6.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
       - pypi: ./
@@ -6666,7 +6666,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libexpat-2.7.5-hf6b4638_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libffi-3.5.2-hcf2aa1b_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.2-h8088a28_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.3-h8088a28_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libmpdec-4.0.0-h84a0fba_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsqlite-3.53.0-h1b79a29_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libzlib-1.3.2-h8088a28_2.conda
@@ -6684,10 +6684,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.8.0-hce30654_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.8.0-h614a2b4_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.8.0-h614a2b4_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.8.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.9.0-hce30654_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.9.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.9.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.9.0-h614a2b4_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-hbf9d68e_6.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
       - pypi: ./
@@ -6700,7 +6700,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libexpat-2.7.5-hac47afa_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libffi-3.5.2-h3d046cb_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.2-hfd05255_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.3-hfd05255_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libmpdec-4.0.0-hfd05255_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.53.0-hf5d6505_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libzlib-1.3.2-hfd05255_2.conda
@@ -6720,10 +6720,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc-14.3-h41ae7f8_34.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc14_runtime-14.44.35208-h818238b_34.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vcomp14-14.44.35208-h818238b_34.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.8.0-h57928b3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.8.0-h531bba3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.8.0-h531bba3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.8.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.9.0-h57928b3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.9.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.9.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.9.0-h531bba3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda
       - pypi: https://files.pythonhosted.org/packages/26/16/a94c4f37e3a088faadf4b5fbc64e5f69dea1023dc7efc49b3be0e0ecc953/eclipse_zenoh-1.9.0-cp39-abi3-win_amd64.whl
       - pypi: ./
@@ -6770,10 +6770,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.8.0-ha770c72_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.8.0-hf6b7bf5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.8.0-hf6b7bf5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.8.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.9.0-ha770c72_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.9.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.9.0-hf6b7bf5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.9.0-hf6b7bf5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
       - pypi: https://files.pythonhosted.org/packages/58/1b/2a074d4f4595bd37c3d12f1b2ad49bceef5c8cd0962cbfd97d1d39f32e1f/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: ./
@@ -6790,7 +6790,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libffi-3.5.2-h376a255_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgcc-15.2.0-h8acb6b2_18.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libgomp-15.2.0-h8acb6b2_18.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.2-he30d5cf_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.3-he30d5cf_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libmpdec-4.0.0-he30d5cf_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libsqlite-3.53.0-h022381a_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libuuid-2.42-h1022ec0_0.conda
@@ -6809,10 +6809,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.8.0-h8af1aa0_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.8.0-hcf48332_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.8.0-hcf48332_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.8.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.9.0-h8af1aa0_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.9.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.9.0-hcf48332_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.9.0-hcf48332_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zstd-1.5.7-h85ac4a6_6.conda
       - pypi: https://files.pythonhosted.org/packages/ab/33/c3116f1bf7647ee0ea8972efbe0fe5710ae75ea7226440a8fda7f04a4cbc/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_28_aarch64.whl
       - pypi: ./
@@ -6826,7 +6826,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libexpat-2.7.5-hcc62823_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libffi-3.5.2-hd1f9c09_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.2-h11316ed_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.3-hbb4bfdb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libmpdec-4.0.0-hf3981d6_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libsqlite-3.53.0-h8f8c405_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libzlib-1.3.2-hbb4bfdb_2.conda
@@ -6844,10 +6844,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.8.0-h694c41f_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.8.0-hee1b4f9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.8.0-hee1b4f9_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.8.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.9.0-h694c41f_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.9.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.9.0-hee1b4f9_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.9.0-hee1b4f9_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h3eecb57_6.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
       - pypi: ./
@@ -6860,7 +6860,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libexpat-2.7.5-hf6b4638_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libffi-3.5.2-hcf2aa1b_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.2-h8088a28_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.3-h8088a28_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libmpdec-4.0.0-h84a0fba_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsqlite-3.53.0-h1b79a29_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libzlib-1.3.2-h8088a28_2.conda
@@ -6878,10 +6878,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tomli-2.4.1-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.15.0-pyhcf101f3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.8.0-hce30654_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.8.0-h614a2b4_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.8.0-h614a2b4_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.8.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.9.0-hce30654_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.9.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.9.0-h614a2b4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.9.0-h614a2b4_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-hbf9d68e_6.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
       - pypi: ./
@@ -6894,7 +6894,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libexpat-2.7.5-hac47afa_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libffi-3.5.2-h3d046cb_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.2-hfd05255_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.3-hfd05255_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libmpdec-4.0.0-hfd05255_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.53.0-hf5d6505_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libzlib-1.3.2-hfd05255_2.conda
@@ -6914,10 +6914,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc-14.3-h41ae7f8_34.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc14_runtime-14.44.35208-h818238b_34.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vcomp14-14.44.35208-h818238b_34.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.8.0-h57928b3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.8.0-h531bba3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.8.0-h531bba3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.8.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.9.0-h57928b3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.9.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.9.0-h531bba3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.9.0-h531bba3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda
       - pypi: https://files.pythonhosted.org/packages/26/16/a94c4f37e3a088faadf4b5fbc64e5f69dea1023dc7efc49b3be0e0ecc953/eclipse_zenoh-1.9.0-cp39-abi3-win_amd64.whl
       - pypi: ./
@@ -6982,22 +6982,15 @@ packages:
   - pkg:pypi/argcomplete?source=hash-mapping
   size: 42386
   timestamp: 1760975036972
-- conda: https://conda.anaconda.org/conda-forge/noarch/async-timeout-5.0.1-pyhcf101f3_2.conda
-  sha256: 6638b68ab2675d0bed1f73562a4e75a61863b903be1538282cddb56c8e8f75bd
-  md5: 0d0ef7e4a0996b2c4ac2175a12b3bf69
-  depends:
-  - python >=3.10
-  - python
-  license: Apache-2.0
-  license_family: APACHE
-  purls:
-  - pkg:pypi/async-timeout?source=hash-mapping
-  size: 13559
-  timestamp: 1767290444597
+- pypi: https://files.pythonhosted.org/packages/fe/ba/e2081de779ca30d473f21f5b30e0e737c438205440784c7dfc81efc2b029/async_timeout-5.0.1-py3-none-any.whl
+  name: async-timeout
+  version: 5.0.1
+  sha256: 39e3809566ff85354557ec2398b55e096c8364bacac9405a7a1fa429e77fe76c
+  requires_python: '>=3.8'
 - pypi: ./
   name: asyncio-for-robotics
-  version: 1.3.5
-  sha256: 837beb697a8147563fff8e75097106563e79290ea48b46d502aa0bca59d70b82
+  version: 1.4.0a0
+  sha256: 2e59656741028302d7dc556a6c2ed843f0dfe5092ee551df0d81e41606319b2c
   requires_dist:
   - typing-extensions>=4.0 ; python_full_version < '3.11'
   - async-timeout ; python_full_version < '3.11'
@@ -7687,7 +7680,7 @@ packages:
   license: Apache-2.0 AND BSD-3-Clause AND PSF-2.0 AND MIT
   license_family: BSD
   purls:
-  - pkg:pypi/cryptography?source=hash-mapping
+  - pkg:pypi/cryptography?source=compressed-mapping
   size: 2433883
   timestamp: 1775638215963
 - conda: https://conda.anaconda.org/conda-forge/win-64/cryptography-46.0.7-py312h232196e_0.conda
@@ -9334,52 +9327,52 @@ packages:
   purls: []
   size: 113478
   timestamp: 1775825492909
-- conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.2-he30d5cf_0.conda
-  sha256: 843c46e20519651a3e357a8928352b16c5b94f4cd3d5481acc48be2e93e8f6a3
-  md5: 96944e3c92386a12755b94619bae0b35
+- conda: https://conda.anaconda.org/conda-forge/linux-aarch64/liblzma-5.8.3-he30d5cf_0.conda
+  sha256: d61962b9cd54c3554361550203c64d5b65b71e3058a285b66e4b04b9769f0a5c
+  md5: 76298a9e6d71ee6e832a8d0d7373b261
   depends:
   - libgcc >=14
   constrains:
-  - xz 5.8.2.*
+  - xz 5.8.3.*
   license: 0BSD
   purls: []
-  size: 125916
-  timestamp: 1768754941722
-- conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.2-h11316ed_0.conda
-  sha256: 7ab3c98abd3b5d5ec72faa8d9f5d4b50dcee4970ed05339bc381861199dabb41
-  md5: 688a0c3d57fa118b9c97bf7e471ab46c
-  depends:
-  - __osx >=10.13
-  constrains:
-  - xz 5.8.2.*
-  license: 0BSD
-  purls: []
-  size: 105482
-  timestamp: 1768753411348
-- conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.2-h8088a28_0.conda
-  sha256: 7bfc7ffb2d6a9629357a70d4eadeadb6f88fa26ebc28f606b1c1e5e5ed99dc7e
-  md5: 009f0d956d7bfb00de86901d16e486c7
+  size: 126102
+  timestamp: 1775828008518
+- conda: https://conda.anaconda.org/conda-forge/osx-64/liblzma-5.8.3-hbb4bfdb_0.conda
+  sha256: d9e2006051529aec5578c6efeb13bb6a7200a014b2d5a77a579e83a8049d5f3c
+  md5: becdfbfe7049fa248e52aa37a9df09e2
   depends:
   - __osx >=11.0
   constrains:
-  - xz 5.8.2.*
+  - xz 5.8.3.*
   license: 0BSD
   purls: []
-  size: 92242
-  timestamp: 1768752982486
-- conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.2-hfd05255_0.conda
-  sha256: f25bf293f550c8ed2e0c7145eb404324611cfccff37660869d97abf526eb957c
-  md5: ba0bfd4c3cf73f299ffe46ff0eaeb8e3
+  size: 105724
+  timestamp: 1775826029494
+- conda: https://conda.anaconda.org/conda-forge/osx-arm64/liblzma-5.8.3-h8088a28_0.conda
+  sha256: 34878d87275c298f1a732c6806349125cebbf340d24c6c23727268184bba051e
+  md5: b1fd823b5ae54fbec272cea0811bd8a9
+  depends:
+  - __osx >=11.0
+  constrains:
+  - xz 5.8.3.*
+  license: 0BSD
+  purls: []
+  size: 92472
+  timestamp: 1775825802659
+- conda: https://conda.anaconda.org/conda-forge/win-64/liblzma-5.8.3-hfd05255_0.conda
+  sha256: d636d1a25234063642f9c531a7bb58d84c1c496411280a36ea000bd122f078f1
+  md5: 8f83619ab1588b98dd99c90b0bfc5c6d
   depends:
   - ucrt >=10.0.20348.0
   - vc >=14.3,<15
   - vc14_runtime >=14.44.35208
   constrains:
-  - xz 5.8.2.*
+  - xz 5.8.3.*
   license: 0BSD
   purls: []
-  size: 106169
-  timestamp: 1768752763559
+  size: 106486
+  timestamp: 1775825663227
 - conda: https://conda.anaconda.org/conda-forge/linux-64/libmpdec-4.0.0-hb03c661_1.conda
   sha256: fe171ed5cf5959993d43ff72de7596e8ac2853e9021dec0344e583734f1e0843
   md5: 2c21e66f50753a083cbe6b80f38268fa
@@ -10591,7 +10584,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/numpy?source=hash-mapping
+  - pkg:pypi/numpy?source=compressed-mapping
   size: 7166412
   timestamp: 1773839142889
 - conda: https://conda.anaconda.org/conda-forge/linux-64/openssl-3.6.2-h35e630c_0.conda
@@ -62834,120 +62827,64 @@ packages:
   purls: []
   size: 148572
   timestamp: 1745308037198
-- conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.8.0-ha770c72_0.conda
-  sha256: 09972073b5be562a180d8f57dd12320344b9abb6150aafd595dc7ba60372e9a9
-  md5: 1de7c00f1175a3f27b3ff26f6cc6baa9
+- conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-1.9.0-ha770c72_0.conda
+  sha256: 5fef779a3c7fdb3334e9936635b58362ec745c1c6367d2276d095f49eb08aff3
+  md5: 5623d3c479b3aceed153e214cbb22344
   depends:
-  - zenoh-plugin-rest 1.8.0 hf6b7bf5_0
-  - zenoh-plugin-storage-manager 1.8.0 hf6b7bf5_0
-  - zenohd 1.8.0 hf6b7bf5_0
+  - zenoh-plugin-rest 1.9.0 hf6b7bf5_0
+  - zenoh-plugin-storage-manager 1.9.0 hf6b7bf5_0
+  - zenohd 1.9.0 hf6b7bf5_0
   license: Apache-2.0 OR EPL-2.0
   purls: []
-  size: 51923
-  timestamp: 1774109338155
-- conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.8.0-h8af1aa0_0.conda
-  sha256: 2be15b4100b36c9fb60a100b31e9bd01086cc9ccf8a801323945bf67ea489d50
-  md5: 39adc00d5cf3084eac642d91f7170148
+  size: 52241
+  timestamp: 1775855286885
+- conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-1.9.0-h8af1aa0_0.conda
+  sha256: 009f1abab08219a70d291c7e12ebd78230afd587157ed802254dfeafb43dcd1c
+  md5: 234d9e27a70de9c9787e4ad34e56ec6a
   depends:
-  - zenoh-plugin-rest 1.8.0 hcf48332_0
-  - zenoh-plugin-storage-manager 1.8.0 hcf48332_0
-  - zenohd 1.8.0 hcf48332_0
+  - zenoh-plugin-rest 1.9.0 hcf48332_0
+  - zenoh-plugin-storage-manager 1.9.0 hcf48332_0
+  - zenohd 1.9.0 hcf48332_0
   license: Apache-2.0 OR EPL-2.0
   purls: []
-  size: 51906
-  timestamp: 1774109219823
-- conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.8.0-h694c41f_0.conda
-  sha256: cdd7406615d59a445a5dd382b2e2e28d02b0922f24accbc19791eed852678d57
-  md5: df979cdc5872abcdffb4dfb3010c9b53
+  size: 52228
+  timestamp: 1775855211272
+- conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-1.9.0-h694c41f_0.conda
+  sha256: 709a8e561b299cd83c893197769eea77927b3ce37407c4629bd95e49711d7775
+  md5: e7a7f250a1dcffd327d830c963563b29
   depends:
-  - zenoh-plugin-rest 1.8.0 hee1b4f9_0
-  - zenoh-plugin-storage-manager 1.8.0 hee1b4f9_0
-  - zenohd 1.8.0 hee1b4f9_0
+  - zenoh-plugin-rest 1.9.0 hee1b4f9_0
+  - zenoh-plugin-storage-manager 1.9.0 hee1b4f9_0
+  - zenohd 1.9.0 hee1b4f9_0
   license: Apache-2.0 OR EPL-2.0
   purls: []
-  size: 51696
-  timestamp: 1774110274027
-- conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.8.0-hce30654_0.conda
-  sha256: ce52fee02dc1bb5edfff6e798be7153c7a0ab2a88a6b26ebc29529e226a8632c
-  md5: d14ff0d0e87589a58ec417479a28766c
+  size: 51954
+  timestamp: 1775857653622
+- conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-1.9.0-hce30654_0.conda
+  sha256: 02f8c1b16cae494f4832bbb53c8222ea85447d07099dd3f37e409020d7dda183
+  md5: 74bebe4eb9568d9baee96ecd4cf499b5
   depends:
-  - zenoh-plugin-rest 1.8.0 h614a2b4_0
-  - zenoh-plugin-storage-manager 1.8.0 h614a2b4_0
-  - zenohd 1.8.0 h614a2b4_0
+  - zenoh-plugin-rest 1.9.0 h614a2b4_0
+  - zenoh-plugin-storage-manager 1.9.0 h614a2b4_0
+  - zenohd 1.9.0 h614a2b4_0
   license: Apache-2.0 OR EPL-2.0
   purls: []
-  size: 51732
-  timestamp: 1774110860097
-- conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.8.0-h57928b3_0.conda
-  sha256: c67e05c5332277cd26aea2c4b43adaec8a01b736e6f0a41efdbac27453c7b0d0
-  md5: bac0afe2f9f19ad5a52c6f403bd30d51
+  size: 52292
+  timestamp: 1775857099464
+- conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-1.9.0-h57928b3_0.conda
+  sha256: 560d85a459b57af2345ecccd5e854291daf2e0a4b6a262d41610538308adc633
+  md5: c11a0e532906bafd4807753cfecc7c20
   depends:
-  - zenoh-plugin-rest 1.8.0 h531bba3_0
-  - zenoh-plugin-storage-manager 1.8.0 h531bba3_0
-  - zenohd 1.8.0 h531bba3_0
+  - zenoh-plugin-rest 1.9.0 h531bba3_0
+  - zenoh-plugin-storage-manager 1.9.0 h531bba3_0
+  - zenohd 1.9.0 h531bba3_0
   license: Apache-2.0 OR EPL-2.0
   purls: []
-  size: 52321
-  timestamp: 1774110863936
-- conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.8.0-hf6b7bf5_0.conda
-  sha256: 78b993a804cadf88fe65094a44619f156237c6b25c9816454aa35c16b2f5667d
-  md5: 9e2092e5d611e0524ce43d95039ab60b
-  depends:
-  - __glibc >=2.17,<3.0.a0
-  - libgcc >=14
-  constrains:
-  - __glibc >=2.17
-  license: Apache-2.0 OR EPL-2.0
-  purls: []
-  size: 1199850
-  timestamp: 1774108885799
-- conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.8.0-hcf48332_0.conda
-  sha256: 4517a784bcd4deb438f447b489d6bd14e8a617780edd242143c86fc5c14508e6
-  md5: 56eebac1d0cc8127ad8d6cf9d0444686
-  depends:
-  - libgcc >=14
-  constrains:
-  - __glibc >=2.17
-  license: Apache-2.0 OR EPL-2.0
-  purls: []
-  size: 1215076
-  timestamp: 1774108788928
-- conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.8.0-hee1b4f9_0.conda
-  sha256: bbfa8042da30bc1b96901bb4cc1ddfeba1300005d832f32230a0436568e97ef8
-  md5: 8fc84f2e3c6125407dbf3385c350af42
-  depends:
-  - __osx >=11.0
-  constrains:
-  - __osx >=10.13
-  license: Apache-2.0 OR EPL-2.0
-  purls: []
-  size: 1146805
-  timestamp: 1774109366408
-- conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.8.0-h614a2b4_0.conda
-  sha256: 359405bb28b8140e57ac6798dd022018b501142cef041852d7adebda803e0eda
-  md5: f9ef9941a2802fc3ffd95213b6529f75
-  depends:
-  - __osx >=11.0
-  constrains:
-  - __osx >=11.0
-  license: Apache-2.0 OR EPL-2.0
-  purls: []
-  size: 1078344
-  timestamp: 1774109778813
-- conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.8.0-h531bba3_0.conda
-  sha256: 4813e168ec8765e285f2c6432cd0e35d782846a71d1939382f1607a67a1f92ad
-  md5: d3dcdf24667273f6732d47c5fbd38907
-  depends:
-  - ucrt >=10.0.20348.0
-  - vc >=14.3,<15
-  - vc14_runtime >=14.44.35208
-  license: Apache-2.0 OR EPL-2.0
-  purls: []
-  size: 1141354
-  timestamp: 1774109546150
-- conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.8.0-hf6b7bf5_0.conda
-  sha256: 80866e00d8154b5cbc973830ade0a28f41210f81eb8bd9be5187820a9cd0692f
-  md5: 9c3ff1de10b38713021813132e047de7
+  size: 52311
+  timestamp: 1775857026692
+- conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-rest-1.9.0-hf6b7bf5_0.conda
+  sha256: 491d717e67a2f555bfb75194af94f7e10993a09c03de043ea9d1891bca1c695a
+  md5: 4b9b898378ddbbef46bc8632634be2d4
   depends:
   - __glibc >=2.17,<3.0.a0
   - libgcc >=14
@@ -62955,52 +62892,108 @@ packages:
   - __glibc >=2.17
   license: Apache-2.0 OR EPL-2.0
   purls: []
-  size: 1146659
-  timestamp: 1774109075028
-- conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.8.0-hcf48332_0.conda
-  sha256: cbc40b3b528155a45edc9afcb86ed13a9337e486f633c4a67a316e9b8234319c
-  md5: ad3d0564dcfd7bc05663a94cb6f1b57a
+  size: 1206083
+  timestamp: 1775854792745
+- conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-rest-1.9.0-hcf48332_0.conda
+  sha256: c34dff98b7ec053f008b2fd2f7395cf690eedc49c65508454fcf3222a55a10c8
+  md5: 9940887cf4c0f167d612c631cb3b9afa
   depends:
   - libgcc >=14
   constrains:
   - __glibc >=2.17
   license: Apache-2.0 OR EPL-2.0
   purls: []
-  size: 1162650
-  timestamp: 1774108959762
-- conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.8.0-hee1b4f9_0.conda
-  sha256: f2096a09dfd5e1b98a52204e2dd0bdfcfc5f1a2f5f731781e6ce997f0101d58b
-  md5: 0cabdfcdb02205838b41e44079896500
+  size: 1239240
+  timestamp: 1775854731889
+- conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-rest-1.9.0-hee1b4f9_0.conda
+  sha256: fe4507ca214f06cdef72ee78388440f376899dd235b14f9dabdbf8c44c6f4531
+  md5: 8e610aa42799f38ee880fe93d27d4a52
   depends:
   - __osx >=11.0
   constrains:
   - __osx >=10.13
   license: Apache-2.0 OR EPL-2.0
   purls: []
-  size: 1092165
-  timestamp: 1774109803812
-- conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.8.0-h614a2b4_0.conda
-  sha256: d9342700ff56bbd9f0558d8db6860110b991bfab0424f021177c048fbf3358f8
-  md5: 3af473bedae163ca53368ef8d3ebc660
+  size: 1152267
+  timestamp: 1775855928473
+- conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-rest-1.9.0-h614a2b4_0.conda
+  sha256: bb3d4a988d2e94f9dd3b16dfb8be9cf147944d6666b903a51a5f0301a509dbfe
+  md5: a28bdcc5687c952181274fd3987077ba
   depends:
   - __osx >=11.0
   constrains:
   - __osx >=11.0
   license: Apache-2.0 OR EPL-2.0
   purls: []
-  size: 1020580
-  timestamp: 1774110213159
-- conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.8.0-h531bba3_0.conda
-  sha256: 316bd03160cbcaf3178d077f7bdb353e795a5c1852e9e5375f17312ae67babb5
-  md5: 3f3c0fc710a7da2c2ad933671a29dc21
+  size: 1091684
+  timestamp: 1775855833390
+- conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-rest-1.9.0-h531bba3_0.conda
+  sha256: 9c654cc10f181034c7c7557c6d79469d2f1cd12ccaaab6ead0baccd522b111db
+  md5: ae4e461e58b543e30c79fc365e848e6b
   depends:
   - ucrt >=10.0.20348.0
   - vc >=14.3,<15
   - vc14_runtime >=14.44.35208
   license: Apache-2.0 OR EPL-2.0
   purls: []
-  size: 1093512
-  timestamp: 1774110137717
+  size: 1146996
+  timestamp: 1775855528122
+- conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-plugin-storage-manager-1.9.0-hf6b7bf5_0.conda
+  sha256: d3a1770c91ed18c0d0562adb046601b14f64b2cb00ec86e9674462ec6280d4c1
+  md5: f63986790c0869714a6b86609df5c91c
+  depends:
+  - __glibc >=2.17,<3.0.a0
+  - libgcc >=14
+  constrains:
+  - __glibc >=2.17
+  license: Apache-2.0 OR EPL-2.0
+  purls: []
+  size: 1151565
+  timestamp: 1775854995555
+- conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenoh-plugin-storage-manager-1.9.0-hcf48332_0.conda
+  sha256: 6ac0f6e4a1e977488e23429ce32060878fdc1c86d9ae646ec1ea5fc5fb95b9ba
+  md5: d123f9f32a19c79a79d4974095e9aab6
+  depends:
+  - libgcc >=14
+  constrains:
+  - __glibc >=2.17
+  license: Apache-2.0 OR EPL-2.0
+  purls: []
+  size: 1182496
+  timestamp: 1775854921377
+- conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.9.0-hee1b4f9_0.conda
+  sha256: 6c16370f94f1a1cb2bdc74c0d2ea8b5146806d14adb1a3cdb7c81cd3147a7384
+  md5: 0fb27c00bb4d4a39f0c0b9213ff5b81a
+  depends:
+  - __osx >=11.0
+  constrains:
+  - __osx >=10.13
+  license: Apache-2.0 OR EPL-2.0
+  purls: []
+  size: 1097424
+  timestamp: 1775856627943
+- conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.9.0-h614a2b4_0.conda
+  sha256: 37102fbc4fc1dadf794ff119e96d3df690003901a5669c8805a56667037c010e
+  md5: 6f85bf7bd0708506e1037785fa44fb79
+  depends:
+  - __osx >=11.0
+  constrains:
+  - __osx >=11.0
+  license: Apache-2.0 OR EPL-2.0
+  purls: []
+  size: 1034214
+  timestamp: 1775856375709
+- conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.9.0-h531bba3_0.conda
+  sha256: f7884cbcd4f967ab85c8d700e10ea6fc75809e352f189e74229127e9ebab2c55
+  md5: 2e9e196c4bb4438224177bbb00525990
+  depends:
+  - ucrt >=10.0.20348.0
+  - vc >=14.3,<15
+  - vc14_runtime >=14.44.35208
+  license: Apache-2.0 OR EPL-2.0
+  purls: []
+  size: 1098977
+  timestamp: 1775856184555
 - conda: https://conda.anaconda.org/conda-forge/linux-64/zenoh-rust-abi-1.7.2.1.85.0-h8619998_0.conda
   sha256: 4c85a07bb991621eb3380f0de679b73de796ebe2bc95f5b65f9f3141949fca13
   md5: ca737b1dc0de56e88605c47022e555bf
@@ -63054,9 +63047,9 @@ packages:
   purls: []
   size: 52030
   timestamp: 1767950036246
-- conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.8.0-hf6b7bf5_0.conda
-  sha256: 72f648f70957036958ebf34f2fe4c41275ed9e666a1429224589e214bf731c2d
-  md5: cd6470389b5cffa4cfdb00a904a25f3e
+- conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.9.0-hf6b7bf5_0.conda
+  sha256: b2ea17370b8de48bd574af0e0125458639e5ab181c03f311f814fcc12150a018
+  md5: b123a54712320be78f020dd680b80264
   depends:
   - __glibc >=2.17,<3.0.a0
   - libgcc >=14
@@ -63064,52 +63057,52 @@ packages:
   - __glibc >=2.17
   license: Apache-2.0 OR EPL-2.0
   purls: []
-  size: 4624518
-  timestamp: 1774109332212
-- conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.8.0-hcf48332_0.conda
-  sha256: b2a26e321d39edcb60faef4d7a814ab46cb2b2c846425338e4dae09b0e8b27db
-  md5: 7c361bb972ce235aa6d479d5ba176e6b
+  size: 4948456
+  timestamp: 1775855280817
+- conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.9.0-hcf48332_0.conda
+  sha256: 5abe1904b238ee264fae6ce00f709e00da3a66d1f3768a7c2733868554059662
+  md5: a0a2c4e9d5e615bd949b75ae36823106
   depends:
   - libgcc >=14
   constrains:
   - __glibc >=2.17
   license: Apache-2.0 OR EPL-2.0
   purls: []
-  size: 4465111
-  timestamp: 1774109214799
-- conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.8.0-hee1b4f9_0.conda
-  sha256: 7aa79a3fcec6b305a36529c46ba9cd97e806aa1a8ac7629cdf017f4d2ffc0adc
-  md5: 8d122bd8f64dbb21738e362b36d2efba
+  size: 4774591
+  timestamp: 1775855205650
+- conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.9.0-hee1b4f9_0.conda
+  sha256: 22489b033581d438afdf642de504ca91bb3509c1ebe840e0db541384d0353959
+  md5: 28c6af59aa8ecdd353382fa80023b466
   depends:
   - __osx >=11.0
   constrains:
   - __osx >=10.13
   license: Apache-2.0 OR EPL-2.0
   purls: []
-  size: 4480395
-  timestamp: 1774110267411
-- conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.8.0-h614a2b4_0.conda
-  sha256: d8678d096e181b202b1cd3e156e580e38128a334eb2385825432df9e0daffc01
-  md5: fa49b46c0907f0d34869d4fe941a6d22
+  size: 4798832
+  timestamp: 1775857640591
+- conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.9.0-h614a2b4_0.conda
+  sha256: 37fd8d7392867829a07dd24cd99058e0b09432dca1681bb2a1bd3d92abd12b9e
+  md5: 9627d7a8dc36c3debf6ae8584c3921dd
   depends:
   - __osx >=11.0
   constrains:
   - __osx >=11.0
   license: Apache-2.0 OR EPL-2.0
   purls: []
-  size: 4064637
-  timestamp: 1774110852448
-- conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.8.0-h531bba3_0.conda
-  sha256: ef38665b1abd8be45b3c8490dc311004a9a44d222b403718bf731efa521b4b10
-  md5: 072978e7be0a9f269801d31af6e6ce9b
+  size: 4321086
+  timestamp: 1775857089411
+- conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.9.0-h531bba3_0.conda
+  sha256: 38ebbadc98dd9cba9465f3dcce402c63425064fb751579ef85a692441459b4e5
+  md5: de36b5d3289277a85b7464e9738420ad
   depends:
   - ucrt >=10.0.20348.0
   - vc >=14.3,<15
   - vc14_runtime >=14.44.35208
   license: Apache-2.0 OR EPL-2.0
   purls: []
-  size: 4092890
-  timestamp: 1774110858101
+  size: 4384819
+  timestamp: 1775857018830
 - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.0-pyhcf101f3_1.conda
   sha256: b4533f7d9efc976511a73ef7d4a2473406d7f4c750884be8e8620b0ce70f4dae
   md5: 30cd29cb87d819caead4d55184c1d115
