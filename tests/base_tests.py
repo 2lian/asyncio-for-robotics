@@ -115,6 +115,7 @@ async def test_listen_too_fast(pub: Callable[[str], None], sub: afor.BaseSub[str
     delay = 0.005 if not is_win else 0.1 # windows slow and unreliable af
     last_payload = "hello"
     pub(last_payload)
+    await asyncio.sleep(delay)
     pub(last_payload)
     sample_count = 0
     put_count = 2
@@ -135,7 +136,8 @@ async def test_listen_too_fast(pub: Callable[[str], None], sub: afor.BaseSub[str
             put_count += 1
             await asyncio.sleep(delay)
 
-    assert put_count / 2 == sample_count == max_iter
+    assert put_count / 2 == max_iter
+    assert sample_count == max_iter
 
 
 async def test_reliable_one_by_one(pub: Callable[[str], None], sub: afor.BaseSub[str]):
