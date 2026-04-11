@@ -27,6 +27,9 @@ class Sub(BaseSub[_MsgType]):
 
         Notably useful to subscribe to text printed to stdout of a process.
 
+        When created inside ``afor.Scope()``, leaving that scope automatically
+        unregisters the underlying file reader.
+
         Args:
             stream: IO - Generic base class for TextIO and BinaryIO.
             pre_process: Function applied before any other processing. If

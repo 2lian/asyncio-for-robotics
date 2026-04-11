@@ -5,6 +5,7 @@ from pytest import approx
 import pytest
 import asyncio_for_robotics as afor
 
+
 async def test_soft_wait_for_coro():
     res = await afor.soft_wait_for(asyncio.sleep(1), 0.001)
     assert isinstance(res, TimeoutError), "Should timeout"

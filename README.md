@@ -37,6 +37,7 @@ pip install asyncio_for_robotics eclipse-zenoh
 ## Read more
 
 - [Detailed ROS 2 tutorial](https://github.com/2lian/asyncio-for-robotics/blob/main/using_with_ros.md)
+- [Lifetime and `afor.Scope`](https://github.com/2lian/asyncio-for-robotics/blob/main/using_scope.md)
 - [Detailed examples](https://github.com/2lian/asyncio-for-robotics/blob/main/asyncio_for_robotics/example)
   - [no talking 🦍 show me code 🦍](https://github.com/2lian/asyncio-for-robotics/blob/main/asyncio_for_robotics/example/ros2_pubsub.py)
 - [Cross-Platform deployment even with ROS](https://github.com/2lian/asyncio-for-robotics/blob/main/cross_platform.md) [![Pixi Badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/prefix-dev/pixi/main/assets/badge/v0.json)](https://pixi.sh)
@@ -105,6 +106,27 @@ async for msg in sub.listen_reliable():
     if status == DONE:
         break
 ```
+
+### Scope and Lifetimes
+
+Application:
+- Destroy subscribers automatically when leaving a block
+- Keep ownership visible
+- Group several `afor` objects under one lifetime
+
+```python
+async with afor.Scope():
+    sub1 = afor.ros2.Sub(String, "/chatter1")
+    sub2 = afor.ros2.Sub(String, "/chatter2")
+
+    # sub1 and sub2 are alive inside this scope/codeblock
+    await sub1.wait_for_value()
+    ...
+# exiting the scope cleans up resources of sub1 and sub2
+# here ROS 2 subscription are destroyed from the transport
+```
+
+See [Lifetime and `afor.Scope`](https://github.com/2lian/asyncio-for-robotics/blob/main/using_scope.md) for details.
 
 ### Improved Services / Queryable for ROS 2
 
@@ -210,4 +232,3 @@ Benchmark code is available at
 [https://github.com/2lian/afor_benchmarks](https://github.com/2lian/afor_benchmarks).
 The benchmark uses two pub/sub pairs that continuously echo messages on
 localhost, with a single participant and a local Zenoh router.
-

@@ -1,4 +1,5 @@
 import logging
+import warnings
 from contextlib import suppress
 from typing import Callable, Dict, Generic, Optional, Type, TypeVar, Union
 
@@ -20,6 +21,9 @@ class Sub(BaseSub[zenoh.Sample]):
         asyncio_for_robotics implementation of a Zenoh subscriber.
 
         Refere to the base class (BaseSub) for details.
+
+        When created inside ``afor.Scope()``, leaving that scope automatically
+        undeclares the underlying Zenoh subscriber.
 
         Args:
             key_expr:
@@ -47,19 +51,16 @@ class Sub(BaseSub[zenoh.Sample]):
         Usefull to overide in a child class and change the Subscription behavior.
         """
         return self.session.declare_subscriber(
-            key_expr=key_expr, handler=self.callback_for_sub
+            key_expr=key_expr, handler=self.input_data
         )
 
     def callback_for_sub(self, sample: zenoh.Sample):
-        """Zenoh callback happening on the Zenoh thread"""
-        if self._closed.is_set():
-            return
-        try:
-            healty = self.input_data(sample)
-            if not healty:
-                self.close()
-        except Exception as e:
-            logger.error(e)
+        """DEPRECATED"""
+        warnings.warn(
+            "afor.zenoh.sub.Sub.callback_for_sub is deprecated. self.input_data"
+            "can be used directly."
+        )
+        self.input_data(sample)
 
     def close(self):
         """Undeclares the subscriber on the zenoh session"""

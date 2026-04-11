@@ -10,6 +10,7 @@ from rclpy.service import Service as RosService
 from rclpy.task import Future as RosFuture
 
 from ..core.sub import BaseSub
+from ..core.scope import Scope
 from .future import asyncify_future
 from .session import BaseSession, auto_session
 from .utils import QOS_DEFAULT, TopicInfo
@@ -18,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 _ReqT = TypeVar("_ReqT")
 _ResT = TypeVar("_ResT")
+_AUTO_SCOPE = object()
 
 
 # Generic base class for a service definition
@@ -182,12 +184,7 @@ class Server(BaseSub[Responder[_ReqT, _ResT]]):
         This needs to be differed in a cbk because it happens after the return
         statement of _incomming_request_cbk
         """
-        try:
-            healty = self.input_data(responder_for_user)
-            if not healty:
-                self.session._node.destroy_service(self.srv)
-        except Exception as e:
-            logger.error(e)
+        self.input_data(responder_for_user)
 
     def close(self):
         super().close()
@@ -204,16 +201,33 @@ class Client(Generic[_ReqT, _ResT]):
         topic: str,
         qos_profile: QoSProfile = QOS_DEFAULT,
         session: Optional[BaseSession] = None,
+        *,
+        scope: Scope | None | object = _AUTO_SCOPE,
     ) -> None:
         """Implements an async ROS 2 service client.
 
         The `Client.call(...)` method will send a request and return its
         asyncio.Future response.
+
+        Args:
+            msg_type:
+            topic:
+            qos_profile:
+            session:
+            scope:
+                Optional afor scope owning this client. By default the current
+                lexical scope is used when one exists.
         """
         self.session: BaseSession = self._resolve_session(session)
         self._event_loop = asyncio.get_event_loop()
         self.topic_info = TopicInfo(topic=topic, msg_type=msg_type, qos=qos_profile)
         self.cli: RosClient = self._resolve_sub(self.topic_info)
+        self._scope: Scope | None = None
+        self._closed = False
+        if scope is _AUTO_SCOPE:
+            scope = Scope.current(default=None)
+        if scope is not None:
+            self.attach(scope)
 
     def _resolve_session(self, session: Optional[BaseSession]) -> BaseSession:
         return auto_session(session)
@@ -227,6 +241,21 @@ class Client(Generic[_ReqT, _ResT]):
                 qos_profile=topic_info.qos,
             )
         return client
+
+    def attach(self, scope: Scope) -> None:
+        """Attach this client to an active scope.
+
+        This is advanced API. Most users should rely on automatic attachment to
+        the current scope or pass ``scope=...`` explicitly.
+
+        Attaching a client registers ``self.close`` on ``scope.exit_stack`` so
+        leaving the scope destroys the ROS client.
+        """
+        if self._scope is not None:
+            raise RuntimeError(f"Client '{self.name}' already attached to a scope")
+        self._scope = scope
+        assert scope.exit_stack is not None
+        scope.exit_stack.callback(self.close)
 
     async def wait_for_service(self, polling_rate: float = 0.25):
         """
@@ -278,6 +307,9 @@ class Client(Generic[_ReqT, _ResT]):
             return f"ROS2-CLI-{self.topic_info.topic}"
 
     def close(self):
+        if self._closed:
+            return
+        self._closed = True
         with self.session.lock() as node:
             if not node.executor.context.ok():
                 return

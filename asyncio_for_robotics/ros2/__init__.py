@@ -1,4 +1,12 @@
-from .. import ConverterSub, Rate, soft_timeout, soft_wait_for
+from .. import (
+    ConverterSub,
+    Rate,
+    Scope,
+    ScopeBreak,
+    scoped,
+    soft_timeout,
+    soft_wait_for,
+)
 from .service import Client, Server
 from .session import (
     GLOBAL_SESSION,
@@ -16,6 +24,9 @@ __all__ = [
     "soft_wait_for",
     "soft_timeout",
     "Rate",
+    "Scope",
+    "ScopeBreak",
+    "scoped",
     "Server",
     "Client",
     "auto_session",

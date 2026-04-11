@@ -34,6 +34,8 @@ classifiers = [
 dependencies = [
 "typing_extensions>=4.0; python_version<'3.11'",
 "async-timeout; python_version<'3.11'",
+"taskgroup; python_version<'3.11'",
+"exceptiongroup; python_version<'3.11'",
 ]
 
 [build-system]

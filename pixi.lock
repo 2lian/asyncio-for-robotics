@@ -5822,6 +5822,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zenohd-1.8.0-hf6b7bf5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
       - pypi: https://files.pythonhosted.org/packages/58/1b/2a074d4f4595bd37c3d12f1b2ad49bceef5c8cd0962cbfd97d1d39f32e1f/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+      - pypi: https://files.pythonhosted.org/packages/d1/b1/74babcc824a57904e919f3af16d86c08b524c0691504baf038ef2d7f655c/taskgroup-0.2.2-py2.py3-none-any.whl
       - pypi: ./
       linux-aarch64:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/_openmp_mutex-4.5-20_gnu.conda
@@ -5863,6 +5864,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zenohd-1.8.0-hcf48332_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/zstd-1.5.7-h85ac4a6_6.conda
       - pypi: https://files.pythonhosted.org/packages/ab/33/c3116f1bf7647ee0ea8972efbe0fe5710ae75ea7226440a8fda7f04a4cbc/eclipse_zenoh-1.9.0-cp39-abi3-manylinux_2_28_aarch64.whl
+      - pypi: https://files.pythonhosted.org/packages/d1/b1/74babcc824a57904e919f3af16d86c08b524c0691504baf038ef2d7f655c/taskgroup-0.2.2-py2.py3-none-any.whl
       - pypi: ./
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/async-timeout-5.0.1-pyhcf101f3_2.conda
@@ -5896,6 +5898,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zenoh-plugin-storage-manager-1.8.0-hee1b4f9_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zenohd-1.8.0-hee1b4f9_0.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
+      - pypi: https://files.pythonhosted.org/packages/d1/b1/74babcc824a57904e919f3af16d86c08b524c0691504baf038ef2d7f655c/taskgroup-0.2.2-py2.py3-none-any.whl
       - pypi: ./
       osx-arm64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/async-timeout-5.0.1-pyhcf101f3_2.conda
@@ -5928,6 +5931,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenoh-plugin-storage-manager-1.8.0-h614a2b4_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zenohd-1.8.0-h614a2b4_0.conda
       - pypi: https://files.pythonhosted.org/packages/05/c5/ee0815c7ec49c5a29307cd935478305159bb3f0b2489f8c54fc6db3fdf36/eclipse_zenoh-1.9.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl
+      - pypi: https://files.pythonhosted.org/packages/d1/b1/74babcc824a57904e919f3af16d86c08b524c0691504baf038ef2d7f655c/taskgroup-0.2.2-py2.py3-none-any.whl
       - pypi: ./
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/async-timeout-5.0.1-pyhcf101f3_2.conda
@@ -5962,6 +5966,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/zenoh-plugin-storage-manager-1.8.0-h531bba3_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zenohd-1.8.0-h531bba3_0.conda
       - pypi: https://files.pythonhosted.org/packages/26/16/a94c4f37e3a088faadf4b5fbc64e5f69dea1023dc7efc49b3be0e0ecc953/eclipse_zenoh-1.9.0-cp39-abi3-win_amd64.whl
+      - pypi: https://files.pythonhosted.org/packages/d1/b1/74babcc824a57904e919f3af16d86c08b524c0691504baf038ef2d7f655c/taskgroup-0.2.2-py2.py3-none-any.whl
       - pypi: ./
   py311:
     channels:
@@ -6992,10 +6997,12 @@ packages:
 - pypi: ./
   name: asyncio-for-robotics
   version: 1.3.5
-  sha256: 57926e473f46e693ca01601b0902661b2f4bf232f49671914d8779fb233c627a
+  sha256: 4a7fc404593ba7a74568a8d940251cee9f908f4a0b0f70bcd668f0f9266dd2bf
   requires_dist:
   - typing-extensions>=4.0 ; python_full_version < '3.11'
   - async-timeout ; python_full_version < '3.11'
+  - taskgroup ; python_full_version < '3.11'
+  - exceptiongroup ; python_full_version < '3.11'
   - eclipse-zenoh>=1.0.0 ; extra == 'zenoh'
   - colorama ; extra == 'dev'
   - pytest ; extra == 'dev'
@@ -62428,6 +62435,13 @@ packages:
   purls: []
   size: 174787
   timestamp: 1767781882230
+- pypi: https://files.pythonhosted.org/packages/d1/b1/74babcc824a57904e919f3af16d86c08b524c0691504baf038ef2d7f655c/taskgroup-0.2.2-py2.py3-none-any.whl
+  name: taskgroup
+  version: 0.2.2
+  sha256: e2c53121609f4ae97303e9ea1524304b4de6faf9eb2c9280c7f87976479a52fb
+  requires_dist:
+  - exceptiongroup
+  - typing-extensions>=4.12.2,<5
 - conda: https://conda.anaconda.org/conda-forge/win-64/tbb-2022.3.0-h3155e25_2.conda
   sha256: abd9a489f059fba85c8ffa1abdaa4d515d6de6a3325238b8e81203b913cf65a9
   md5: 0f9817ffbe25f9e69ceba5ea70c52606

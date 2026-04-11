@@ -113,3 +113,4 @@ class Rate(BaseSub[int]):
 
     def close(self):
         self.periodic_task.cancel()
+        super().close()

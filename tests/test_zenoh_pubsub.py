@@ -1,5 +1,6 @@
 import pytest
 
+import asyncio_for_robotics
 from asyncio_for_robotics.core.sub import ConverterSub
 
 pytest.importorskip("zenoh")
@@ -57,9 +58,7 @@ def pub(session) -> Generator[Callable[[str], None], Any, Any]:
         p.put(input.encode())
 
     yield pub_func
-    if not auto_session().is_closed():
-        logger.debug("closing PUB-%s", pub_topic)
-        p.undeclare()
+    p.undeclare()
 
 
 @pytest.fixture
@@ -67,4 +66,3 @@ async def sub(session) -> AsyncGenerator[BaseSub[str], Any]:
     inner_sub = Sub("test/**")
     s: BaseSub[str] = ConverterSub(inner_sub, lambda sample: sample.payload.to_string())
     yield s
-    s.close()
