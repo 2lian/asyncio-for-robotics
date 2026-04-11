@@ -18,6 +18,7 @@ is_win = (
     and sys.platform.startswith("win")
 )
 
+
 @pytest.mark.skip("deprecated, should use lifetime instead")
 async def test_wait_cancellation(pub: Callable[[str], None], sub: afor.BaseSub[str]):
     t = sub.wait_for_next()
@@ -25,6 +26,7 @@ async def test_wait_cancellation(pub: Callable[[str], None], sub: afor.BaseSub[s
     pub("hey")
     with pytest.raises(SubClosedException):
         r = await asyncio.wait_for(t, 0.5)
+
 
 @pytest.mark.skip("deprecated, should use lifetime instead")
 async def test_loop_cancellation(pub: Callable[[str], None], sub: afor.BaseSub[str]):
@@ -112,7 +114,7 @@ async def test_listen_one_by_one(pub: Callable[[str], None], sub: afor.BaseSub[s
 
 
 async def test_listen_too_fast(pub: Callable[[str], None], sub: afor.BaseSub[str]):
-    delay = 0.005 if not is_win else 0.1 # windows slow and unreliable af
+    delay = 0.005 if not is_win else 0.1  # windows slow and unreliable af
     last_payload = "hello"
     pub(last_payload)
     await asyncio.sleep(delay)
@@ -136,9 +138,9 @@ async def test_listen_too_fast(pub: Callable[[str], None], sub: afor.BaseSub[str
             put_count += 1
             await asyncio.sleep(delay)
 
-    put_count_trgt = put_count/2
-    assert put_count_trgt == max_iter
-    assert sample_count == max_iter
+    put_count_trgt = put_count / 2
+    assert put_count_trgt == max_iter, f"{put_count_trgt} == {max_iter}"
+    assert sample_count == max_iter, f"{sample_count} == {max_iter}"
 
 
 async def test_reliable_one_by_one(pub: Callable[[str], None], sub: afor.BaseSub[str]):
@@ -225,7 +227,9 @@ async def test_freshness(pub: Callable[[str], None], sub: afor.BaseSub[str]):
     sample = await afor.soft_wait_for(anext(sub.listen_reliable(fresh=False)), 0.1)
     assert not isinstance(sample, TimeoutError), f"Should get the message"
     assert sample == payload
-    assert not isinstance(await afor.soft_wait_for(sub.wait_for_value(), 1), TimeoutError)
+    assert not isinstance(
+        await afor.soft_wait_for(sub.wait_for_value(), 1), TimeoutError
+    )
 
     new = sub.wait_for_new()
     pub(payload)

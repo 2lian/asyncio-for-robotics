@@ -229,7 +229,7 @@ class BaseSub(Generic[_MsgType]):
         Returns:
             Async generator itterating over the newest message.
         """
-        return self.listen_reliable(fresh, 1, False)
+        return self.listen_reliable(fresh, 1)
 
     def listen_reliable(
         self,
