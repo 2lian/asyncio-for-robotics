@@ -73,12 +73,9 @@ def zenoh_router():
 @pytest.fixture(scope="module", autouse=True)
 def session(zenoh_router) -> Generator[afor.BaseSession, Any, Any]:
     logger.info("Starting rclpy and session")
-    rclpy.init()
-    ses = afor.auto_session()
-    yield ses
+    with afor.auto_context() as ses:
+        yield ses
     logger.info("closing rclpy and session")
-    ses.close()
-    rclpy.shutdown()
 
 
 @pytest.fixture(scope="module")

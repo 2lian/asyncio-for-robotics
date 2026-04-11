@@ -28,7 +28,7 @@ from asyncio_for_robotics.core import BaseSub
 from asyncio_for_robotics.zenoh import (
     Sub,
     auto_session,
-    set_auto_session,
+    session_context,
     soft_timeout,
     soft_wait_for,
 )
@@ -38,19 +38,15 @@ logger = logging.getLogger("asyncio_for_robotics.test")
 
 @pytest.fixture(scope="module", autouse=True)
 def session() -> Generator[zenoh.Session, Any, Any]:
-    set_auto_session(zenoh.open(zenoh.Config()))
-    ses = auto_session()
-    yield ses
-    if not auto_session().is_closed():
-        with suppress(zenoh.ZError):
-            ses.close()
+    with session_context(zenoh.open(zenoh.Config())) as ses:
+        yield ses
 
 
 @pytest.fixture
 def pub(session) -> Generator[Callable[[str], None], Any, Any]:
     pub_topic = "test/something"
     logger.debug("Creating PUB-%s", pub_topic)
-    p: zenoh.Publisher = auto_session().declare_publisher(
+    p: zenoh.Publisher = session.declare_publisher(
         pub_topic, reliability=zenoh.Reliability.RELIABLE
     )
 

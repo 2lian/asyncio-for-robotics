@@ -8,8 +8,6 @@ from typing import (
     AsyncGenerator,
     Callable,
     Coroutine,
-    Deque,
-    Final,
     Generic,
     List,
     Optional,
@@ -343,6 +341,8 @@ class ConverterSub(BaseSub[_OutType], Generic[_OutType, _InType]):
         self,
         sub: BaseSub[_InType],
         convert_func: Callable[[_InType], _OutType] = lambda x: x,
+        *,
+        scope: Scope | None | object = _AUTO_SCOPE,
     ) -> None:
         """Subscriber that applies a transformation to another subscriber.
 
@@ -354,12 +354,13 @@ class ConverterSub(BaseSub[_OutType], Generic[_OutType, _InType]):
         ``sub.asap_callback``. This keeps forwarding lean and reliable, but it
         also means:
 
-        - only future upstream messages are forwarded
-        - there is no separate worker task or buffering boundary
-        - slow conversion propagate upstream
+        - only incomming upstream messages are forwarded
+        - there is no separate worker task or buffer
+        - if convert_func is slow it propagates upstream
 
         Note:
-            Conversion errors fail this subscriber lifetime, not upstream.
+            - Conversion errors fail this subscriber lifetime, not upstream.
+            - the lifetime upstream is not linked in any way to the lifetime downstream
 
         Args:
             sub: Upstream subscriber producing input values.
@@ -370,7 +371,7 @@ class ConverterSub(BaseSub[_OutType], Generic[_OutType, _InType]):
         self.sub: BaseSub[_InType] = sub
         #: Transformation applied to each received message
         self.convert_func: Callable[[_InType], _OutType] = convert_func
-        super().__init__()
+        super().__init__(scope=scope)
         self.sub.asap_callback.append(self._converter_forwarder)
 
     def _converter_forwarder(self, msg: _InType):

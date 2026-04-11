@@ -37,7 +37,7 @@ pip install asyncio_for_robotics eclipse-zenoh
 ## Read more
 
 - [Detailed ROS 2 tutorial](https://github.com/2lian/asyncio-for-robotics/blob/main/using_with_ros.md)
-- [Lifetime and `afor.Scope`](https://github.com/2lian/asyncio-for-robotics/blob/main/using_scope.md)
+- [Lifetime with `afor.Scope`](https://github.com/2lian/asyncio-for-robotics/blob/main/using_scope.md) and [Backend's Sessions](https://github.com/2lian/asyncio-for-robotics/blob/main//using_session.md)
 - [Detailed examples](https://github.com/2lian/asyncio-for-robotics/blob/main/asyncio_for_robotics/example)
   - [no talking 🦍 show me code 🦍](https://github.com/2lian/asyncio-for-robotics/blob/main/asyncio_for_robotics/example/ros2_pubsub.py)
 - [Cross-Platform deployment even with ROS](https://github.com/2lian/asyncio-for-robotics/blob/main/cross_platform.md) [![Pixi Badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/prefix-dev/pixi/main/assets/badge/v0.json)](https://pixi.sh)
@@ -195,7 +195,7 @@ Application:
 inner_sub: Sub[String] = afor.ros2.Sub(String, "topic_name")
 # converted into a subscriber generating python `str`
 ros2str_func = lambda msg: msg.data
-sub: Sub[str] = afor.ConverterSub(sub=inner_sub, convert_func=ros2str_func)
+sub: BaseSub[str] = afor.ConverterSub(sub=inner_sub, convert_func=ros2str_func)
 ```
 
 ## About Speed

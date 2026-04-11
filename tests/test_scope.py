@@ -159,9 +159,10 @@ async def test_scoped_decorator_auto_scope():
     assert await wrapped() == "hello"
 
 
-async def test_scoped_decorator_pass_scope():
-    @afor.scoped(pass_scope=True)
-    async def wrapped(scope: afor.Scope):
+async def test_scoped_decorator_current_scope():
+    @afor.scoped
+    async def wrapped():
+        scope = afor.Scope.current()
         sub = afor.BaseSub[str](scope=scope)
         sub.input_data("hello")
         value = await sub.wait_for_value()

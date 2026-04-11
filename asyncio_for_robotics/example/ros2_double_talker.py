@@ -2,13 +2,12 @@
 Example ROS 2 publishers using asyncio integration.
 
 This example demonstrates how to:
-- Safely create and destroy publishers using `auto_session().lock()`.
+- Safely create publishers and let the current `afor.Scope` destroy them
+  automatically on exit.
 - Publish messages asynchronously at regular intervals with non-blocking
   `asyncio.sleep`.
 - Run multiple publishers concurrently and cancel them dynamically.
-- Ensure cleanup of publishers when tasks are cancelled or errors occur,
-  which is especially useful for testing scenarios with short-lived
-  publishers and subscribers.
+- Show how scope ownership can manage non-afor ROS objects too.
 
 The script alternates between running:
   - Publisher #1 alone.
@@ -18,70 +17,80 @@ The script alternates between running:
 Run this script using `python3 -m asyncio_for_robotics.example.ros2_double_talker`
 Run this script side by side with `python3 -m asyncio_for_robotics.example.ros2_double_listener`
 """
+
 import asyncio
 from contextlib import suppress
 
-import rclpy
 from std_msgs.msg import String
 
-from asyncio_for_robotics.ros2.session import auto_session
-from asyncio_for_robotics.ros2.utils import TopicInfo
+import asyncio_for_robotics.ros2 as afor
 
-TOPIC1 = TopicInfo(msg_type=String, topic="example/talker1")
-TOPIC2 = TopicInfo(msg_type=String, topic="example/talker2")
+TOPIC1 = afor.TopicInfo(msg_type=String, topic="example/talker1")
+TOPIC2 = afor.TopicInfo(msg_type=String, topic="example/talker2")
 
-async def pub1_loop():
-    # create the publisher safely
-    with auto_session().lock() as node:
-        pub = node.create_publisher(TOPIC1.msg_type, TOPIC1.topic, TOPIC1.qos)
-        node.get_clock(...)
-        print("Pub #1 safely created")
 
-    try:
-        count = 0
-        while 1:  # This loop is not very precise and can drift
-            data = f"[Hello world! timestamp: {count}s]"
-            count += 1
-            print(f"Pub #1 sending: {data}")
-            pub.publish(String(data=data)) # sends data (lock is not necessary)
-            await asyncio.sleep(1) # non-blocking sleep
-    finally:
-        # if error or anything occurs, publisher is cleaned up
-        # This is not necessary in most application. 
-        # It is mainly usefull for tests where many short lived pub/sub are created
-        with auto_session().lock() as node:
+def make_scoped_publisher(topic: afor.TopicInfo[type[String]], name: str):
+    """Create a ROS publisher and register its teardown on the current scope.
+
+    This is a good pattern when afor owns the lifetime of your task.
+    """
+    scope = afor.Scope.current()
+    assert scope.exit_stack is not None
+
+    with afor.auto_session().lock() as node:
+        pub = node.create_publisher(topic.msg_type, topic.topic, topic.qos)
+        print(f"{name} created")
+
+    def cleanup() -> None:
+        with afor.auto_session().lock() as node:
             node.destroy_publisher(pub)
-            print("Pub #1 safely cleaned up")
+            print(f"{name} cleaned up")
 
+    scope.exit_stack.callback(cleanup)
+    return pub
+
+
+@afor.scoped
+async def pub1_loop():
+    # because of @afor.scope and make_scoped_publisher, our publisher will be
+    # automatically destroyed once this function returns 
+    pub = make_scoped_publisher(TOPIC1, "Pub #1")
+    count = 0
+    while 1:  # This loop is not very precise and can drift
+        data = f"[Hello world! timestamp: {count}s]"
+        count += 1
+        print(f"Pub #1 sending: {data}")
+        pub.publish(String(data=data))  # sends data (lock is not necessary)
+        await asyncio.sleep(1)  # non-blocking sleep
+
+
+@afor.scoped
 async def pub2_loop():
     """Same as pub1_loop"""
-    with auto_session().lock() as node:
-        pub = node.create_publisher(TOPIC2.msg_type, TOPIC2.topic, TOPIC2.qos)
-        print("Pub #2 safely created")
-
-    try:
-        count = 0
-        while 1:
-            data = f"[Hello world! timestamp: {count}s]"
-            count += 1
-            print(f"Pub #2 sending: {data}")
-            pub.publish(String(data=data))
-            await asyncio.sleep(1)
-    finally:
-        with auto_session().lock() as node:
-            node.destroy_publisher(pub)
-            print("Pub #2 safely cleaned up")
+    pub = make_scoped_publisher(TOPIC2, "Pub #2")
+    count = 0
+    while 1:
+        data = f"[Hello world! timestamp: {count}s]"
+        count += 1
+        print(f"Pub #2 sending: {data}")
+        pub.publish(String(data=data))
+        await asyncio.sleep(1)
 
 
+@afor.scoped
 async def main():
+    # this is the asyncio.TaskGroup attached to our current afor.Scope
+    # using @afor.scoped , this Scope applies to all code in this function
+    tg = afor.Scope.current().task_group
+    assert tg is not None
     while 1:
         print()
         print("Running pub #1 for 5s")
-        task1 = asyncio.create_task(pub1_loop())
+        task1 = tg.create_task(pub1_loop())
         await asyncio.sleep(5)
         print()
         print("Running pub #1 and #2 for 5s")
-        task2 = asyncio.create_task(pub2_loop())
+        task2 = tg.create_task(pub2_loop())
         await asyncio.sleep(5)
         print()
         print("stopping pub #1, keep running pub #2 for 5s")
@@ -93,15 +102,7 @@ async def main():
         await asyncio.sleep(2)
 
 
-
 if __name__ == "__main__":
-    rclpy.init()
-    try:
-        # suppress, just so we don't flood the terminal on exit
+    with afor.auto_context():
         with suppress(KeyboardInterrupt, asyncio.CancelledError):
-            asyncio.run(main()) # starts asyncio executor
-    finally:
-        # cleanup. `finally` statment always executes
-        auto_session().close()
-        rclpy.shutdown()
-
+            asyncio.run(main())

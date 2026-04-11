@@ -1,13 +1,16 @@
 import asyncio
 import contextvars
 import inspect
+from collections.abc import Awaitable, Callable
 from contextlib import AsyncExitStack
 from functools import wraps
-from typing import Any, Optional
+from typing import Any, Coroutine, Optional, ParamSpec, TypeVar, cast
 
 from ._compat import BaseExceptionGroup, TaskGroup
 
 _MISSING = object()
+_P = ParamSpec("_P")
+_R = TypeVar("_R")
 _CURRENT_SCOPE: contextvars.ContextVar["Scope | None"] = contextvars.ContextVar(
     "afor_current_scope",
     default=None,
@@ -24,6 +27,7 @@ class ScopeBreak(Exception):
 
 class _ScopeCancelled(Exception):
     """Internal exception used to stop a scope early."""
+
 
 class Scope:
     """Lexical owner for afor resources and background tasks.
@@ -146,7 +150,9 @@ class Scope:
         requests cancellation of that scope.
         """
         if self._finished is None:
-            raise RuntimeError("Scope.finished is available only after entering the scope")
+            raise RuntimeError(
+                "Scope.finished is available only after entering the scope"
+            )
         return self._finished
 
     def cancel(self) -> None:
@@ -253,8 +259,16 @@ class Scope:
             return
 
 
-def scoped(func=None, *, pass_scope: bool = False):
+#     func: Callable[_P, Coroutine[_A, _Y, _R]],
+# ) -> Callable[_P, Coroutine[_A, _Y, _R]]:
+
+
+def scoped(
+    func: Callable[_P, Coroutine[Any, Any, _R]],
+) -> Callable[_P, Coroutine[Any, Any, _R]]:
     """Wrap an async function in ``async with afor.Scope():``.
+
+    afor.Scope is a lexical owner for afor resources and background tasks.
 
     Usage:
         ```python
@@ -263,28 +277,13 @@ def scoped(func=None, *, pass_scope: bool = False):
             ...
         ```
 
-        ```python
-        @afor.scoped(pass_scope=True)
-        async def main(scope: afor.Scope):
-            ...
-        ```
     """
+    if not inspect.iscoroutinefunction(func):
+        raise TypeError("@afor.scoped requires an async function")
 
-    def decorate(fn):
-        if not inspect.iscoroutinefunction(fn):
-            raise TypeError("@afor.scoped requires an async function")
+    @wraps(func)
+    async def wrapped(*args: _P.args, **kwargs: _P.kwargs) -> _R:
+        async with Scope():
+            return await func(*args, **kwargs)
 
-        @wraps(fn)
-        async def wrapped(*args, **kwargs):
-            async with Scope() as scope:
-                if pass_scope:
-                    if "scope" in kwargs:
-                        raise TypeError("scope argument already provided")
-                    kwargs["scope"] = scope
-                return await fn(*args, **kwargs)
-
-        return wrapped
-
-    if func is None:
-        return decorate
-    return decorate(func)
+    return wrapped

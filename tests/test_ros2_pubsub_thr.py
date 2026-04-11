@@ -24,28 +24,24 @@ from base_tests import (
 from rclpy.qos import QoSProfile
 from std_msgs.msg import String
 
-import asyncio_for_robotics.ros2 as aros
+import asyncio_for_robotics.ros2 as afor
 from asyncio_for_robotics.core import BaseSub
 from asyncio_for_robotics.core._logger import setup_logger
-from asyncio_for_robotics.ros2.session import ThreadedSession, set_auto_session
+from asyncio_for_robotics.ros2.session import ThreadedSession
 
 setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
 
 
 @pytest.fixture(scope="module")
-def session() -> Generator[aros.BaseSession, Any, Any]:
+def session() -> Generator[afor.BaseSession, Any, Any]:
     logger.info("Starting rclpy and session")
-    rclpy.init()
-    set_auto_session(ThreadedSession())
-    ses = aros.auto_session()
-    yield ses
+    with afor.session_context(ThreadedSession()) as ses:
+        yield ses
     logger.info("closing rclpy and session")
-    ses.close()
-    rclpy.shutdown()
 
 
-topic = aros.TopicInfo(
+topic = afor.TopicInfo(
     "test/something",
     String,
     QoSProfile(
@@ -56,7 +52,7 @@ TOPIC = topic
 
 
 @pytest.fixture(scope="module")
-def pub(session: aros.BaseSession) -> Generator[Callable[[str], None], Any, Any]:
+def pub(session: afor.BaseSession) -> Generator[Callable[[str], None], Any, Any]:
     with session.lock() as node:
         publisher = node.create_publisher(*TOPIC.as_arg())
 
@@ -70,7 +66,7 @@ def pub(session: aros.BaseSession) -> Generator[Callable[[str], None], Any, Any]
 
 @pytest.fixture
 async def sub(session) -> AsyncGenerator[BaseSub[str], Any]:
-    inner_sub = aros.Sub(*TOPIC.as_arg())
+    inner_sub = afor.Sub(*TOPIC.as_arg())
     s: BaseSub[str] = ConverterSub(inner_sub, lambda msg: msg.data)
     yield s
     s.close()

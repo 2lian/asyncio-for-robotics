@@ -38,7 +38,6 @@ from contextlib import suppress
 from pprint import pprint
 from typing import Optional
 
-import rclpy
 from colorama import Fore
 from rclpy.event_handler import (
     IncompatibleTypeInfo,
@@ -54,27 +53,24 @@ from rclpy.subscription import Subscription
 from std_msgs.msg import String
 
 from asyncio_for_robotics.core.sub import BaseSub, _MsgType
-from asyncio_for_robotics.ros2 import (
-    QOS_DEFAULT,
-    BaseSession,
-    Sub,
-    TopicInfo,
-    auto_session,
-)
+import asyncio_for_robotics.ros2 as afor
+from asyncio_for_robotics.ros2 import QOS_DEFAULT, BaseSession
 
-TOPIC = TopicInfo(
+TOPIC = afor.TopicInfo(
     "example",
     String,
 )
 
 
-class AdvancedSub(Sub[_MsgType]):
+class AdvancedSub(afor.Sub[_MsgType]):
     def __init__(
         self,
         msg_type: type[_MsgType],
         topic: str,
         qos_profile: QoSProfile = QOS_DEFAULT,
         session: Optional[BaseSession] = None,
+        *,
+        scope: afor.Scope | None = None,
         event_callbacks: Optional[SubscriptionEventCallbacks] = None,
     ) -> None:
         """
@@ -83,9 +79,9 @@ class AdvancedSub(Sub[_MsgType]):
         subscription.
         """
         self.event_callbacks = event_callbacks
-        super().__init__(msg_type, topic, qos_profile, session)
+        super().__init__(msg_type, topic, qos_profile, session, scope=scope)
 
-    def _resolve_sub(self, topic_info: TopicInfo) -> Subscription:
+    def _resolve_sub(self, topic_info: afor.TopicInfo) -> Subscription:
         """
         Create the underlying rclpy Subscription with event callbacks attached.
         """
@@ -117,12 +113,13 @@ async def verbose_match_event(match_sub: BaseSub[QoSSubscriptionMatchedInfo]):
         print("")
 
 
-async def what_do_you_hear(sub: Sub[String]):
+async def what_do_you_hear(sub: afor.Sub[String]):
     """Simply print the payloads of a topic."""
     async for msg in sub.listen_reliable():
         print(f"I heard: {msg.data}")
 
 
+@afor.scoped
 async def event_example():
     """
     - Creates `BaseSub` instances to receive ROS events in afor.
@@ -138,24 +135,19 @@ async def event_example():
         matched=match_sub.input_data,  # type: ignore
         # more event types can be added
     )
-    sub = AdvancedSub(
-        **TOPIC.as_kwarg(),
-        event_callbacks=event_cbk,
-    )
-    hear_task = asyncio.create_task(what_do_you_hear(sub))
-    match_task = asyncio.create_task(verbose_match_event(match_sub))
+    sub = AdvancedSub(**TOPIC.as_kwarg(), event_callbacks=event_cbk)
+    tg = afor.Scope.current().task_group
+    assert tg is not None
+    tg.create_task(what_do_you_hear(sub))
+    tg.create_task(verbose_match_event(match_sub))
     print(
         f"""Start/stop publishing using 
         `ros2 topic pub /{sub.topic_info.topic} std_msgs/msg/String "data: hey"`"""
     )
-    await asyncio.wait([hear_task, match_task])
+    await asyncio.Future()
 
 
 if __name__ == "__main__":
-    rclpy.init()
-    try:
+    with afor.auto_context():
         with suppress(KeyboardInterrupt, asyncio.CancelledError):
             asyncio.run(event_example())
-    finally:
-        auto_session().close()
-        rclpy.shutdown()

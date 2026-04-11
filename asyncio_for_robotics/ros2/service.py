@@ -9,7 +9,7 @@ from rclpy.qos import QoSProfile
 from rclpy.service import Service as RosService
 from rclpy.task import Future as RosFuture
 
-from ..core.sub import BaseSub
+from ..core.sub import BaseSub, _AUTO_SCOPE as _SUB_AUTO_SCOPE
 from ..core.scope import Scope
 from .future import asyncify_future
 from .session import BaseSession, auto_session
@@ -115,6 +115,8 @@ class Server(BaseSub[Responder[_ReqT, _ResT]]):
         topic: str,
         qos_profile: QoSProfile = QOS_DEFAULT,
         session: Optional[BaseSession] = None,
+        *,
+        scope: Scope | None | object = _SUB_AUTO_SCOPE,
     ) -> None:
         """Implements an async ROS 2 service server.
 
@@ -131,7 +133,7 @@ class Server(BaseSub[Responder[_ReqT, _ResT]]):
         self.session: BaseSession = self._resolve_session(session)
         self.topic_info = TopicInfo(topic=topic, msg_type=msg_type, qos=qos_profile)
         self.srv = self._resolve_sub(self.topic_info)
-        super().__init__()
+        super().__init__(scope=scope)
 
     @property
     def name(self) -> str:

@@ -3,18 +3,18 @@
 import asyncio
 from contextlib import suppress
 
-import rclpy
 from std_msgs.msg import String
 
 from asyncio_for_robotics.core.utils import Rate
-from asyncio_for_robotics.ros2 import TopicInfo, auto_session
+import asyncio_for_robotics.ros2 as afor
 
-TOPIC = TopicInfo(msg_type=String, topic="example/talker")
+TOPIC = afor.TopicInfo(msg_type=String, topic="example/talker")
 
 
+@afor.scoped
 async def main():
     # create the publisher safely
-    with auto_session().lock() as node:
+    with afor.auto_session().lock() as node:
         pub = node.create_publisher(TOPIC.msg_type, TOPIC.topic, TOPIC.qos)
 
     count = 0
@@ -30,12 +30,6 @@ async def main():
 
 
 if __name__ == "__main__":
-    rclpy.init()
-    try:
-        # suppress, just so we don't flood the terminal on exit
+    with afor.auto_context():
         with suppress(KeyboardInterrupt, asyncio.CancelledError):
-            asyncio.run(main())  # starts asyncio executor
-    finally:
-        # cleanup. `finally` statment always executes
-        auto_session().close()
-        rclpy.shutdown()
+            asyncio.run(main())

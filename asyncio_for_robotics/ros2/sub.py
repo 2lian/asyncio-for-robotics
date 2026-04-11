@@ -5,7 +5,8 @@ from typing import Callable, Dict, Generic, Optional, Type, TypeVar, Union
 from rclpy.qos import QoSProfile
 from rclpy.subscription import Subscription
 
-from ..core.sub import BaseSub
+from ..core.scope import Scope
+from ..core.sub import BaseSub, _AUTO_SCOPE
 from .session import BaseSession, auto_session
 from .utils import QOS_DEFAULT, TopicInfo, _MsgType
 
@@ -24,6 +25,8 @@ class Sub(BaseSub[_MsgType]):
         topic: str,
         qos_profile: QoSProfile = QOS_DEFAULT,
         session: Optional[BaseSession] = None,
+        *,
+        scope: Scope | None | object = _AUTO_SCOPE,
     ) -> None:
         """
         Implementation of a asyncio ROS2 subscriber.
@@ -43,7 +46,7 @@ class Sub(BaseSub[_MsgType]):
         self.session: BaseSession = self._resolve_session(session)
         self.topic_info = TopicInfo(topic=topic, msg_type=msg_type, qos=qos_profile)
         self.sub = self._resolve_sub(self.topic_info)
-        super().__init__()
+        super().__init__(scope=scope)
 
     @classmethod
     def from_info(

@@ -59,6 +59,16 @@ Issues = "https://github.com/2lian/asyncio-for-robotics/issues"
 [tool.setuptools.package-data]
 "asyncio_for_robotics" = ["py.typed"]
 
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+filterwarnings = [
+  "ignore::DeprecationWarning:pytest_asyncio.plugin",
+]
+markers = [
+  "only: only this test shall run",
+]
+
 [[tool.uv.index]]
 name = "testpypi"
 url = "https://test.pypi.org/simple/"

@@ -7,16 +7,15 @@ This script demonstrates:
 - Call to `python_discussion.discuss` then illustrate different asyncio-based
   subscription methods (`wait_for_value`, `wait_for_new`, `wait_for_next`,
   `listen`, and `listen_reliable`). Refere to `python_discussion.py` for details
-- Properly shutting down Zenoh sessions to allow clean program exit.
+- Letting the lexical session context cleanly shut the session down on exit.
 """
 import asyncio
 from contextlib import suppress
 
 import zenoh
 
-from asyncio_for_robotics.zenoh.session import auto_session
-from asyncio_for_robotics.zenoh.sub import Sub
 from asyncio_for_robotics.core._logger import setup_logger
+import asyncio_for_robotics.zenoh as afor
 
 from .python_discussion import brint, discuss
 setup_logger("./")
@@ -28,7 +27,7 @@ async def talking_loop():
           of scope. You remain in full control of publishing. You can get the
           zenoh session to declare a publisher by using `auto_session()`"""
     )
-    pub = auto_session().declare_publisher("example/discussion")
+    pub = afor.auto_session().declare_publisher("example/discussion")
     print(f"Zenoh started publishing onto {pub.key_expr}")
     try:
         count = 0
@@ -45,32 +44,25 @@ def get_str_from_msg(msg: zenoh.Sample):
     return msg.payload.to_string()
 
 
+@afor.scoped
 async def main():
-    background_talker_task = asyncio.create_task(talking_loop())
-    sub = Sub("example/**")
+    tg = afor.Scope.current().task_group
+    assert tg is not None
+    background_talker_task = tg.create_task(talking_loop())
     try:
+        sub = afor.Sub("example/**")
         await discuss(sub, get_str_from_msg)
     finally:
-        sub.close()
         background_talker_task.cancel()
 
 
 if __name__ == "__main__":
     brint(
         f"""
-        Zenoh requires a zenoh session runing in the background.
-        asyncio_for_robotics will automatically call `auto_session` if a
-        zenoh session is not provided. This auto_session is a singleton
-        (one per python process).
+        `afor.auto_context()` creates a Zenoh session for this block. Inside
+        the block, afor objects use this session by default.
         """
     )
-    asyncio.run(main())
-    print()
-    brint(
-        f"""
-    To finish and let python exit, the zenoh session needs to be closed. We can
-    retrieve and close the one automatically created with `auto_session().close()`
-    """
-    )
-    with suppress(zenoh.ZError): # why error here???
-        auto_session().close()
+    with afor.auto_context():
+        with suppress(KeyboardInterrupt, asyncio.CancelledError, zenoh.ZError):
+            asyncio.run(main())

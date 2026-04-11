@@ -197,14 +197,6 @@ async def main():
     ...
 ```
 
-Optionally:
-
-```python
-@afor.scoped(pass_scope=True)
-async def main(scope: afor.Scope):
-    ...
-```
-
 This is cleaner than inventing a hidden global scope.
 
 ## Naming
@@ -415,4 +407,3 @@ This gives:
 - real structured concurrency
 - minimal custom machinery
 - behavior users can understand by reading the standard Python docs plus a small afor layer
-

@@ -14,7 +14,9 @@ from .session import (
     SynchronousSession,
     ThreadedSession,
     auto_session,
-    set_auto_session,
+    auto_context,
+    current_session,
+    session_context,
 )
 from .sub import Sub
 from .utils import QOS_DEFAULT, QOS_TRANSIENT, TopicInfo
@@ -29,8 +31,10 @@ __all__ = [
     "scoped",
     "Server",
     "Client",
+    "session_context",
+    "auto_context",
+    "current_session",
     "auto_session",
-    "set_auto_session",
     "GLOBAL_SESSION",
     "ThreadedSession",
     "SynchronousSession",

@@ -3,6 +3,7 @@ from contextlib import suppress
 import subprocess
 from typing import IO, Any, Awaitable, List
 
+import asyncio_for_robotics as afor
 from asyncio_for_robotics.core.sub import BaseSub
 
 
@@ -26,6 +27,7 @@ def make_afor_stdout_monitor(process: subprocess.Popen[str]) -> BaseSub[str]:
     return afor_sub
 
 
+@afor.scoped
 async def main():
     proc = subprocess.Popen(
         ["ping", "localhost"],

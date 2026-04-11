@@ -55,15 +55,16 @@ async def main():
 asyncio.run(main())
 ```
 
-If you need direct access to the scope object:
+If you need direct access to the current scope object:
 
 ```python
 import asyncio
 import asyncio_for_robotics as afor
 
 
-@afor.scoped(pass_scope=True)
-async def main(scope: afor.Scope):
+@afor.scoped
+async def main():
+    scope = afor.Scope.current()
     sub = afor.BaseSub[str](scope=scope)
     sub.input_data("hello")
     print(await sub.wait_for_value())
@@ -91,19 +92,6 @@ With `Scope`, the meaning is:
 - while execution is inside the block, the owned objects are alive
 - when execution leaves the block, the owned objects are closed
 
-So this exits normally and closes `sub` at block end:
-
-```python
-async def main():
-    async with afor.Scope():
-        sub = afor.BaseSub[str]()
-        sub.input_data("hello")
-        value = await sub.wait_for_value()
-        print(value)
-```
-
-You do not need `scope.cancel()` to leave a scope at the end of the block.
-
 If you want a scope to stay alive until something else stops it, write that
 explicitly:
 
@@ -112,32 +100,6 @@ async def main():
     async with afor.Scope():
         sub = afor.BaseSub[str]()
         await asyncio.Future()
-```
-
-This is the important semantic point:
-
-- end of block means "close what this block owns"
-- it does not mean "wait forever for these objects to finish naturally"
-
-`await asyncio.Future()` is a good explicit pattern when you intentionally want
-the scope to remain open.
-
-## Normal use
-
-```python
-import asyncio
-import asyncio_for_robotics as afor
-
-
-async def main():
-    async with afor.Scope():
-        sub = afor.BaseSub[str]()
-        sub.input_data("hello")
-        value = await sub.wait_for_value()
-        print(value)
-
-
-asyncio.run(main())
 ```
 
 ## Many objects in one scope
@@ -264,13 +226,14 @@ async def worker(scope: afor.Scope):
 
 
 async def main():
-    scope = afor.Scope()
-    watcher = asyncio.create_task(worker(scope))
-    async with scope:
-        sub = afor.BaseSub[str]()
-        sub.input_data("hello")
-        await sub.wait_for_value()
-    await watcher
+    async with afor.Scope() as outer:
+        scope = afor.Scope()
+        assert outer.task_group is not None
+        outer.task_group.create_task(worker(scope))
+        async with scope:
+            sub = afor.BaseSub[str]()
+            sub.input_data("hello")
+            await sub.wait_for_value()
 
 
 asyncio.run(main())
@@ -319,3 +282,12 @@ asyncio.run(main())
 - `attach(scope)` is advanced API.
 - `scope.task_group` exposes the real `TaskGroup`.
 - `scope.exit_stack` exposes the real `AsyncExitStack`.
+
+For a concrete advanced example, see
+[`ros2_double_talker.py`](./asyncio_for_robotics/example/ros2_double_talker.py).
+That example shows three advanced patterns together:
+- the outer scope uses `scope.task_group` to own long-lived publisher tasks
+- each publisher loop has its own `@afor.scoped` lifetime
+- each inner scope uses `scope.exit_stack` to register teardown of a native
+  ROS publisher so it is destroyed automatically when that publisher scope
+  exits
