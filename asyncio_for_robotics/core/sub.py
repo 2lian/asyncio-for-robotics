@@ -18,6 +18,7 @@ from typing import (
 from .scope import Scope
 
 logger = logging.getLogger(__name__)
+_CLOSE_SENTINEL = object()
 
 
 class SubClosedException(RuntimeError):
@@ -208,6 +209,8 @@ class BaseSub(Generic[_MsgType]):
                     val_deep = val_top
                 else:
                     val_deep = q.get_nowait()
+                if val_deep is _CLOSE_SENTINEL:
+                    raise SubClosedException(f"Subscriber '{self.name}' was closed")
                 return val_deep
             finally:
                 self._dyncamic_queues.discard(q)
@@ -236,7 +239,7 @@ class BaseSub(Generic[_MsgType]):
         fresh=False,
         queue_size: int = 10,
         lifo=False,
-        exit_on_close: bool = False,
+        exit_on_close: bool = True,
     ) -> AsyncGenerator[_MsgType, None]:
         """Itterates over every incomming messages. (does not miss messages)
 
@@ -267,12 +270,16 @@ class BaseSub(Generic[_MsgType]):
         return self._unprimed_listen_reliable(q, exit_on_close)
 
     async def _unprimed_listen_reliable(
-        self, queue: asyncio.Queue, exit_on_close: bool = False
+        self, queue: asyncio.Queue, exit_on_close: bool = True
     ) -> AsyncGenerator[_MsgType, None]:
         logger.debug("Reliable listener first iter %s", self.name)
         try:
             while True:
                 msg = await queue.get()
+                if msg is _CLOSE_SENTINEL:
+                    if exit_on_close:
+                        return
+                    raise SubClosedException(f"Subscriber '{self.name}' was closed")
                 yield msg
         finally:
             self._dyncamic_queues.discard(queue)
@@ -310,6 +317,10 @@ class BaseSub(Generic[_MsgType]):
             return
         logger.debug("%s closed", self.name)
         self._closed.set()
+        for q in list(self._dyncamic_queues):
+            if q.full():
+                q.get_nowait()
+            q.put_nowait(_CLOSE_SENTINEL)
         self._set_lifetime_result(True)
 
     def _set_lifetime_result(self, result: bool) -> None:
