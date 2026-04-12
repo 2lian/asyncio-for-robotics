@@ -30,26 +30,32 @@ _AUTO_SCOPE = object()
 
 
 class BaseSub(Generic[_MsgType]):
+    """Transport-agnostic async subscriber.
+
+    Feed data in with ``input_data()`` (thread-safe) and consume it with
+    the async methods:
+
+    - ``listen()`` — latest-value iteration (may skip messages).
+    - ``listen_reliable()`` — queued iteration (no skips).
+    - ``wait_for_value()`` — latest message, or wait for the first one.
+    - ``wait_for_new()`` — next message after the call.
+    - ``wait_for_next()`` — exactly the next received message.
+
+    Auto-attaches to the current ``afor.Scope`` for cleanup.  Override
+    ``_input_data_asyncio()`` or append to ``asap_callback`` for custom
+    processing.
+    """
+
     def __init__(
         self,
         *,
         scope: Scope | None | object = _AUTO_SCOPE,
     ) -> None:
-        """Abstract (non-specific) asyncio_for_robotics subscriber.
+        """Create a subscriber, optionally attached to *scope*.
 
-        This defines the different methods to asynchronously get new messages.
-
-        Use ``self.intput_data(your_data)`` to input new messages on this subscriber.
-
-        This object is pure python and not specialize for any transport
-        protocol. See asyncio_for_robotics.zenoh.sub for an easy
-        implementation.
-
-        To implements your own sheduling methods (new type of queue, buffer,
-        genrator ...), please either:
-
-            - inherit from this class, then overide self._input_data_asyncio
-            - put a callback inside self.asap_callback
+        Args:
+            scope: ``afor.Scope`` to attach to.  ``_AUTO_SCOPE`` (default)
+                picks the current scope if any.  ``None`` opts out.
         """
         #: Blocking callbacks called on message arrival
         self.asap_callback: List[Callable[[_MsgType], Any]] = []
@@ -133,18 +139,17 @@ class BaseSub(Generic[_MsgType]):
             self._set_lifetime_exception(e)
 
     def input_data(self, data: _MsgType) -> bool:
-        """Processes incomming data.
-        Call this in your subscriber callback.
+        """Feed a message into this subscriber.  **Thread-safe.**
 
-        .. Note:
-            This is threadsafe, thus can run safely on any thread.
+        Call this from any thread (e.g. a Zenoh callback).  The message is
+        dispatched to the asyncio event loop via ``call_soon_threadsafe``.
 
         Args:
-            data: Data to input on this sub
+            data: Message to deliver to listeners.
 
         Returns:
-            False if the even loop has been closed or there is another critical
-                problem making this sub unable to work.
+            ``False`` if the event loop is closed or the subscriber has
+            already finished — the caller should stop sending.
         """
         if self._lifetime_threadsafe.done():
             return False
@@ -159,26 +164,17 @@ class BaseSub(Generic[_MsgType]):
         return True
 
     async def wait_for_value(self) -> _MsgType:
-        """Latest message.
-
-        Returns:
-            The latest message (if none, awaits the first message)
-        """
+        """Return the latest message, waiting for the first one if needed."""
         await self._value_flag.wait()
         assert self._value is not None
         return self._value
 
     def wait_for_new(self) -> Coroutine[Any, Any, _MsgType]:
-        """Awaits a new value.
+        """Await a message newer than the one at call time.
 
-        .. Note:
-            "Listening" starts the moment this function is called, not when
-            the coroutine is awaited
-
-        See wait_for_next to be sure the data is exactly the next received.
-
-        Returns:
-            Coroutine holding a message more recent than the one at time of the call
+        Listening starts *immediately* when this method is called, not when
+        the returned coroutine is awaited.  Use ``wait_for_next`` if you need
+        exactly the next received message (no skips).
         """
         iterato = self.listen(fresh=True)
 
@@ -189,14 +185,10 @@ class BaseSub(Generic[_MsgType]):
         return func()
 
     def wait_for_next(self) -> Coroutine[Any, Any, _MsgType]:
-        """Awaits exactly the next value.
+        """Await exactly the next received message (no skips).
 
-        .. Note:
-            "Listening" starts the moment this function is called, not when
-            the coroutine is awaited
-
-        Returns:
-            Coroutine holding the first message received after the call.
+        Listening starts *immediately* when this method is called, not when
+        the returned coroutine is awaited.
         """
         q: asyncio.Queue[_MsgType] = asyncio.LifoQueue(maxsize=2)
         self._dyncamic_queues.add(q)
@@ -215,19 +207,15 @@ class BaseSub(Generic[_MsgType]):
         return func()
 
     def listen(self, fresh=False) -> AsyncGenerator[_MsgType, None]:
-        """Itterates over the newest message.
+        """Iterate over the latest message (queue size 1, may skip).
 
-        Messages might be skipped, this is not a queue.
+        Equivalent to ``listen_reliable(fresh, queue_size=1)``.  Good for
+        sensor-style consumers that only care about the most recent value.
 
-        .. Note:
-            "Listening" starts the moment this function is called, not when
-            the generator is awaited
+        Listening starts *immediately* — the generator is already primed.
 
         Args:
-            fresh: If false, first yield can be the latest value
-
-        Returns:
-            Async generator itterating over the newest message.
+            fresh: If ``False``, the first yield may be the current value.
         """
         return self.listen_reliable(fresh, 1)
 
@@ -238,22 +226,21 @@ class BaseSub(Generic[_MsgType]):
         lifo=False,
         exit_on_close: bool = False,
     ) -> AsyncGenerator[_MsgType, None]:
-        """Itterates over every incomming messages. (does not miss messages)
+        """Iterate over every message without skipping (queued).
 
-        .. Note:
-            "Listening" starts the moment this function is called, not when
-            the generator is awaited.
+        Good for command/control consumers where every message matters.
+        The internal queue buffers up to *queue_size* messages; if the queue
+        is full, the oldest message is dropped and a warning is logged.
 
+        Listening starts *immediately* — the generator is already primed.
 
         Args:
-            fresh: If false, first yield can be the latest value
-            queue_size: size of the queue of values
-            lifo: If True, uses a last in first out queue instead of default fifo.
-            return_on_close: If True, the async for loop will exit when
-                `.close()` is called. Else, exception will be raised (default)
-
-        Returns:
-            Async generator itterating over every incomming message.
+            fresh: If ``False``, the first yield may be the current value.
+            queue_size: Maximum queued messages.  ``0`` means unbounded.
+            lifo: Use last-in-first-out order instead of FIFO.
+            exit_on_close: If ``True``, the ``async for`` loop exits cleanly
+                when ``.close()`` is called.  If ``False``,
+                ``SubClosedException`` is raised instead.
         """
         if not lifo:
             q: asyncio.Queue[_MsgType] = asyncio.Queue(maxsize=queue_size)
@@ -302,10 +289,12 @@ class BaseSub(Generic[_MsgType]):
             self.alive.set()
 
     def close(self):
-        """Stops everything waiting on data.
+        """Close this subscriber.  Idempotent.
 
-        Raises exception inside all coroutines/tasks waiting on the next data.
-        Async for loops will exit (if setup to do so)."""
+        All ``listen*`` loops exit (or raise ``SubClosedException``), all
+        ``wait_for_*`` coroutines receive a close sentinel, and ``lifetime``
+        resolves.
+        """
         if self._closed.is_set():
             return
         logger.debug("%s closed", self.name)
@@ -337,6 +326,19 @@ _OutType = TypeVar("_OutType")
 
 
 class ConverterSub(BaseSub[_OutType], Generic[_OutType, _InType]):
+    """Subscriber that transforms messages from an upstream ``BaseSub``.
+
+    Conversion runs inline in the upstream callback path (no extra task or
+    buffer).  Errors fail *this* subscriber's lifetime, not the upstream one.
+
+    Example::
+
+        raw_sub = Sub(bytes_type, "topic")
+        decoded = ConverterSub(raw_sub, lambda b: b.decode("utf-8"))
+        async for text in decoded.listen_reliable():
+            print(text)
+    """
+
     def __init__(
         self,
         sub: BaseSub[_InType],
@@ -344,28 +346,13 @@ class ConverterSub(BaseSub[_OutType], Generic[_OutType, _InType]):
         *,
         scope: Scope | None | object = _AUTO_SCOPE,
     ) -> None:
-        """Subscriber that applies a function to another subscriber.
-
-        This subscriber forwards messages from an upstream ``BaseSub``
-        through ``convert_func`` and publishes the transformed values as a new
-        ``BaseSub`` instance.
-
-        Conversion happens inline in the upstream callback path through
-        ``sub.asap_callback``. This keeps forwarding lean and reliable, but it
-        also means:
-
-        - only incomming upstream messages are forwarded
-        - there is no separate worker task or buffer
-        - if convert_func is slow it propagates upstream
-
-        Note:
-            - Conversion errors fail this subscriber lifetime, not upstream.
-            - the lifetime upstream is not linked in any way to the lifetime downstream
+        """Create a converter wrapping *sub*.
 
         Args:
             sub: Upstream subscriber producing input values.
-            convert_func: Function applied to each incoming message. Identity
-                by default.
+            convert_func: Function applied to each incoming message.
+                Identity by default.
+            scope: ``afor.Scope`` to attach to.
         """
         #: Upstream subscriber
         self.sub: BaseSub[_InType] = sub

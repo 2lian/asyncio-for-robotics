@@ -30,27 +30,30 @@ class _ScopeCancelled(Exception):
 
 
 class Scope:
-    """Lexical owner for afor resources and background tasks.
+    """Lexical owner for async resources and background tasks.
 
-    Public attributes:
-        task_group:
-            The underlying TaskGroup used by this scope.
-            It is available only while the scope is active, meaning inside the
-            ``async with`` block.
-        exit_stack:
-            The underlying AsyncExitStack used by this scope.
-            It is available only while the scope is active.
-        finished:
-            Future resolved once scope teardown is complete.
-            It becomes available once the scope has been entered.
+    A scope binds a ``TaskGroup`` and an ``AsyncExitStack`` together: resources
+    created inside the scope auto-attach to it and are cleaned up when the
+    scope exits.  If any task fails, the scope cancels the others and
+    propagates the error.
 
-    Typical use:
-        - normal users only create ``async with afor.Scope():``
-        - active afor objects attach to the current scope automatically
-        - use ``raise afor.ScopeBreak()`` to exit the current scope now
-        - advanced users may directly use ``scope.task_group`` or
-          ``scope.exit_stack`` for custom structured-concurrency or cleanup
-          needs
+    Use as a context manager or as a decorator::
+
+        async with afor.Scope() as scope:
+            sub = Sub(...)           # auto-attaches
+            scope.task_group.create_task(background_work())
+
+        @afor.scoped
+        async def main():
+            sub = Sub(...)           # same auto-attach, less indentation
+
+    ``raise afor.ScopeBreak()`` exits the current scope immediately (like
+    ``break`` for an ``async with`` block).
+
+    Advanced users can access ``scope.task_group`` and ``scope.exit_stack``
+    directly for custom structured-concurrency or cleanup needs.  The
+    ``scope.finished`` future lets external code observe when teardown
+    completes.
     """
 
     def __init__(self) -> None:
@@ -266,17 +269,23 @@ class Scope:
 def scoped(
     func: Callable[_P, Coroutine[Any, Any, _R]],
 ) -> Callable[_P, Coroutine[Any, Any, _R]]:
-    """Wrap an async function in ``async with afor.Scope():``.
+    """Decorator: wrap an async function in ``async with afor.Scope():``.
 
-    afor.Scope is a lexical owner for afor resources and background tasks.
+    Resources created inside the function auto-attach to the scope and are
+    cleaned up when the function returns (or raises).  Equivalent to::
 
-    Usage:
-        ```python
+        async def main():
+            async with afor.Scope():
+                ...  # your code
+
+    but with one less indentation level::
+
         @afor.scoped
         async def main():
-            ...
-        ```
+            ...  # your code
 
+    Raises:
+        TypeError: If *func* is not an async function.
     """
     if not inspect.iscoroutinefunction(func):
         raise TypeError("@afor.scoped requires an async function")

@@ -84,16 +84,14 @@ def auto_context() -> Generator[zenoh.Session, Any, Any]:
 
 
 def auto_session(session: Optional[zenoh.Session] = None) -> zenoh.Session:
-    """Return or create a Zenoh session depending on the context.
+    """Resolve a Zenoh session, creating a global one as a last resort.
 
     Resolution order:
-    - explicit ``session`` argument
-    - current lexical session context
-    - global singleton fallback
-    - creates global singleton
-
-    If no explicit or lexical session exists, a global shared session is
-    created on first use and returned.
+        1. Explicit *session* argument (pass-through).
+        2. Current ``session_context`` (lexical).
+        3. ``GLOBAL_SESSION`` module-level singleton.
+        4. Auto-create ``GLOBAL_SESSION`` from ``$ZENOH_SESSION_CONFIG_URI``
+           or the Zenoh default config.
     """
     global GLOBAL_SESSION
     if session is not None:

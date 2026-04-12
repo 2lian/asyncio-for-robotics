@@ -18,15 +18,21 @@ _T = TypeVar("_T")
 
 
 async def soft_wait_for(coro: Awaitable[_T], timeout: float) -> _T | TimeoutError:
-    """Awaits a coroutine with a timeout,
-    if timeout occurs returns TimeoutError but does not raise it.
+    """Await *coro* with a timeout — returns ``TimeoutError`` instead of raising.
+
+    Useful for try-or-skip patterns where a timeout is an expected outcome,
+    not an error::
+
+        result = await soft_wait_for(sub.wait_for_new(), 2.0)
+        if isinstance(result, TimeoutError):
+            print("no message within 2 s")
 
     Args:
-        coro: coroutine to await
-        timeout: timeout in seconds
+        coro: Awaitable to run.
+        timeout: Maximum wait in seconds.
 
     Returns:
-        coroutine result or TimeoutError
+        The awaitable's result, or a ``TimeoutError`` instance on expiry.
     """
 
     timer = asyncio.create_task(asyncio.sleep(timeout))
@@ -43,20 +49,18 @@ async def soft_wait_for(coro: Awaitable[_T], timeout: float) -> _T | TimeoutErro
 
 @asynccontextmanager
 async def soft_timeout(timeout: float):
-    """
-    Run an async block with a time limit, cancelling it on expiry.
+    """Async context manager: cancel the block on expiry, no exception outside.
 
-    - Inside the block: awaited operations may be cancelled.
-    - Outside the block: no exception propagates.
+    Inside the block, awaited operations may be cancelled.  After the block,
+    execution continues normally regardless of whether the timeout fired::
 
-    Example:
-        async with soft_timeout(1):
-            await asyncio.sleep(2)  # interrupted after 1 second
+        async with soft_timeout(1.0):
+            await asyncio.sleep(10)   # cancelled after 1 s
 
-        # Execution resumes here without raising CancelledError.
+        print("continues here either way")
 
     Args:
-        duration: Maximum time in seconds to allow the block to run.
+        timeout: Maximum time in seconds.
     """
     timed_out = False
     try:
@@ -69,26 +73,36 @@ async def soft_timeout(timeout: float):
 
 
 class Rate(BaseSub[int]):
+    """Drift-free periodic timer, usable like any ``BaseSub``.
+
+    Each tick yields the *scheduled* time in nanoseconds, so you can detect
+    jitter by comparing against the actual wall clock.
+
+    Usage patterns:
+
+    - ``async for _ in rate.listen():`` — run at the rate, skip if behind.
+    - ``async for _ in rate.listen_reliable():`` — run every tick, queue if behind.
+    - ``await rate.wait_for_new()`` — wait for the next tick.
+
+    Example::
+
+        rate = afor.Rate(10)  # 10 Hz
+        async for scheduled_ns in rate.listen():
+            do_work()
+    """
+
     def __init__(
         self,
         frequency: float,
         time_source: Callable[[], int] = time.time_ns,
         scope: Scope | None | object = _AUTO_SCOPE,
     ) -> None:
-        """Provides a reliable, no drift rate, usable like an afor subscriber.
-
-        Data returned is the time (in ns) at which the rate was suppose to fire.
-
-        Posibilities:
-            - wait_for_value returns the last tic time (ns)
-            - wait_for_next and wait_for_new will wait for the next tic.
-            - listen() executes every tic. However, if there is a queue, it
-              skips and executes the latest.
-            - listen_reliable() executes every tic and never misses any (queuing).
+        """Create a rate timer.
 
         Args:
-            frequency: Frequency in Hz
-            time_source: Source of time in ns
+            frequency: Tick frequency in Hz.
+            time_source: Callable returning the current time in nanoseconds.
+            scope: ``afor.Scope`` to attach to.
         """
         self.period: int= int(1e9 / frequency)
         super().__init__(scope=scope)
