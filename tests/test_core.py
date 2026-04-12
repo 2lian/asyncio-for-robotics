@@ -3,7 +3,7 @@ import logging
 from typing import Any, AsyncGenerator, Callable, Generator
 
 import pytest
-from base_tests import (
+from .base_tests import (
     test_freshness,
     test_listen_one_by_one,
     test_listen_too_fast,

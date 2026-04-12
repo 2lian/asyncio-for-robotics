@@ -17,23 +17,25 @@ Run this script side by side with `python3 -m asyncio_for_robotics.example.ros2_
 import asyncio
 from contextlib import suppress
 
-import rclpy
 from colorama import Fore  # colorama is included with ros so not dependency
 from std_msgs.msg import String
 
+import asyncio_for_robotics.ros2 as afor
 from asyncio_for_robotics import soft_timeout
-from asyncio_for_robotics.ros2 import Sub, TopicInfo, auto_session
 
-TOPIC1 = TopicInfo(msg_type=String, topic="example/talker1")
-TOPIC2 = TopicInfo(msg_type=String, topic="example/talker2")
+TOPIC1 = afor.TopicInfo(msg_type=String, topic="example/talker1")
+TOPIC2 = afor.TopicInfo(msg_type=String, topic="example/talker2")
 
 
+@afor.scoped
 async def main():
-    sub1 = Sub(TOPIC1.msg_type, TOPIC1.topic, TOPIC1.qos)
-    sub2 = Sub(TOPIC2.msg_type, TOPIC2.topic, TOPIC2.qos)
+    sub1 = afor.Sub(TOPIC1.msg_type, TOPIC1.topic, TOPIC1.qos)
+    sub2 = afor.Sub(TOPIC2.msg_type, TOPIC2.topic, TOPIC2.qos)
+    tg = afor.Scope.current().task_group
+    assert tg is not None
     while 1:
-        task1 = asyncio.create_task(sub1.wait_for_new())
-        task2 = asyncio.create_task(sub2.wait_for_new())
+        task1 = tg.create_task(sub1.wait_for_new())
+        task2 = tg.create_task(sub2.wait_for_new())
 
         # waits for a message on any of the topics
         await asyncio.wait([task1, task2], return_when=asyncio.FIRST_COMPLETED)
@@ -71,12 +73,6 @@ Latest received messages:
 
 
 if __name__ == "__main__":
-    rclpy.init()
-    try:
-        # suppress, just so we don't flood the terminal on exit
+    with afor.auto_context():
         with suppress(KeyboardInterrupt, asyncio.CancelledError):
-            asyncio.run(main())  # starts asyncio executor
-    finally:
-        # cleanup. `finally` statment always executes
-        auto_session().close()
-        rclpy.shutdown()
+            asyncio.run(main())

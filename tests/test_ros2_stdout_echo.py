@@ -14,7 +14,14 @@ from os import environ
 from typing import Any, AsyncGenerator, Callable, Generator
 
 import rclpy
-from base_tests import (
+from rclpy.qos import QoSProfile
+from std_msgs.msg import String
+
+import asyncio_for_robotics.ros2 as afor
+import asyncio_for_robotics.textio as afor_io
+from asyncio_for_robotics.core._logger import setup_logger
+
+from .base_tests import (
     test_freshness,
     test_listen_one_by_one,
     test_listen_too_fast,
@@ -27,12 +34,6 @@ from base_tests import (
     test_wait_new,
     test_wait_next,
 )
-from rclpy.qos import QoSProfile
-from std_msgs.msg import String
-
-import asyncio_for_robotics.ros2 as afor
-import asyncio_for_robotics.textio as afor_io
-from asyncio_for_robotics.core._logger import setup_logger
 
 is_win = (
     sys.version_info[0] == 3
@@ -73,12 +74,9 @@ def zenoh_router():
 @pytest.fixture(scope="module", autouse=True)
 def session(zenoh_router) -> Generator[afor.BaseSession, Any, Any]:
     logger.info("Starting rclpy and session")
-    rclpy.init()
-    ses = afor.auto_session()
-    yield ses
+    with afor.auto_context() as ses:
+        yield ses
     logger.info("closing rclpy and session")
-    ses.close()
-    rclpy.shutdown()
 
 
 @pytest.fixture(scope="module")

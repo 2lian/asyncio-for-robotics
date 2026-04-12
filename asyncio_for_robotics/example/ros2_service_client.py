@@ -1,7 +1,6 @@
 import asyncio
 from contextlib import suppress
 
-import rclpy
 from example_interfaces.srv import AddTwoInts
 
 import asyncio_for_robotics.ros2 as afor
@@ -9,6 +8,7 @@ import asyncio_for_robotics.ros2 as afor
 TOPIC = afor.TopicInfo("add_two_ints", AddTwoInts)
 
 
+@afor.scoped
 async def fibo_client_loop():
     client = afor.Client(*TOPIC.as_arg())
     a: int = 1
@@ -27,16 +27,7 @@ async def fibo_client_loop():
         print(f"Got: {a}")
         await asyncio.sleep(0.5)
 
-
-
-
 if __name__ == "__main__":
-    rclpy.init()
-    try:
-        # suppress, just so we don't flood the terminal on exit
+    with afor.auto_context():
         with suppress(KeyboardInterrupt, asyncio.CancelledError):
-            asyncio.run(fibo_client_loop())  # starts asyncio executor
-    finally:
-        # cleanup. `finally` statment always executes
-        afor.auto_session().close()
-        rclpy.shutdown()
+            asyncio.run(fibo_client_loop())

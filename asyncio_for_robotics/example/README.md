@@ -25,7 +25,7 @@ require convoluted timers, callback chaining, and manual future management.
 
 ### `ros2_discusion.py` or `zenoh_discusion.py` 
 
-- Verbose runtime examples demonstrating session creation and cleanup
+- Verbose runtime examples demonstrating lexical session contexts and scope
 - Illustrates all subscriber methods for consuming messages on a data stream.
 - Shows the behavioral differences between `wait_for_value`, `wait_for_new`,
 `wait_for_next`, `listen`, and `listen_reliable`.
@@ -60,6 +60,8 @@ python3 -m asyncio_for_robotics.example.ros2_pubsub
 - Publishes and listens to two data stream simultaneously.
 - Demonstrates advanced asyncio usage, including concurrent async tasks and
   event management.
+- Shows advanced scope usage: long-lived tasks owned by a scope task group,
+  plus native ROS publishers cleaned up automatically through nested scopes.
 - Ideal for understanding how asyncio_for_robotics can simplify complex
   multi-stream communication compared to traditional ROS 2 code.
 

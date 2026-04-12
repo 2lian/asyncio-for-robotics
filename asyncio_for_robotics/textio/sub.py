@@ -7,7 +7,8 @@ import time
 from typing import IO, Callable, TypeVar, Union
 import warnings
 
-from asyncio_for_robotics.core.sub import BaseSub
+from asyncio_for_robotics.core.scope import Scope
+from asyncio_for_robotics.core.sub import BaseSub, _AUTO_SCOPE
 
 _MsgType = TypeVar("_MsgType", str, bytes)
 logger = logging.getLogger(__name__)
@@ -22,10 +23,15 @@ class Sub(BaseSub[_MsgType]):
         self,
         stream: IO[_MsgType],
         pre_process: Callable[[_MsgType], Union[_MsgType, None]] = default_preprocess,
+        *,
+        scope: Scope | None | object = _AUTO_SCOPE,
     ) -> None:
         """Subscriber streaming updates of a file.
 
         Notably useful to subscribe to text printed to stdout of a process.
+
+        When created inside ``afor.Scope()``, leaving that scope automatically
+        unregisters the underlying file reader.
 
         Args:
             stream: IO - Generic base class for TextIO and BinaryIO.
@@ -34,7 +40,7 @@ class Sub(BaseSub[_MsgType]):
         """
         self.stream = stream
         self.pre_process = pre_process
-        super().__init__()
+        super().__init__(scope=scope)
         if sys.platform.startswith("win"):
             warnings.warn("Windows requires changing the asyncio loop type")
         else:

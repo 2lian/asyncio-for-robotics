@@ -2,30 +2,27 @@
 Verbose example showing how to integrate ROS 2 with asyncio_for_robotics.
 
 This script demonstrates:
-- Initializing ROS 2 nodes and creating a publisher with `auto_session()`.
+- Creating a ROS 2 session with `auto_context()` and a publisher with
+  `auto_session()`.
 - Safely declaring publishers using the session lock to manipulate the node
   running in a background thread.
 - Publishing data in the background while running subscriber examples.
 - Calling `python_discussion.discuss` to illustrate asyncio-based subscription
   methods (`wait_for_value`, `wait_for_new`, `wait_for_next`, `listen`,
   and `listen_reliable`). See `python_discussion.py` for detailed behavior.
-- Properly shutting down both the ROS 2 session and `rclpy` to allow clean
-  program exit.
+- Letting the lexical session context cleanly shut everything down on exit.
 """
 import asyncio
 from contextlib import suppress
-import rclpy
 
 from rclpy.qos import QoSProfile
 from std_msgs.msg import String
 
-from asyncio_for_robotics.ros2.session import auto_session
-from asyncio_for_robotics.ros2.sub import Sub
-from asyncio_for_robotics.ros2.utils import TopicInfo
+import asyncio_for_robotics.ros2 as afor
 
 from .python_discussion import brint, discuss
 
-TOPIC = TopicInfo(
+TOPIC = afor.TopicInfo(
     msg_type=String,
     topic="example/discussion",
     qos=QoSProfile(
@@ -57,7 +54,7 @@ with auto_session().lock() as node:
     pub = node.create_publisher(TOPIC.msg_type, TOPIC.topic, TOPIC.qos)
 """
             )
-    with auto_session().lock() as node:
+    with afor.auto_session().lock() as node:
         pub = node.create_publisher(TOPIC.msg_type, TOPIC.topic, TOPIC.qos)
     print(f"ROS 2 started publishing onto {pub.topic_name}")
     try:
@@ -67,7 +64,7 @@ with auto_session().lock() as node:
             count += 1
             await asyncio.sleep(0.1)
     finally:
-        with auto_session().lock() as node:
+        with afor.auto_session().lock() as node:
             node.destroy_publisher(pub)
 
 
@@ -75,53 +72,42 @@ def get_str_from_msg(msg: String):
     return msg.data
 
 
+@afor.scoped
 async def main():
-    background_talker_task = asyncio.create_task(talking_loop())
-    await asyncio.sleep(0.001)
-    print("\n#####################")
-    brint(
-        f"""
-        From now on, all objects are initialized and the code is the same
-        between ros2 and zenoh!
-        """
-    )
-    print("#####################\n")
-    sub = Sub(**TOPIC.as_kwarg())
-    await discuss(sub, get_str_from_msg)
-    background_talker_task.cancel()
+    tg = afor.Scope.current().task_group
+    assert tg is not None
+    background_talker_task = tg.create_task(talking_loop())
+    try:
+        await asyncio.sleep(0.001)
+        print("\n#####################")
+        brint(
+            f"""
+            From now on, all objects are initialized and the code is the same
+            between ros2 and zenoh!
+            """
+        )
+        print("#####################\n")
+        sub = afor.Sub(**TOPIC.as_kwarg())
+        await discuss(sub, get_str_from_msg)
+    finally:
+        background_talker_task.cancel()
 
 
 if __name__ == "__main__":
     print()
     brint(
-        f""" ROS requires `rclpy.init` to be called once per python process
-        (then shutdown). Unlike the session, asyncio_for_robotics will
-        not call `rclpy.init` automatically.
+        f"""`afor.auto_context()` creates a ROS session for this block.
+        The session owns the executor, the node, and ROS init/shutdown when
+        needed.
         """
     )
     brint(
         f""" 
-        The concept of session is however also present in
-        asyncio_for_robotics.ros2! The session is made of a node and executor
-        running in a background thread. You can create your own session
-        with your node and your executor, or let asyncio_for_robotics automatically
-        handle it with `ros2.auto_session()`. `ros2.auto_session()` will be called automatically every time a session is not provided as argument.
+        The session is made of a node and executor running in a background
+        thread. You can create your own session with your node and executor,
+        or let asyncio_for_robotics handle it with `ros2.auto_context()`.
         """
     )
-    rclpy.init()
-    try:
-        # suppress, just so we don't flood the terminal on exit
+    with afor.auto_context():
         with suppress(KeyboardInterrupt, asyncio.CancelledError):
-            asyncio.run(main()) # starts asyncio executor
-    finally:
-        # cleanup. `finally` statment always executes
-        print()
-        brint(
-            f"""
-        To finish and let python exit, the session and rclpy needs to be closed. We can
-        retrieve and close the one automatically created with `auto_session().close()`
-        """
-        )
-        auto_session().close()
-        rclpy.shutdown()
-
+            asyncio.run(main())

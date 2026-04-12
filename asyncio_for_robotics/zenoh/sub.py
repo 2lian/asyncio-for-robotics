@@ -1,10 +1,12 @@
 import logging
+import warnings
 from contextlib import suppress
 from typing import Callable, Dict, Generic, Optional, Type, TypeVar, Union
 
 import zenoh
 
-from ..core.sub import BaseSub
+from ..core.scope import Scope
+from ..core.sub import BaseSub, _AUTO_SCOPE
 from .session import auto_session
 
 logger = logging.getLogger(__name__)
@@ -15,11 +17,16 @@ class Sub(BaseSub[zenoh.Sample]):
         self,
         key_expr: Union[zenoh.KeyExpr, str],
         session: Optional[zenoh.Session] = None,
+        *,
+        scope: Scope | None | object = _AUTO_SCOPE,
     ) -> None:
         """
         asyncio_for_robotics implementation of a Zenoh subscriber.
 
         Refere to the base class (BaseSub) for details.
+
+        When created inside ``afor.Scope()``, leaving that scope automatically
+        undeclares the underlying Zenoh subscriber.
 
         Args:
             key_expr:
@@ -28,7 +35,7 @@ class Sub(BaseSub[zenoh.Sample]):
         self.session = self._resolve_session(session)
         self.sub = self._resolve_sub(key_expr)
         self._name = f"zenoh-{self.sub.key_expr}"
-        super().__init__()
+        super().__init__(scope=scope)
 
     @property
     def name(self) -> str:
@@ -47,19 +54,16 @@ class Sub(BaseSub[zenoh.Sample]):
         Usefull to overide in a child class and change the Subscription behavior.
         """
         return self.session.declare_subscriber(
-            key_expr=key_expr, handler=self.callback_for_sub
+            key_expr=key_expr, handler=self.input_data
         )
 
     def callback_for_sub(self, sample: zenoh.Sample):
-        """Zenoh callback happening on the Zenoh thread"""
-        if self._closed.is_set():
-            return
-        try:
-            healty = self.input_data(sample)
-            if not healty:
-                self.close()
-        except Exception as e:
-            logger.error(e)
+        """DEPRECATED"""
+        warnings.warn(
+            "afor.zenoh.sub.Sub.callback_for_sub is deprecated. self.input_data"
+            "can be used directly."
+        )
+        self.input_data(sample)
 
     def close(self):
         """Undeclares the subscriber on the zenoh session"""

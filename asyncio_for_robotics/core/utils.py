@@ -4,7 +4,8 @@ import time
 from contextlib import asynccontextmanager, suppress
 from typing import Any, Awaitable, Callable, Coroutine, TypeVar
 
-from asyncio_for_robotics.core.sub import BaseSub
+from asyncio_for_robotics.core.scope import Scope
+from asyncio_for_robotics.core.sub import BaseSub, _AUTO_SCOPE
 
 try:
     from asyncio import timeout as john_timeout
@@ -69,7 +70,10 @@ async def soft_timeout(timeout: float):
 
 class Rate(BaseSub[int]):
     def __init__(
-        self, frequency: float, time_source: Callable[[], int] = time.time_ns
+        self,
+        frequency: float,
+        time_source: Callable[[], int] = time.time_ns,
+        scope: Scope | None | object = _AUTO_SCOPE,
     ) -> None:
         """Provides a reliable, no drift rate, usable like an afor subscriber.
 
@@ -87,7 +91,7 @@ class Rate(BaseSub[int]):
             time_source: Source of time in ns
         """
         self.period: int= int(1e9 / frequency)
-        super().__init__()
+        super().__init__(scope=scope)
         self.time_source: Callable[[], int] = time_source
         self.periodic_task: asyncio.Task=self._initialize_task()
 
@@ -113,3 +117,4 @@ class Rate(BaseSub[int]):
 
     def close(self):
         self.periodic_task.cancel()
+        super().close()

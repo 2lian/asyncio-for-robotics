@@ -26,8 +26,6 @@ dev = { features = ["dev"] }
 
 [feature.py310.dependencies]
 python = "3.10.*"
-async-timeout = ">=3.0"
-typing_extensions = ">=4.0"
 
 [feature.py311.dependencies]
 python = "3.11.*"

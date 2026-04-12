@@ -15,29 +15,25 @@ from std_msgs.msg import String
 from std_srvs.srv import SetBool
 
 import asyncio_for_robotics as afor
-import asyncio_for_robotics.ros2 as aros
+import asyncio_for_robotics.ros2 as afor
 from asyncio_for_robotics.core._logger import setup_logger
 from asyncio_for_robotics.core.sub import BaseSub
 from asyncio_for_robotics.ros2.service import Client, Responder, Server
-from asyncio_for_robotics.ros2.session import ThreadedSession, set_auto_session
+from asyncio_for_robotics.ros2.session import ThreadedSession
 
 setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
 
 
 @pytest.fixture(scope="module", autouse=True)
-def session() -> Generator[aros.BaseSession, Any, Any]:
+def session() -> Generator[afor.BaseSession, Any, Any]:
     logger.info("Starting rclpy and session")
-    rclpy.init()
-    set_auto_session(ThreadedSession())
-    ses = aros.auto_session()
-    yield ses
+    with afor.session_context(ThreadedSession()) as ses:
+        yield ses
     logger.info("closing rclpy and session")
-    ses.close()
-    rclpy.shutdown()
 
 
-topic = aros.TopicInfo(
+topic = afor.TopicInfo(
     "test/srv",
     SetBool,
     QoSProfile(
@@ -48,7 +44,7 @@ topic = aros.TopicInfo(
 
 @pytest.fixture
 async def server(
-    session: aros.BaseSession,
+    session: afor.BaseSession,
 ) -> AsyncGenerator[Server[SetBool.Request, SetBool.Response], Any]:
     server = Server(**topic.as_kwarg())
     yield server
@@ -57,7 +53,7 @@ async def server(
 
 @pytest.fixture
 async def client(
-    session: aros.BaseSession,
+    session: afor.BaseSession,
 ) -> AsyncGenerator[Client[SetBool.Request, SetBool.Response], Any]:
     client = Client(**topic.as_kwarg())
     yield client

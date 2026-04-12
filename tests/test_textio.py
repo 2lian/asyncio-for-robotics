@@ -6,7 +6,11 @@ from typing import Any, AsyncGenerator, Callable, Generator
 
 import pytest
 import pytest_asyncio
-from base_tests import (
+
+import asyncio_for_robotics.textio as afor
+from asyncio_for_robotics.core._logger import setup_logger
+
+from .base_tests import (
     test_freshness,
     test_listen_one_by_one,
     test_listen_too_fast,
@@ -19,9 +23,6 @@ from base_tests import (
     test_wait_new,
     test_wait_next,
 )
-
-import asyncio_for_robotics.textio as afor
-from asyncio_for_robotics.core._logger import setup_logger
 
 is_win = (
     sys.version_info[0] == 3
