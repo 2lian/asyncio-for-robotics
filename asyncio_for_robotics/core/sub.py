@@ -81,7 +81,7 @@ class BaseSub(Generic[_MsgType]):
         #: watch it to propagate subscriber failures through their TaskGroup.
         self.lifetime: asyncio.Future[bool] = self._event_loop.create_future()
         self._lifetime_threadsafe = concurrent.futures.Future()
-        self.lifetime.add_done_callback(lambda *_: self.close)
+        self.lifetime.add_done_callback(lambda *_: self.close())
         self._scope: Scope | None = None
         if scope is _AUTO_SCOPE:
             scope = Scope.current(default=None)
