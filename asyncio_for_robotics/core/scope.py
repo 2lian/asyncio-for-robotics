@@ -107,7 +107,7 @@ class Scope:
 
     async def __aenter__(self) -> "Scope":
         """Enter the scope and activate its TaskGroup and AsyncExitStack."""
-        logger.info("Entered scope block")
+        logger.debug("Entered scope block")
         self._finished = asyncio.get_running_loop().create_future()
         self._finished.add_done_callback(self._finished_done_callback)
         self._finished.add_done_callback(self._finished_consume_exception_callback)
@@ -124,7 +124,7 @@ class Scope:
         ``ScopeBreak`` is treated as normal scoped control flow and is
         suppressed after teardown finishes.
         """
-        logger.info("Exiting scope block")
+        logger.debug("Exiting scope block")
         assert self._exit_stack is not None
         assert self._current_scope_token is not None
         _CURRENT_SCOPE.reset(self._current_scope_token)
@@ -152,7 +152,7 @@ class Scope:
         finally:
             self._task_group = None
             self._exit_stack = None
-            logger.info("Finished scope block")
+            logger.debug("Finished scope block")
 
     @classmethod
     def current(cls, default: Any = _MISSING) -> "Scope":
@@ -218,7 +218,7 @@ class Scope:
         """
         if self._cancel_called:
             return
-        logger.info("Cancelling scope")
+        logger.debug("Cancelling scope")
         self._cancel_called = True
         assert self._task_group is not None
         self._cancel_tg()
@@ -226,7 +226,7 @@ class Scope:
     def _cancel_tg(self) -> None:
         if self._task_group is None:
             return
-        logger.info("Cancelling task_group")
+        logger.debug("Cancelling task_group")
         for t in self._task_group._tasks:
             t.cancel()
 
