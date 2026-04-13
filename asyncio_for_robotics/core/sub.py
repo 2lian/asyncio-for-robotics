@@ -35,15 +35,14 @@ class BaseSub(Generic[_MsgType]):
     Feed data in with ``input_data()`` (thread-safe) and consume it with
     the async methods:
 
-    - ``listen()`` — latest-value iteration (may skip messages).
-    - ``listen_reliable()`` — queued iteration (no skips).
-    - ``wait_for_value()`` — latest message, or wait for the first one.
-    - ``wait_for_new()`` — next message after the call.
-    - ``wait_for_next()`` — exactly the next received message.
+    - ``listen()`` : latest-value iteration (may skip messages).
+    - ``listen_reliable()`` : queued iteration (no skips).
+    - ``wait_for_value()`` : latest message, or wait for the first one.
+    - ``wait_for_new()`` : next message after the call.
+    - ``wait_for_next()`` : exactly the next received message.
+    - ``asap_callback.append()`` : adds a callback (bypassing the event loop).
 
-    Auto-attaches to the current ``afor.Scope`` for cleanup.  Override
-    ``_input_data_asyncio()`` or append to ``asap_callback`` for custom
-    processing.
+    Auto-attaches to the current ``afor.Scope`` for cleanup.
     """
 
     def __init__(
@@ -126,10 +125,10 @@ class BaseSub(Generic[_MsgType]):
         return await asyncio.shield(self.lifetime)
 
     def _input_data_guarded(self, data: _MsgType):
-        """Feed input unless this subscriber has already finished.
+        """Feed input with Exception handling and propagation.
 
-        If ``_input_data_asyncio()`` raises, the exception is stored on
-        ``self.lifetime`` so scopes and other owners can observe the failure.
+        If an erros accours, the exception is propagated to ``self.lifetime``
+        so scopes and this sub shutsdown.
         """
         if self.lifetime.done():
             return
@@ -149,7 +148,7 @@ class BaseSub(Generic[_MsgType]):
 
         Returns:
             ``False`` if the event loop is closed or the subscriber has
-            already finished — the caller should stop sending.
+            already finished.
         """
         if self._lifetime_threadsafe.done():
             return False
@@ -164,7 +163,7 @@ class BaseSub(Generic[_MsgType]):
         return True
 
     async def wait_for_value(self) -> _MsgType:
-        """Return the latest message, waiting for the first one if needed."""
+        """Return the latest message, waiting if there is none."""
         await self._value_flag.wait()
         assert self._value is not None
         return self._value
@@ -173,8 +172,7 @@ class BaseSub(Generic[_MsgType]):
         """Await a message newer than the one at call time.
 
         Listening starts *immediately* when this method is called, not when
-        the returned coroutine is awaited.  Use ``wait_for_next`` if you need
-        exactly the next received message (no skips).
+        the returned coroutine is awaited.
         """
         iterato = self.listen(fresh=True)
 
@@ -212,7 +210,8 @@ class BaseSub(Generic[_MsgType]):
         Equivalent to ``listen_reliable(fresh, queue_size=1)``.  Good for
         sensor-style consumers that only care about the most recent value.
 
-        Listening starts *immediately* — the generator is already primed.
+        Listening starts *immediately* when this method is called, not when
+        the returned generator is awaited.
 
         Args:
             fresh: If ``False``, the first yield may be the current value.
@@ -232,7 +231,8 @@ class BaseSub(Generic[_MsgType]):
         The internal queue buffers up to *queue_size* messages; if the queue
         is full, the oldest message is dropped and a warning is logged.
 
-        Listening starts *immediately* — the generator is already primed.
+        Listening starts *immediately* when this method is called, not when
+        the returned generator is awaited.
 
         Args:
             fresh: If ``False``, the first yield may be the current value.
@@ -269,6 +269,8 @@ class BaseSub(Generic[_MsgType]):
         """Processes incomming data.
 
         Is only safe to run on the same thread as asyncio.
+        If error is raised by this call (typically an error in asap_callback,
+                                         the sub will not stop.)
 
         Args:
             msg: message
