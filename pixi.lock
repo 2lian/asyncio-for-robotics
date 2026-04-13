@@ -6989,8 +6989,8 @@ packages:
   requires_python: '>=3.8'
 - pypi: ./
   name: asyncio-for-robotics
-  version: 1.4.0a0
-  sha256: 2e59656741028302d7dc556a6c2ed843f0dfe5092ee551df0d81e41606319b2c
+  version: 1.4.0a2
+  sha256: ab221fc1a5ec44837012861ec8c789e4c235b3958c40699874e649b208e08b4e
   requires_dist:
   - typing-extensions>=4.0 ; python_full_version < '3.11'
   - async-timeout ; python_full_version < '3.11'

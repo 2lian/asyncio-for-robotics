@@ -1,12 +1,15 @@
 import asyncio
 import contextvars
 import inspect
+import logging
 from collections.abc import Awaitable, Callable
 from contextlib import AsyncExitStack
 from functools import wraps
 from typing import Any, Coroutine, Optional, ParamSpec, TypeVar, cast
 
 from ._compat import BaseExceptionGroup, TaskGroup
+
+logger = logging.getLogger(__name__)
 
 _MISSING = object()
 _P = ParamSpec("_P")
@@ -59,23 +62,59 @@ class Scope:
     def __init__(self) -> None:
         #: Underlying AsyncExitStack.
         #: It is None before ``__aenter__`` and after ``__aexit__``.
-        self.exit_stack: Optional[AsyncExitStack] = None
+        self._exit_stack: Optional[AsyncExitStack] = None
         #: Underlying TaskGroup.
         #: It is None before ``__aenter__`` and after ``__aexit__``.
-        self.task_group: Optional[TaskGroup] = None
+        self._task_group: Optional[TaskGroup] = None
         self._finished: Optional[asyncio.Future[None]] = None
         self._updating_finished = False
         self._current_scope_token: Optional[contextvars.Token["Scope | None"]] = None
         self._cancel_called = False
 
+    @property
+    def exit_stack(self) -> AsyncExitStack:
+        """Underlying AsyncExitStack.
+
+        Returns:
+            Underlying AsyncExitStack.
+
+        Raises:
+            RuntimeError: if called when the scope is not active.
+        """
+        if self._exit_stack is None:
+            raise RuntimeError(
+                "Cannot get the AsyncExitStack of a afor.Scope that is not active:"
+                "not entered yet; or was exited."
+            )
+        return self._exit_stack
+
+    @property
+    def task_group(self) -> asyncio.TaskGroup:
+        """Underlying TaskGroup.
+
+        Returns:
+            Underlying TaskGroup.
+
+        Raises:
+            RuntimeError: if called when the scope is not active.
+        """
+        if self._task_group is None:
+            raise RuntimeError(
+                "Cannot get the TaskGroup of a afor.Scope that is not active:"
+                "not entered yet; or was exited."
+            )
+        return self._task_group
+
     async def __aenter__(self) -> "Scope":
         """Enter the scope and activate its TaskGroup and AsyncExitStack."""
+        logger.info("Entered scope block")
         self._finished = asyncio.get_running_loop().create_future()
         self._finished.add_done_callback(self._finished_done_callback)
         self._finished.add_done_callback(self._finished_consume_exception_callback)
-        self.exit_stack = AsyncExitStack()
-        await self.exit_stack.__aenter__()
-        self.task_group = await self.exit_stack.enter_async_context(TaskGroup())
+        self._exit_stack = AsyncExitStack()
+        await self._exit_stack.__aenter__()
+        self._exit_stack.callback(self._cancel_tg)
+        self._task_group = await self._exit_stack.enter_async_context(TaskGroup())
         self._current_scope_token = _CURRENT_SCOPE.set(self)
         return self
 
@@ -85,11 +124,13 @@ class Scope:
         ``ScopeBreak`` is treated as normal scoped control flow and is
         suppressed after teardown finishes.
         """
-        assert self.exit_stack is not None
+        logger.info("Exiting scope block")
+        assert self._exit_stack is not None
         assert self._current_scope_token is not None
         _CURRENT_SCOPE.reset(self._current_scope_token)
         try:
-            suppressed = await self.exit_stack.__aexit__(exc_type, exc, tb)
+            self.cancel()
+            suppressed = await self._exit_stack.__aexit__(exc_type, exc, tb)
             self._set_finished_result()
             return suppressed or exc_type is ScopeBreak
         except BaseException as err:
@@ -109,8 +150,9 @@ class Scope:
             self._set_finished_exception(filtered)
             raise filtered
         finally:
-            self.task_group = None
-            self.exit_stack = None
+            self._task_group = None
+            self._exit_stack = None
+            logger.info("Finished scope block")
 
     @classmethod
     def current(cls, default: Any = _MISSING) -> "Scope":
@@ -176,12 +218,17 @@ class Scope:
         """
         if self._cancel_called:
             return
+        logger.info("Cancelling scope")
         self._cancel_called = True
-        assert self.task_group is not None
-        self.task_group.create_task(self._cancel_scope())
+        assert self._task_group is not None
+        self._cancel_tg()
 
-    async def _cancel_scope(self) -> None:
-        raise _ScopeCancelled()
+    def _cancel_tg(self) -> None:
+        if self._task_group is None:
+            return
+        logger.info("Cancelling task_group")
+        for t in self._task_group._tasks:
+            t.cancel()
 
     @classmethod
     def _strip_scope_cancel(cls, err: BaseException) -> BaseException | None:
@@ -248,7 +295,7 @@ class Scope:
             return
         if not fut.cancelled():
             return
-        if self.task_group is None:
+        if self._task_group is None:
             return
         self.cancel()
 

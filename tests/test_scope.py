@@ -71,7 +71,7 @@ async def test_scope_propagates_input_callback_failure():
             sub = afor.BaseSub[str]()
             sub.asap_callback.append(boom)
             assert sub.input_data("hello")
-            await asyncio.sleep(0)
+            await asyncio.sleep(1)
 
     errors = _flatten_exceptions(exc_info.value)
     assert any(
@@ -94,7 +94,7 @@ async def test_scope_propagates_call_soon_threadsafe_failure(monkeypatch):
                 broken_call_soon_threadsafe,
             )
             assert sub.input_data("hello") is False
-            await asyncio.sleep(0)
+            await asyncio.sleep(1)
 
     errors = _flatten_exceptions(exc_info.value)
     assert any(
@@ -129,7 +129,7 @@ async def test_scope_finished_failed():
 
             sub.asap_callback.append(boom)
             sub.input_data("hello")
-            await asyncio.sleep(0)
+            await asyncio.sleep(1)
 
     assert scope.finished.done()
     assert not scope.finished.cancelled()
