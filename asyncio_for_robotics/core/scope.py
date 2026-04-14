@@ -89,7 +89,7 @@ class Scope:
         return self._exit_stack
 
     @property
-    def task_group(self) -> asyncio.TaskGroup:
+    def task_group(self) -> TaskGroup:
         """Underlying TaskGroup.
 
         Returns:
