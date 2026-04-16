@@ -62,7 +62,10 @@ def _open_default_session() -> zenoh.Session:
             "'ZENOH_SESSION_CONFIG_URI' environment variable is not set. Using default session provided by zenoh"
         )
         config = zenoh.Config()
-    return zenoh.open(config)
+    try:
+        return zenoh.open(config)
+    except zenoh.ZError as e:
+        e.add_note("Did you forget to start the zenoh router?")
 
 
 @contextmanager
