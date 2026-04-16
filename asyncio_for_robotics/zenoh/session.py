@@ -66,6 +66,7 @@ def _open_default_session() -> zenoh.Session:
         return zenoh.open(config)
     except zenoh.ZError as e:
         e.add_note("Did you forget to start the zenoh router?")
+        raise e
 
 
 @contextmanager
