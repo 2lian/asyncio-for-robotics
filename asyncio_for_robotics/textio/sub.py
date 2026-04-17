@@ -7,8 +7,8 @@ import time
 from typing import IO, Callable, TypeVar, Union
 import warnings
 
-from asyncio_for_robotics.core.scope import Scope
-from asyncio_for_robotics.core.sub import BaseSub, _AUTO_SCOPE
+from asyncio_for_robotics.core.scope import AUTO_SCOPE, Scope
+from asyncio_for_robotics.core.sub import BaseSub
 
 _MsgType = TypeVar("_MsgType", str, bytes)
 logger = logging.getLogger(__name__)
@@ -24,7 +24,7 @@ class Sub(BaseSub[_MsgType]):
         stream: IO[_MsgType],
         pre_process: Callable[[_MsgType], Union[_MsgType, None]] = default_preprocess,
         *,
-        scope: Scope | None | object = _AUTO_SCOPE,
+        scope: Scope | None = AUTO_SCOPE,
     ) -> None:
         """Subscriber streaming updates of a file.
 

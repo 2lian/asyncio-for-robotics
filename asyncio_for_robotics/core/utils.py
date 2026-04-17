@@ -4,8 +4,8 @@ import time
 from contextlib import asynccontextmanager, suppress
 from typing import Any, Awaitable, Callable, Coroutine, TypeVar
 
-from asyncio_for_robotics.core.scope import Scope
-from asyncio_for_robotics.core.sub import BaseSub, _AUTO_SCOPE
+from asyncio_for_robotics.core.scope import AUTO_SCOPE, Scope
+from asyncio_for_robotics.core.sub import BaseSub
 
 try:
     from asyncio import timeout as john_timeout
@@ -95,7 +95,7 @@ class Rate(BaseSub[int]):
         self,
         frequency: float,
         time_source: Callable[[], int] = time.time_ns,
-        scope: Scope | None | object = _AUTO_SCOPE,
+        scope: Scope | None = AUTO_SCOPE,
     ) -> None:
         """Create a rate timer.
 

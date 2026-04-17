@@ -30,7 +30,7 @@ async def test_wait_cancellation(pub: Callable[[str], None], sub: afor.BaseSub[s
 
 @pytest.mark.skip("deprecated, should use lifetime instead")
 async def test_loop_cancellation(pub: Callable[[str], None], sub: afor.BaseSub[str]):
-    iterator = sub.listen_reliable(exit_on_close=True)
+    iterator = sub.listen_reliable()
     sub.close()
     pub("hey")
     done = False

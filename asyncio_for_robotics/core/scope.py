@@ -32,6 +32,40 @@ class _ScopeCancelled(Exception):
     """Internal exception used to stop a scope early."""
 
 
+class _AutoScope:
+    """Sentinel type for :data:`AUTO_SCOPE`.
+
+    Instances are never entered, attached to, or otherwise used as a real
+    scope: the identity check ``scope is AUTO_SCOPE`` is the only
+    interaction. All scope-shaped operations raise ``RuntimeError`` so
+    accidental use fails loudly.
+    """
+
+    def __repr__(self) -> str:
+        return "AUTO_SCOPE"
+
+    def _fail(self) -> None:
+        raise RuntimeError(
+            "AUTO_SCOPE is a sentinel, not a usable scope. "
+            "Pass a real afor.Scope, or None to opt out of auto-attach."
+        )
+
+    async def __aenter__(self):
+        self._fail()
+
+    async def __aexit__(self, exc_type, exc, tb):
+        self._fail()
+
+
+#: Sentinel for ``scope=`` parameters.
+#:
+#: When passed as ``scope=AUTO_SCOPE`` (the default on every subscriber),
+#: the resource attaches to :meth:`Scope.current` if one is active, or
+#: runs unattached otherwise. Pass ``None`` to opt out explicitly, or a
+#: concrete :class:`Scope` to attach to a specific one.
+AUTO_SCOPE: "Scope" = cast("Scope", _AutoScope())
+
+
 class Scope:
     """Lexical owner for async resources and background tasks.
 

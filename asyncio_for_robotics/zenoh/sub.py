@@ -5,8 +5,8 @@ from typing import Callable, Dict, Generic, Optional, Type, TypeVar, Union
 
 import zenoh
 
-from ..core.scope import Scope
-from ..core.sub import BaseSub, _AUTO_SCOPE
+from ..core.scope import AUTO_SCOPE, Scope
+from ..core.sub import BaseSub
 from .session import auto_session
 
 logger = logging.getLogger(__name__)
@@ -18,7 +18,7 @@ class Sub(BaseSub[zenoh.Sample]):
         key_expr: Union[zenoh.KeyExpr, str],
         session: Optional[zenoh.Session] = None,
         *,
-        scope: Scope | None | object = _AUTO_SCOPE,
+        scope: Scope | None = AUTO_SCOPE,
     ) -> None:
         """
         asyncio_for_robotics implementation of a Zenoh subscriber.

@@ -15,7 +15,7 @@ from typing import (
     TypeVar,
 )
 
-from .scope import Scope
+from .scope import AUTO_SCOPE, Scope
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +26,7 @@ class SubClosedException(RuntimeError):
 
 _MsgType = TypeVar("_MsgType")
 _T = TypeVar("_T")
-_AUTO_SCOPE = object()
+_AUTO_SCOPE = AUTO_SCOPE
 
 
 class BaseSub(Generic[_MsgType]):
@@ -48,12 +48,12 @@ class BaseSub(Generic[_MsgType]):
     def __init__(
         self,
         *,
-        scope: Scope | None | object = _AUTO_SCOPE,
+        scope: Scope | None = AUTO_SCOPE,
     ) -> None:
         """Create a subscriber, optionally attached to *scope*.
 
         Args:
-            scope: ``afor.Scope`` to attach to.  ``_AUTO_SCOPE`` (default)
+            scope: ``afor.Scope`` to attach to.  ``AUTO_SCOPE`` (default)
                 picks the current scope if any.  ``None`` opts out.
         """
         #: Blocking callbacks called on message arrival
@@ -88,7 +88,7 @@ class BaseSub(Generic[_MsgType]):
         self._lifetime_threadsafe = concurrent.futures.Future()
         self.lifetime.add_done_callback(lambda *_: self.close())
         self._scope: Scope | None = None
-        if scope is _AUTO_SCOPE:
+        if scope is AUTO_SCOPE:
             scope = Scope.current(default=None)
         if scope is not None:
             self.attach(scope)
@@ -223,7 +223,6 @@ class BaseSub(Generic[_MsgType]):
         fresh=False,
         queue_size: int = 10,
         lifo=False,
-        exit_on_close: bool = False,
     ) -> AsyncGenerator[_MsgType, None]:
         """Iterate over every message without skipping (queued).
 
@@ -238,9 +237,6 @@ class BaseSub(Generic[_MsgType]):
             fresh: If ``False``, the first yield may be the current value.
             queue_size: Maximum queued messages.  ``0`` means unbounded.
             lifo: Use last-in-first-out order instead of FIFO.
-            exit_on_close: If ``True``, the ``async for`` loop exits cleanly
-                when ``.close()`` is called.  If ``False``,
-                ``SubClosedException`` is raised instead.
         """
         if not lifo:
             q: asyncio.Queue[_MsgType] = asyncio.Queue(maxsize=queue_size)
@@ -251,10 +247,10 @@ class BaseSub(Generic[_MsgType]):
         if self._value_flag.is_set() and not fresh:
             assert self._value is not None, "impossible if flag set"
             q.put_nowait(self._value)
-        return self._unprimed_listen_reliable(q, exit_on_close)
+        return self._unprimed_listen_reliable(q)
 
     async def _unprimed_listen_reliable(
-        self, queue: asyncio.Queue, exit_on_close: bool = False
+        self, queue: asyncio.Queue
     ) -> AsyncGenerator[_MsgType, None]:
         logger.debug("Reliable listener first iter %s", self.name)
         try:
@@ -346,7 +342,7 @@ class ConverterSub(BaseSub[_OutType], Generic[_OutType, _InType]):
         sub: BaseSub[_InType],
         convert_func: Callable[[_InType], _OutType] = lambda x: x,
         *,
-        scope: Scope | None | object = _AUTO_SCOPE,
+        scope: Scope | None = AUTO_SCOPE,
     ) -> None:
         """Create a converter wrapping *sub*.
 

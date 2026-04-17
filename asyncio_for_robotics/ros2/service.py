@@ -9,8 +9,8 @@ from rclpy.qos import QoSProfile
 from rclpy.service import Service as RosService
 from rclpy.task import Future as RosFuture
 
-from ..core.sub import BaseSub, _AUTO_SCOPE as _SUB_AUTO_SCOPE
-from ..core.scope import Scope
+from ..core.scope import AUTO_SCOPE, Scope
+from ..core.sub import BaseSub
 from .future import asyncify_future
 from .session import BaseSession, auto_session
 from .utils import QOS_DEFAULT, TopicInfo
@@ -19,7 +19,6 @@ logger = logging.getLogger(__name__)
 
 _ReqT = TypeVar("_ReqT")
 _ResT = TypeVar("_ResT")
-_AUTO_SCOPE = object()
 
 
 # Generic base class for a service definition
@@ -116,7 +115,7 @@ class Server(BaseSub[Responder[_ReqT, _ResT]]):
         qos_profile: QoSProfile = QOS_DEFAULT,
         session: Optional[BaseSession] = None,
         *,
-        scope: Scope | None | object = _SUB_AUTO_SCOPE,
+        scope: Scope | None = AUTO_SCOPE,
     ) -> None:
         """Implements an async ROS 2 service server.
 
@@ -204,7 +203,7 @@ class Client(Generic[_ReqT, _ResT]):
         qos_profile: QoSProfile = QOS_DEFAULT,
         session: Optional[BaseSession] = None,
         *,
-        scope: Scope | None | object = _AUTO_SCOPE,
+        scope: Scope | None = AUTO_SCOPE,
     ) -> None:
         """Implements an async ROS 2 service client.
 
@@ -226,7 +225,7 @@ class Client(Generic[_ReqT, _ResT]):
         self.cli: RosClient = self._resolve_sub(self.topic_info)
         self._scope: Scope | None = None
         self._closed = False
-        if scope is _AUTO_SCOPE:
+        if scope is AUTO_SCOPE:
             scope = Scope.current(default=None)
         if scope is not None:
             self.attach(scope)
