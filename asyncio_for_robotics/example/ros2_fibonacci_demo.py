@@ -254,7 +254,7 @@ async def demo_12_multi_server(
 
 @afor.scoped
 async def main() -> None:
-    # 4台のサーバーをバックグラウンドタスクとして起動する
+    # Start 4 servers as background tasks
     server_tasks = [
         asyncio.create_task(_run_server(f"fibonacci_{i}"))
         for i in range(4)
@@ -294,7 +294,7 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    # ActionServer の並列実行と cancel には MultiThreadedExecutor が必要
+    # MultiThreadedExecutor is required for concurrent goals and cancel support
     session = afor.ThreadedSession(executor=MultiThreadedExecutor)
     with afor.session_context(session):
         with suppress(KeyboardInterrupt, asyncio.CancelledError):

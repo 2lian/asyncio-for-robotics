@@ -27,19 +27,19 @@ async def fib_client():
     await client.wait_for_server()
     print("Server ready.\n")
 
-    # ── 1. call() : ゴールを送って結果を待つ ──────────────────────────────────
+    # ── 1. call() : send a goal and wait for the final result ─────────────────
     print("[1] call(order=8)")
     result = await client.call(Fibonacci.Goal(order=8))
     print(f"    result: {list(result.sequence)}\n")
 
-    # ── 2. send_goal() : feedback を受け取りながら結果を待つ ──────────────────
+    # ── 2. send_goal() : stream feedback while waiting for the result ─────────
     print("[2] send_goal(order=8) with feedback streaming")
     goal_handle = await client.send_goal(Fibonacci.Goal(order=8))
     async for feedback in goal_handle:
         print(f"    feedback: {list(feedback.sequence)}")
     print(f"    result:   {list(goal_handle.result.sequence)}\n")
 
-    # ── 3. cancel : 実行中にゴールをキャンセルする ───────────────────────────
+    # ── 3. cancel : cancel a goal mid-flight ──────────────────────────────────
     print("[3] send_goal(order=30) then cancel after 0.3s")
     goal_handle = await client.send_goal(Fibonacci.Goal(order=30))
 
