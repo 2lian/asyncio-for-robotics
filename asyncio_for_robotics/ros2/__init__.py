@@ -7,6 +7,14 @@ from .. import (
     soft_timeout,
     soft_wait_for,
 )
+from .action import (
+    ActionAborted,
+    ActionCanceled,
+    ActionClient,
+    ActionGoalHandle,
+    ActionServer,
+    ClientGoalHandle,
+)
 from .service import Client, Server
 from .session import (
     GLOBAL_SESSION,
@@ -29,6 +37,12 @@ __all__ = [
     "Scope",
     "ScopeBreak",
     "scoped",
+    "ActionAborted",
+    "ActionCanceled",
+    "ActionServer",
+    "ActionClient",
+    "ActionGoalHandle",
+    "ClientGoalHandle",
     "Server",
     "Client",
     "session_context",
