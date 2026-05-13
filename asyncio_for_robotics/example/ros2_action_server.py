@@ -6,7 +6,6 @@ Run:
 """
 
 import asyncio
-import time
 from contextlib import suppress
 
 from example_interfaces.action import Fibonacci
@@ -42,10 +41,9 @@ async def fib_server():
 
 
 if __name__ == "__main__":
-    from rclpy.executors import MultiThreadedExecutor
 
     with afor.auto_context():
-        import rclpy
+
         # ActionServer requires MultiThreadedExecutor
         with suppress(KeyboardInterrupt, asyncio.CancelledError):
             asyncio.run(fib_server())

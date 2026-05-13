@@ -28,6 +28,7 @@ REJECT_ORDER = -2
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
 
+
 @pytest.fixture(scope="module", autouse=True)
 def session() -> Generator[afor.BaseSession, Any, Any]:
     # MultiThreadedExecutor is required: ActionServer._execute blocks an executor thread
@@ -84,15 +85,14 @@ async def client(session: afor.BaseSession) -> AsyncGenerator[afor.ActionClient,
 
 # ── Tests ─────────────────────────────────────────────────────────────────────
 
+
 async def test_wait_for_server_timeout(client: afor.ActionClient):
     """wait_for_server() times out when no server is available."""
     result = await afor.soft_wait_for(client.wait_for_server(), 0.5)
     assert isinstance(result, TimeoutError)
 
 
-async def test_wait_for_server(
-    server: afor.ActionServer, client: afor.ActionClient
-):
+async def test_wait_for_server(server: afor.ActionServer, client: afor.ActionClient):
     """wait_for_server() returns successfully when a server is available."""
     result = await afor.soft_wait_for(client.wait_for_server(), 2)
     assert not isinstance(result, TimeoutError)
@@ -108,9 +108,7 @@ async def test_call_returns_result(
     assert list(result.sequence) == [0, 1, 1, 2, 3, 5]
 
 
-async def test_feedback_streaming(
-    server: afor.ActionServer, client: afor.ActionClient
-):
+async def test_feedback_streaming(server: afor.ActionServer, client: afor.ActionClient):
     """send_goal() + async for delivers feedback and result is available after the loop."""
     await afor.soft_wait_for(client.wait_for_server(), 2)
     gh = await client.send_goal(Fibonacci.Goal(order=5))
@@ -180,9 +178,7 @@ async def test_call_raises_on_reject(
         await client.call(Fibonacci.Goal(order=REJECT_ORDER))
 
 
-async def test_concurrent_goals(
-    server: afor.ActionServer, client: afor.ActionClient
-):
+async def test_concurrent_goals(server: afor.ActionServer, client: afor.ActionClient):
     """Multiple goals on the same server are processed in parallel, finishing faster than sequential."""
     import time
 

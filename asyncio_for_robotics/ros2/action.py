@@ -23,6 +23,7 @@ _ResultT = TypeVar("_ResultT")
 
 # ── Exceptions ────────────────────────────────────────────────────────────────
 
+
 class ActionAborted(Exception):
     """Raised inside ``async for fb in goal_handle`` when the server aborts the goal.
 
@@ -69,6 +70,7 @@ class ActionCanceled(Exception):
 
 
 # ── Server-side goal handle ───────────────────────────────────────────────────
+
 
 class ActionGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
     """Server-side goal handle delivered to user asyncio code by ``ActionServer``.
@@ -195,6 +197,7 @@ class ActionGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
 
 # ── Client-side goal handle ───────────────────────────────────────────────────
 
+
 class ClientGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
     """Async wrapper around rclpy.action.client.ClientGoalHandle.
 
@@ -258,9 +261,7 @@ class ClientGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
             Do not call both ``get_result()`` and ``async for`` on the same handle;
             they issue separate ``get_result_async()`` calls internally.
         """
-        res = await asyncify_future(
-            self._ros_gh.get_result_async(), self._event_loop
-        )
+        res = await asyncify_future(self._ros_gh.get_result_async(), self._event_loop)
         return res.result
 
     async def cancel_goal(self) -> object:
@@ -277,9 +278,7 @@ class ClientGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
             requests.  Without this, ``goals_canceling`` will always be empty and
             ``is_cancel_requested`` will never be set on the server side.
         """
-        return await asyncify_future(
-            self._ros_gh.cancel_goal_async(), self._event_loop
-        )
+        return await asyncify_future(self._ros_gh.cancel_goal_async(), self._event_loop)
 
     # ── AsyncIterator protocol ────────────────────────────────────────────────
 
@@ -317,12 +316,11 @@ class ClientGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
 
     async def _fetch_full_result(self):
         """Fetch the full ROS result including status.  Used by __aiter__."""
-        return await asyncify_future(
-            self._ros_gh.get_result_async(), self._event_loop
-        )
+        return await asyncify_future(self._ros_gh.get_result_async(), self._event_loop)
 
 
 # ── ActionServer ──────────────────────────────────────────────────────────────
+
 
 class ActionServer(BaseSub["ActionGoalHandle"]):
     """Async ROS 2 action server implemented as an afor subscriber.
@@ -410,7 +408,9 @@ class ActionServer(BaseSub["ActionGoalHandle"]):
                 kwargs["goal_callback"] = self._goal_callback
             if self._cancel_callback is not None:
                 kwargs["cancel_callback"] = self._cancel_callback
-            server = RosActionServer(node, self._action_type, self._action_name, **kwargs)
+            server = RosActionServer(
+                node, self._action_type, self._action_name, **kwargs
+            )
         return server
 
     def _execute(self, ros_gh) -> object:
@@ -439,6 +439,7 @@ class ActionServer(BaseSub["ActionGoalHandle"]):
 
 
 # ── ActionClient ──────────────────────────────────────────────────────────────
+
 
 class ActionClient(Generic[_GoalT, _FeedbackT, _ResultT]):
     """Async ROS 2 action client.
@@ -489,7 +490,9 @@ class ActionClient(Generic[_GoalT, _FeedbackT, _ResultT]):
     def attach(self, scope: Scope) -> None:
         """Attach this client to an active scope for lifecycle management."""
         if self._scope is not None:
-            raise RuntimeError(f"ActionClient '{self.name}' already attached to a scope")
+            raise RuntimeError(
+                f"ActionClient '{self.name}' already attached to a scope"
+            )
         self._scope = scope
         assert scope.exit_stack is not None
         scope.exit_stack.callback(self.close)
@@ -526,7 +529,9 @@ class ActionClient(Generic[_GoalT, _FeedbackT, _ResultT]):
             # Called from the executor thread; bridge to asyncio via call_soon_threadsafe.
             loop.call_soon_threadsafe(feedback_queue.put_nowait, fb_msg.feedback)
 
-        ros_fut = self._ros_client.send_goal_async(goal, feedback_callback=_bridge_feedback)
+        ros_fut = self._ros_client.send_goal_async(
+            goal, feedback_callback=_bridge_feedback
+        )
         ros_gh_fut: Future = asyncify_future(ros_fut, loop)
         wrapped_fut: Future = loop.create_future()
 

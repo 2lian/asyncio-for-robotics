@@ -34,6 +34,7 @@ import asyncio_for_robotics.ros2 as afor
 
 # ── Server ────────────────────────────────────────────────────────────────────
 
+
 async def _handle_goal(goal_handle: afor.ActionGoalHandle) -> None:
     order = goal_handle.request.order
     if order < 0:
@@ -54,7 +55,8 @@ async def _handle_goal(goal_handle: afor.ActionGoalHandle) -> None:
 
 async def _run_server(action_name: str) -> None:
     server = afor.ActionServer(
-        Fibonacci, action_name,
+        Fibonacci,
+        action_name,
         cancel_callback=lambda _: CancelResponse.ACCEPT,
     )
     with suppress(asyncio.CancelledError):
@@ -64,12 +66,14 @@ async def _run_server(action_name: str) -> None:
 
 # ── Helper ────────────────────────────────────────────────────────────────────
 
+
 async def fibonacci(client: afor.ActionClient, order: int) -> list[int]:
     result = await client.call(Fibonacci.Goal(order=order))
     return list(result.sequence)
 
 
 # ── Demos 01–12 ───────────────────────────────────────────────────────────────
+
 
 async def demo_01_sleep(c: afor.ActionClient) -> None:
     print("[01 sleep]  sleep runs concurrently while action is in-flight")
@@ -115,7 +119,9 @@ async def demo_04_wait_first(c: afor.ActionClient) -> None:
     fast = asyncio.create_task(fibonacci(c, 3))
     slow = asyncio.create_task(fibonacci(c, 20))
 
-    done, pending = await asyncio.wait({fast, slow}, return_when=asyncio.FIRST_COMPLETED)
+    done, pending = await asyncio.wait(
+        {fast, slow}, return_when=asyncio.FIRST_COMPLETED
+    )
 
     assert fast in done
     for t in pending:
@@ -252,12 +258,12 @@ async def demo_12_multi_server(
 
 # ── Entry point ───────────────────────────────────────────────────────────────
 
+
 @afor.scoped
 async def main() -> None:
     # Start 4 servers as background tasks
     server_tasks = [
-        asyncio.create_task(_run_server(f"fibonacci_{i}"))
-        for i in range(4)
+        asyncio.create_task(_run_server(f"fibonacci_{i}")) for i in range(4)
     ]
 
     client_0 = afor.ActionClient(Fibonacci, "fibonacci_0")
