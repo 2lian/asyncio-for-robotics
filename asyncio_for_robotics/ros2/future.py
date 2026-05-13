@@ -1,6 +1,7 @@
 import asyncio
 import logging
 from asyncio import AbstractEventLoop, Future
+from contextlib import suppress
 from typing import Optional
 
 from rclpy.task import Future as RosFuture
@@ -18,6 +19,9 @@ def asyncify_future(
     The asyncio Future will complete when the ROS Future completes,
     propagating its result, cancellation or exception.
 
+    If the asyncio Future is already done (e.g. cancelled by asyncio.wait_for),
+    the ROS callback is silently ignored.
+
     Args:
         ros_future: ROS Future.
         event_loop: Asyncio event loop to use. If None, uses asyncio.get_event_loop().
@@ -26,21 +30,32 @@ def asyncify_future(
         Asyncio Future reflecting the ROS Future.
     """
     ao_future: Future = Future()
-    if event_loop == None:
+    if event_loop is None:
         event_loop = asyncio.get_event_loop()
 
-    def ros_cbk(fut: RosFuture):
-        nonlocal ao_future
+    def _try_cancel() -> None:
+        with suppress(asyncio.InvalidStateError):
+            ao_future.cancel()
+
+    def _try_set_exception(exc: BaseException) -> None:
+        with suppress(asyncio.InvalidStateError):
+            ao_future.set_exception(exc)
+
+    def _try_set_result(res: object) -> None:
+        with suppress(asyncio.InvalidStateError):
+            ao_future.set_result(res)
+
+    def ros_cbk(fut: RosFuture) -> None:
         if fut.cancelled():
-            event_loop.call_soon_threadsafe(ao_future.cancel)
+            event_loop.call_soon_threadsafe(_try_cancel)
             return
         if fut.done():
             exc = fut.exception()
             if exc is not None:
-                event_loop.call_soon_threadsafe(ao_future.set_exception, exc)
+                event_loop.call_soon_threadsafe(_try_set_exception, exc)
             else:
                 res = fut.result()  # type: ignore
-                event_loop.call_soon_threadsafe(ao_future.set_result, res)
+                event_loop.call_soon_threadsafe(_try_set_result, res)
 
     # lock not necessary, ros seems safe
     ros_future.add_done_callback(ros_cbk)
