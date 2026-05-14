@@ -1,6 +1,6 @@
 """ros2_fibonacci_demo.py — comprehensive asyncio patterns demo via Action.
 
-Starts 4 Fibonacci action servers internally and runs 12 demos showing how
+Starts 4 Fibonacci action servers internally and runs 13 demos showing how
 standard asyncio primitives compose naturally with ROS 2 actions.
 
   01 asyncio.sleep    — sleep runs concurrently while an action is in-flight
@@ -11,10 +11,11 @@ standard asyncio primitives compose naturally with ROS 2 actions.
   06 asyncio.Event    — Event gates a goal until a signal is set
   07 asyncio.Semaphore— Semaphore(2) caps concurrent goals at 2
   08 asyncio.Queue    — producer/consumer pipeline over actions
-  09 feedback         — stream feedback with ``async for``
-  10 cancel           — cancel a long-running goal mid-flight
-  11 abort            — handle ActionAborted raised by the server
-  12 multi-server     — asyncio.gather across 4 independent servers
+  09 feedback helper  — stream feedback until the result arrives
+  10 feedback raw     — handle ActionFeedbackDone yourself
+  11 cancel           — cancel a long-running goal mid-flight
+  12 abort            — handle ActionAborted raised by the server
+  13 multi-server     — asyncio.gather across 4 independent servers
 
 Run:
     source /opt/ros/jazzy/setup.bash
@@ -72,7 +73,7 @@ async def fibonacci(client: afor.ActionClient, order: int) -> list[int]:
     return list(result.sequence)
 
 
-# ── Demos 01–12 ───────────────────────────────────────────────────────────────
+# ── Demos 01–13 ───────────────────────────────────────────────────────────────
 
 
 async def demo_01_sleep(c: afor.ActionClient) -> None:
@@ -196,7 +197,7 @@ async def demo_08_queue(c: afor.ActionClient) -> None:
 
 
 async def demo_09_feedback(c: afor.ActionClient) -> None:
-    print("[09 feedback]  stream feedback with async for")
+    print("[09 feedback helper]  stream feedback until the result arrives")
     goal_handle = c.send_goal(Fibonacci.Goal(order=8))
     await goal_handle.accepted
 
@@ -207,8 +208,22 @@ async def demo_09_feedback(c: afor.ActionClient) -> None:
     print(f"    PASS  result={list(result.sequence)}\n")
 
 
-async def demo_10_cancel(c: afor.ActionClient) -> None:
-    print("[10 cancel]  cancel a long-running goal mid-flight")
+async def demo_10_feedback_raw(c: afor.ActionClient) -> None:
+    print("[10 feedback raw]  handle ActionFeedbackDone yourself")
+    goal_handle = c.send_goal(Fibonacci.Goal(order=8))
+    await goal_handle.accepted
+
+    async for item in goal_handle.feedback.listen():
+        if isinstance(item, afor.ActionFeedbackDone):
+            break
+        print(f"    feedback: {list(item.sequence)}")
+
+    result = await goal_handle.result
+    print(f"    PASS  result={list(result.sequence)}\n")
+
+
+async def demo_11_cancel(c: afor.ActionClient) -> None:
+    print("[11 cancel]  cancel a long-running goal mid-flight")
     goal_handle = c.send_goal(Fibonacci.Goal(order=30))
     await goal_handle.accepted
 
@@ -226,8 +241,8 @@ async def demo_10_cancel(c: afor.ActionClient) -> None:
         print(f"    PASS  cancelled, partial result={list(e.result.sequence)}\n")
 
 
-async def demo_11_abort(c: afor.ActionClient) -> None:
-    print("[11 abort]  handle ActionAborted raised by the server")
+async def demo_12_abort(c: afor.ActionClient) -> None:
+    print("[12 abort]  handle ActionAborted raised by the server")
     goal_handle = c.send_goal(Fibonacci.Goal(order=-1))
     await goal_handle.accepted
 
@@ -239,13 +254,13 @@ async def demo_11_abort(c: afor.ActionClient) -> None:
         print(f"    PASS  server aborted, result={list(e.result.sequence)}\n")
 
 
-async def demo_12_multi_server(
+async def demo_13_multi_server(
     c0: afor.ActionClient,
     c1: afor.ActionClient,
     c2: afor.ActionClient,
     c3: afor.ActionClient,
 ) -> None:
-    print("[12 multi-server]  asyncio.gather across 4 independent servers")
+    print("[13 multi-server]  asyncio.gather across 4 independent servers")
     start = time.monotonic()
 
     r0, r1, r2, r3 = await asyncio.gather(
@@ -295,9 +310,10 @@ async def main() -> None:
     await demo_07_semaphore(client_0)
     await demo_08_queue(client_0)
     await demo_09_feedback(client_0)
-    await demo_10_cancel(client_0)
-    await demo_11_abort(client_0)
-    await demo_12_multi_server(client_0, client_1, client_2, client_3)
+    await demo_10_feedback_raw(client_0)
+    await demo_11_cancel(client_0)
+    await demo_12_abort(client_0)
+    await demo_13_multi_server(client_0, client_1, client_2, client_3)
 
     print("All demos done!")
 
