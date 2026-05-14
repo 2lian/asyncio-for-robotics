@@ -197,17 +197,20 @@ async def demo_08_queue(c: afor.ActionClient) -> None:
 
 async def demo_09_feedback(c: afor.ActionClient) -> None:
     print("[09 feedback]  stream feedback with async for")
-    goal_handle = await c.send_goal(Fibonacci.Goal(order=8))
+    goal_handle = c.send_goal(Fibonacci.Goal(order=8))
+    await goal_handle.accepted
 
-    async for feedback in goal_handle:
+    async for feedback in goal_handle.feedback_until_result():
         print(f"    feedback: {list(feedback.sequence)}")
 
-    print(f"    PASS  result={list(goal_handle.result.sequence)}\n")
+    result = await goal_handle.result
+    print(f"    PASS  result={list(result.sequence)}\n")
 
 
 async def demo_10_cancel(c: afor.ActionClient) -> None:
     print("[10 cancel]  cancel a long-running goal mid-flight")
-    goal_handle = await c.send_goal(Fibonacci.Goal(order=30))
+    goal_handle = c.send_goal(Fibonacci.Goal(order=30))
+    await goal_handle.accepted
 
     async def cancel_later():
         await asyncio.sleep(0.3)
@@ -216,19 +219,22 @@ async def demo_10_cancel(c: afor.ActionClient) -> None:
     asyncio.create_task(cancel_later())
 
     try:
-        async for feedback in goal_handle:
+        async for feedback in goal_handle.feedback_until_result():
             print(f"    feedback: {list(feedback.sequence)}")
+        await goal_handle.result
     except afor.ActionCanceled as e:
         print(f"    PASS  cancelled, partial result={list(e.result.sequence)}\n")
 
 
 async def demo_11_abort(c: afor.ActionClient) -> None:
     print("[11 abort]  handle ActionAborted raised by the server")
-    goal_handle = await c.send_goal(Fibonacci.Goal(order=-1))
+    goal_handle = c.send_goal(Fibonacci.Goal(order=-1))
+    await goal_handle.accepted
 
     try:
-        async for _ in goal_handle:
+        async for _ in goal_handle.feedback_until_result():
             pass
+        await goal_handle.result
     except afor.ActionAborted as e:
         print(f"    PASS  server aborted, result={list(e.result.sequence)}\n")
 

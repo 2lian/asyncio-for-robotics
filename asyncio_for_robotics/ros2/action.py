@@ -1,8 +1,8 @@
 import asyncio
 import logging
 import threading
-from asyncio import AbstractEventLoop, Future
-from typing import Generic, Optional, TypeVar
+from asyncio import AbstractEventLoop
+from typing import AsyncGenerator, Generic, Optional, TypeVar, cast
 
 from action_msgs.msg import GoalStatus
 from rclpy.action import ActionClient as RosActionClient
@@ -25,7 +25,7 @@ _ResultT = TypeVar("_ResultT")
 
 
 class ActionAborted(Exception):
-    """Raised inside ``async for fb in goal_handle`` when the server aborts the goal.
+    """Raised when awaiting ``goal_handle.result`` after the server aborts the goal.
 
     Attributes:
         result: The result object returned by the server at abort time.
@@ -34,8 +34,7 @@ class ActionAborted(Exception):
     Example::
 
         try:
-            async for fb in goal_handle:
-                process(fb)
+            result = await goal_handle.result
         except ActionAborted as e:
             handle_abort(e.result)
     """
@@ -46,7 +45,7 @@ class ActionAborted(Exception):
 
 
 class ActionCanceled(Exception):
-    """Raised inside ``async for fb in goal_handle`` when the goal is canceled.
+    """Raised when awaiting ``goal_handle.result`` after the goal is canceled.
 
     Cancellation requires the server to (1) register a ``cancel_callback`` that
     returns ``CancelResponse.ACCEPT`` and (2) detect ``goal_handle.is_cancel_requested``
@@ -58,8 +57,7 @@ class ActionCanceled(Exception):
     Example::
 
         try:
-            async for fb in goal_handle:
-                process(fb)
+            result = await goal_handle.result
         except ActionCanceled as e:
             handle_cancel(e.result)
     """
@@ -162,7 +160,7 @@ class ActionGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
     def abort(self, result: _ResultT) -> None:
         """Finish the goal with ABORTED and deliver the result to the client.
 
-        The client's ``async for fb in gh`` loop will raise ``ActionAborted(result)``.
+        Awaiting the client's ``result`` future will raise ``ActionAborted(result)``.
         Unblocks the executor thread.  Call exactly once per goal handle.
 
         Args:
@@ -176,7 +174,7 @@ class ActionGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
         """Finish the goal with CANCELED and deliver the result to the client.
 
         Call this after detecting ``is_cancel_requested == True``.
-        The client's ``async for fb in gh`` loop will raise ``ActionCanceled(result)``.
+        Awaiting the client's ``result`` future will raise ``ActionCanceled(result)``.
         Unblocks the executor thread.  Call exactly once per goal handle.
 
         Args:
@@ -198,71 +196,122 @@ class ActionGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
 # ── Client-side goal handle ───────────────────────────────────────────────────
 
 
+class ActionFeedbackDone:
+    """Marker yielded by action feedback streams when the result has arrived."""
+
+    def __repr__(self) -> str:
+        return "ActionFeedbackDone()"
+
+
+class ActionFeedbackSub(BaseSub[_FeedbackT | ActionFeedbackDone], Generic[_FeedbackT]):
+    """Feedback subscriber that keeps the result sentinel in order."""
+
+    def listen(self, fresh=False):
+        return self.listen_reliable(fresh=fresh, queue_size=0)
+
+    @property
+    def name(self) -> str:
+        return "ROS2-ACT-FEEDBACK"
+
+
 class ClientGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
     """Async wrapper around rclpy.action.client.ClientGoalHandle.
 
     Returned by ``ActionClient.send_goal()``.
 
-    Two usage patterns are supported:
+    ``accepted`` and ``result`` are asyncio futures.  ``feedback`` is a normal
+    afor subscriber that receives feedback messages and an ``ActionFeedbackDone``
+    value when the result arrives.
 
-    **Simple (result only)**::
+    Example::
 
-        gh = await client.send_goal(goal)
-        result = await gh.get_result()
-
-    **Streaming (feedback + result)**::
-
-        gh = await client.send_goal(goal)
-        try:
-            async for fb in gh:       # yields Feedback messages
-                process(fb)
-        except ActionAborted as e:    # server called abort()
-            handle(e.result)
-        except ActionCanceled as e:   # goal was canceled
-            handle(e.result)
-        final = gh.result             # set after successful iteration
-
-    .. Note::
-        ``async for`` and ``get_result()`` use separate ``get_result_async()``
-        calls internally.  Do not mix them on the same handle.
+        gh = client.send_goal(goal)
+        accepted = await gh.accepted
+        async for feedback in gh.feedback_until_result():
+            process(feedback)
+        result = await gh.result
     """
+
+    SENTINEL = ActionFeedbackDone()
 
     def __init__(
         self,
-        ros_gh: RosClientGoalHandle,
         event_loop: AbstractEventLoop,
-        feedback_queue: "asyncio.Queue[_FeedbackT | None]",
+        *,
+        scope: Optional[Scope] = AUTO_SCOPE,
     ) -> None:
-        self._ros_gh = ros_gh
+        self._ros_gh: Optional[RosClientGoalHandle] = None
         self._event_loop = event_loop
-        self._feedback_queue = feedback_queue
-        self._result_task: Optional[asyncio.Task] = None
-        self.result: Optional[_ResultT] = None  # set after successful async-for
+        self.accepted: asyncio.Future[bool] = event_loop.create_future()
+        self.result: asyncio.Future[_ResultT] = event_loop.create_future()
+        self.result.add_done_callback(self._consume_unhandled_result_exception)
+        self.feedback: ActionFeedbackSub[_FeedbackT] = ActionFeedbackSub(scope=scope)
 
-    @property
-    def accepted(self) -> bool:
-        """True if the server accepted the goal, False if it was rejected.
+    def _watch_goal_response(self, ros_gh_future: asyncio.Future) -> None:
+        ros_gh_future.add_done_callback(self._on_goal_response)
 
-        Check this immediately after ``await client.send_goal(...)``  before
-        proceeding.  ``ActionClient.call()`` raises ``RuntimeError`` automatically
-        on rejection, but ``send_goal()`` does not.
-        """
-        return self._ros_gh.accepted
+    @staticmethod
+    def _consume_unhandled_result_exception(fut: asyncio.Future) -> None:
+        if fut.cancelled():
+            return
+        fut.exception()
+
+    def _on_goal_response(self, fut: asyncio.Future) -> None:
+        if fut.cancelled():
+            self.accepted.cancel()
+            self.result.cancel()
+            self.feedback.close()
+            return
+        exc = fut.exception()
+        if exc is not None:
+            self.accepted.set_exception(exc)
+            self.result.set_exception(exc)
+            self.feedback.close()
+            return
+
+        ros_gh: RosClientGoalHandle = fut.result()
+        self._ros_gh = ros_gh
+        self.accepted.set_result(ros_gh.accepted)
+        if not ros_gh.accepted:
+            self.result.set_exception(RuntimeError("goal was rejected by server"))
+            self.feedback.input_data(self.SENTINEL)
+            return
+
+        result_future = asyncify_future(ros_gh.get_result_async(), self._event_loop)
+        result_future.add_done_callback(self._on_result)
+
+    def _on_result(self, fut: asyncio.Future) -> None:
+        self.feedback.input_data(self.SENTINEL)
+        if fut.cancelled():
+            self.result.cancel()
+            return
+        exc = fut.exception()
+        if exc is not None:
+            self.result.set_exception(exc)
+            return
+
+        ros_result = fut.result()
+        status = ros_result.status
+        result = ros_result.result
+        if status == GoalStatus.STATUS_SUCCEEDED:
+            self.result.set_result(result)
+        elif status == GoalStatus.STATUS_ABORTED:
+            self.result.set_exception(ActionAborted(result))
+        elif status == GoalStatus.STATUS_CANCELED:
+            self.result.set_exception(ActionCanceled(result))
+        else:
+            self.result.set_result(result)
 
     async def get_result(self) -> _ResultT:
-        """Await the final result of this goal without checking the terminal status.
+        """Backward-compatible alias for awaiting ``result``."""
+        return await self.result
 
-        Use this for the simple "fire and wait" pattern.  If you need to
-        distinguish SUCCEEDED / ABORTED / CANCELED, use ``async for fb in gh``
-        instead, which raises ``ActionAborted`` or ``ActionCanceled`` on
-        non-success outcomes.
-
-        .. Note::
-            Do not call both ``get_result()`` and ``async for`` on the same handle;
-            they issue separate ``get_result_async()`` calls internally.
-        """
-        res = await asyncify_future(self._ros_gh.get_result_async(), self._event_loop)
-        return res.result
+    async def feedback_until_result(self) -> AsyncGenerator[_FeedbackT, None]:
+        """Yield feedback messages until the action result arrives."""
+        async for msg in self.feedback.listen():
+            if isinstance(msg, ActionFeedbackDone):
+                break
+            yield cast(_FeedbackT, msg)
 
     async def cancel_goal(self) -> object:
         """Request cancellation of this goal and await the server's acknowledgment.
@@ -278,45 +327,10 @@ class ClientGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
             requests.  Without this, ``goals_canceling`` will always be empty and
             ``is_cancel_requested`` will never be set on the server side.
         """
+        await self.accepted
+        if self._ros_gh is None:
+            raise RuntimeError("goal handle is not available")
         return await asyncify_future(self._ros_gh.cancel_goal_async(), self._event_loop)
-
-    # ── AsyncIterator protocol ────────────────────────────────────────────────
-
-    def __aiter__(self) -> "ClientGoalHandle[_GoalT, _FeedbackT, _ResultT]":
-        if self._result_task is None:
-            self._result_task = asyncio.create_task(self._fetch_full_result())
-            # sentinel: notify __anext__ that the result has arrived
-            self._result_task.add_done_callback(
-                lambda _: self._feedback_queue.put_nowait(None)
-            )
-        return self
-
-    async def __anext__(self) -> _FeedbackT:
-        try:
-            item = await self._feedback_queue.get()
-        except asyncio.CancelledError:
-            if self._result_task and not self._result_task.done():
-                self._result_task.cancel()
-            raise
-
-        if item is not None:
-            return item
-
-        # sentinel received — result_task is guaranteed done here
-        ros_result = self._result_task.result()  # re-raises if task failed
-        self.result = ros_result.result
-        status = ros_result.status
-        if status == GoalStatus.STATUS_SUCCEEDED:
-            raise StopAsyncIteration
-        if status == GoalStatus.STATUS_ABORTED:
-            raise ActionAborted(self.result)
-        if status == GoalStatus.STATUS_CANCELED:
-            raise ActionCanceled(self.result)
-        raise StopAsyncIteration  # unknown status
-
-    async def _fetch_full_result(self):
-        """Fetch the full ROS result including status.  Used by __aiter__."""
-        return await asyncify_future(self._ros_gh.get_result_async(), self._event_loop)
 
 
 # ── ActionServer ──────────────────────────────────────────────────────────────
@@ -507,49 +521,33 @@ class ActionClient(Generic[_GoalT, _FeedbackT, _ResultT]):
     def send_goal(
         self,
         goal: _GoalT,
-    ) -> "Future[ClientGoalHandle[_GoalT, _FeedbackT, _ResultT]]":
-        """Send a goal and return an asyncio.Future that resolves to a ClientGoalHandle.
+    ) -> "ClientGoalHandle[_GoalT, _FeedbackT, _ResultT]":
+        """Send a goal and return a ClientGoalHandle immediately.
 
-        An internal feedback queue is set up automatically, so the returned
-        ``ClientGoalHandle`` can be used both as a plain awaitable (via
-        ``get_result()``) and as an async iterator (``async for fb in gh``).
+        The returned handle exposes ``accepted`` and ``result`` futures plus a
+        ``feedback`` subscriber.  Returning synchronously lets callers schedule
+        multiple goals first and then decide the order in which they await
+        acceptance, feedback, or results.
 
         Args:
             goal: Goal to send.
 
         Returns:
-            asyncio.Future[ClientGoalHandle] — resolves when the server accepts
-            or rejects the goal.
+            ClientGoalHandle.
         """
         logger.debug("%s sending goal", self.name)
         loop = self._event_loop
-        feedback_queue: asyncio.Queue = asyncio.Queue()
+        handle: ClientGoalHandle = ClientGoalHandle(loop, scope=None)
 
         def _bridge_feedback(fb_msg) -> None:
-            # Called from the executor thread; bridge to asyncio via call_soon_threadsafe.
-            loop.call_soon_threadsafe(feedback_queue.put_nowait, fb_msg.feedback)
+            handle.feedback.input_data(fb_msg.feedback)
 
         ros_fut = self._ros_client.send_goal_async(
             goal, feedback_callback=_bridge_feedback
         )
-        ros_gh_fut: Future = asyncify_future(ros_fut, loop)
-        wrapped_fut: Future = loop.create_future()
-
-        def _on_accepted(fut: Future) -> None:
-            if wrapped_fut.done():
-                return
-            if fut.cancelled():
-                wrapped_fut.cancel()
-                return
-            exc = fut.exception()
-            if exc is not None:
-                wrapped_fut.set_exception(exc)
-                return
-            ros_gh: RosClientGoalHandle = fut.result()
-            wrapped_fut.set_result(ClientGoalHandle(ros_gh, loop, feedback_queue))
-
-        ros_gh_fut.add_done_callback(_on_accepted)
-        return wrapped_fut
+        ros_gh_fut = asyncify_future(ros_fut, loop)
+        handle._watch_goal_response(ros_gh_fut)
+        return handle
 
     async def call(self, goal: _GoalT) -> _ResultT:
         """Send a goal and await the final result, discarding all feedback.
@@ -567,10 +565,10 @@ class ActionClient(Generic[_GoalT, _FeedbackT, _ResultT]):
         Raises:
             RuntimeError: If the server rejects the goal.
         """
-        gh: ClientGoalHandle = await self.send_goal(goal)
-        if not gh.accepted:
+        gh: ClientGoalHandle = self.send_goal(goal)
+        if not await gh.accepted:
             raise RuntimeError(f"{self.name}: goal was rejected by server")
-        return await gh.get_result()
+        return await gh.result
 
     @property
     def name(self) -> str:
