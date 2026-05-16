@@ -56,7 +56,7 @@ async def fib_server():
     print("Fibonacci action server ready, waiting for goals...")
 
     async for goal_handle in server.listen_reliable():
-        asyncio.create_task(handle_goal(goal_handle))
+        afor.Scope.current().task_group.create_task(handle_goal(goal_handle))
 
 
 if __name__ == "__main__":

@@ -90,7 +90,7 @@ class ActionGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
 
         async for goal_handle in server.listen_reliable():
             # Dispatch concurrently so the server can accept new goals
-            asyncio.create_task(handle_goal(goal_handle))
+            Scope.current().task_group.create_task(handle_goal(goal_handle))
 
         async def handle_goal(goal_handle):
             fb = MyAction.Feedback()
@@ -381,7 +381,7 @@ class ActionServer(BaseSub["ActionGoalHandle"]):
             cancel_callback=lambda _: CancelResponse.ACCEPT,
         )
         async for goal_handle in server.listen_reliable():
-            asyncio.create_task(handle_goal(goal_handle))
+            Scope.current().task_group.create_task(handle_goal(goal_handle))
 
         async def handle_goal(goal_handle):
             seq = [0, 1]
@@ -537,7 +537,8 @@ class ActionClient(Generic[_GoalT, _FeedbackT, _ResultT]):
         """
         logger.debug("%s sending goal", self.name)
         loop = self._event_loop
-        handle: ClientGoalHandle = ClientGoalHandle(loop, scope=None)
+        handle_scope = Scope.current(default=self._scope)
+        handle: ClientGoalHandle = ClientGoalHandle(loop, scope=handle_scope)
 
         def _bridge_feedback(fb_msg) -> None:
             handle.feedback.input_data(fb_msg.feedback)

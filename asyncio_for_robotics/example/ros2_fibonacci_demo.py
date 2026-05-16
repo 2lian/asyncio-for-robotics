@@ -62,7 +62,7 @@ async def _run_server(action_name: str) -> None:
     )
     with suppress(asyncio.CancelledError):
         async for goal_handle in server.listen_reliable():
-            asyncio.create_task(_handle_goal(goal_handle))
+            afor.Scope.current().task_group.create_task(_handle_goal(goal_handle))
 
 
 # ── Helper ────────────────────────────────────────────────────────────────────

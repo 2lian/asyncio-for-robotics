@@ -68,7 +68,7 @@ async def server(session: afor.BaseSession) -> AsyncGenerator[afor.ActionServer,
 
     async def serve():
         async for goal_handle in srv.listen_reliable():
-            asyncio.create_task(_handle_goal(goal_handle))
+            afor.Scope.current().task_group.create_task(_handle_goal(goal_handle))
 
     task = asyncio.create_task(serve())
     yield srv
@@ -112,6 +112,7 @@ async def test_feedback_streaming(server: afor.ActionServer, client: afor.Action
     """send_goal() exposes accepted/result futures and a feedback helper."""
     await afor.soft_wait_for(client.wait_for_server(), 2)
     gh = client.send_goal(Fibonacci.Goal(order=5))
+    assert gh.feedback._scope is afor.Scope.current()
     assert await gh.accepted
 
     feedback_seqs: list[list[int]] = []
