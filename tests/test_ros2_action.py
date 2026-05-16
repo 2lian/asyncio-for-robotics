@@ -104,10 +104,34 @@ async def test_call_returns_result(
     server: afor.ActionServer, client: afor.ActionClient
 ):
     """call() sends a goal and returns the final result."""
-    await afor.soft_wait_for(client.wait_for_server(), 2)
-    result = await afor.soft_wait_for(client.call(Fibonacci.Goal(order=5)), 3)
+    result = await afor.soft_wait_for(
+        client.call(
+            Fibonacci.Goal(order=5),
+            server_timeout=2,
+            result_timeout=3,
+        ),
+        4,
+    )
     assert not isinstance(result, TimeoutError)
     assert list(result.sequence) == [0, 1, 1, 2, 3, 5]
+
+
+async def test_call_server_timeout(client: afor.ActionClient):
+    """call() can time out while waiting for the action server."""
+    with pytest.raises(asyncio.TimeoutError):
+        await client.call(Fibonacci.Goal(order=5), server_timeout=0.1)
+
+
+async def test_call_result_timeout(
+    server: afor.ActionServer, client: afor.ActionClient
+):
+    """call() can time out while waiting for an accepted goal to finish."""
+    with pytest.raises(asyncio.TimeoutError):
+        await client.call(
+            Fibonacci.Goal(order=30),
+            server_timeout=2,
+            result_timeout=0.1,
+        )
 
 
 async def test_feedback_streaming(server: afor.ActionServer, client: afor.ActionClient):

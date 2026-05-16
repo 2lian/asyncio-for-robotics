@@ -2,6 +2,7 @@ import asyncio
 import logging
 import threading
 from asyncio import AbstractEventLoop
+from contextlib import suppress
 from typing import AsyncGenerator, Generic, Optional, TypeVar, cast
 
 from action_msgs.msg import GoalStatus
@@ -568,7 +569,13 @@ class ActionClient(Generic[_GoalT, _FeedbackT, _ResultT]):
         handle._watch_goal_response(ros_gh_fut)
         return handle
 
-    async def call(self, goal: _GoalT) -> _ResultT:
+    async def call(
+        self,
+        goal: _GoalT,
+        *,
+        server_timeout: Optional[float] = None,
+        result_timeout: Optional[float] = None,
+    ) -> _ResultT:
         """Send a goal and await the final result, discarding all feedback.
 
         Convenience wrapper around ``send_goal`` + ``ClientGoalHandle.get_result``.
@@ -577,17 +584,45 @@ class ActionClient(Generic[_GoalT, _FeedbackT, _ResultT]):
 
         Args:
             goal: Goal message to send (e.g. ``Fibonacci.Goal(order=10)``).
+            server_timeout: Maximum seconds to wait for the action server before
+                sending the goal. If ``None``, skip the readiness wait.
+            result_timeout: Maximum seconds to wait for the accepted goal result.
+                If ``None``, wait indefinitely.
 
         Returns:
             The result message from the action server.
 
         Raises:
             RuntimeError: If the server rejects the goal.
+            asyncio.TimeoutError: If ``server_timeout`` or ``result_timeout`` expires.
         """
+        if server_timeout is not None:
+            await asyncio.wait_for(self.wait_for_server(), server_timeout)
+
         gh: ClientGoalHandle = self.send_goal(goal)
         if not await gh.accepted:
             raise RuntimeError(f"{self.name}: goal was rejected by server")
-        return await gh.result
+        if result_timeout is None:
+            return await gh.result
+        try:
+            return await asyncio.wait_for(gh.result, result_timeout)
+        except asyncio.TimeoutError:
+            self._schedule_cancel_goal(gh)
+            raise
+
+    def _schedule_cancel_goal(self, gh: ClientGoalHandle) -> None:
+        """Request goal cancellation without delaying timeout propagation."""
+        coro = self._cancel_goal_safely(gh)
+        scope = Scope.current(default=None)
+        if scope is not None:
+            scope.task_group.create_task(coro)
+        else:
+            asyncio.create_task(coro)
+
+    @staticmethod
+    async def _cancel_goal_safely(gh: ClientGoalHandle) -> None:
+        with suppress(Exception):
+            await gh.cancel_goal()
 
     @property
     def name(self) -> str:
