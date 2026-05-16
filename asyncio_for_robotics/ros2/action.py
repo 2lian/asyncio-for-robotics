@@ -12,7 +12,12 @@ from rclpy.action.client import ClientGoalHandle as RosClientGoalHandle
 
 from ..core.scope import AUTO_SCOPE, Scope
 from ..core.sub import BaseSub
-from .future import asyncify_future
+from .future import (
+    asyncify_future,
+    try_cancel_future,
+    try_set_future_exception,
+    try_set_future_result,
+)
 from .session import BaseSession, auto_session
 
 logger = logging.getLogger(__name__)
@@ -257,39 +262,24 @@ class ClientGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
             return
         fut.exception()
 
-    @staticmethod
-    def _try_cancel(fut: asyncio.Future) -> None:
-        if not fut.done():
-            fut.cancel()
-
-    @staticmethod
-    def _try_set_exception(fut: asyncio.Future, exc: BaseException) -> None:
-        if not fut.done():
-            fut.set_exception(exc)
-
-    @staticmethod
-    def _try_set_result(fut: asyncio.Future, result: object) -> None:
-        if not fut.done():
-            fut.set_result(result)
-
     def _on_goal_response(self, fut: asyncio.Future) -> None:
         if fut.cancelled():
-            self._try_cancel(self.accepted)
-            self._try_cancel(self.result)
+            try_cancel_future(self.accepted)
+            try_cancel_future(self.result)
             self.feedback.close()
             return
         exc = fut.exception()
         if exc is not None:
-            self._try_set_exception(self.accepted, exc)
-            self._try_set_exception(self.result, exc)
+            try_set_future_exception(self.accepted, exc)
+            try_set_future_exception(self.result, exc)
             self.feedback.close()
             return
 
         ros_gh: RosClientGoalHandle = fut.result()
         self._ros_gh = ros_gh
-        self._try_set_result(self.accepted, ros_gh.accepted)
+        try_set_future_result(self.accepted, ros_gh.accepted)
         if not ros_gh.accepted:
-            self._try_set_exception(
+            try_set_future_exception(
                 self.result,
                 RuntimeError("goal was rejected by server"),
             )
@@ -302,24 +292,24 @@ class ClientGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
     def _on_result(self, fut: asyncio.Future) -> None:
         self.feedback.input_data(self.SENTINEL)
         if fut.cancelled():
-            self._try_cancel(self.result)
+            try_cancel_future(self.result)
             return
         exc = fut.exception()
         if exc is not None:
-            self._try_set_exception(self.result, exc)
+            try_set_future_exception(self.result, exc)
             return
 
         ros_result = fut.result()
         status = ros_result.status
         result = ros_result.result
         if status == GoalStatus.STATUS_SUCCEEDED:
-            self._try_set_result(self.result, result)
+            try_set_future_result(self.result, result)
         elif status == GoalStatus.STATUS_ABORTED:
-            self._try_set_exception(self.result, ActionAborted(result))
+            try_set_future_exception(self.result, ActionAborted(result))
         elif status == GoalStatus.STATUS_CANCELED:
-            self._try_set_exception(self.result, ActionCanceled(result))
+            try_set_future_exception(self.result, ActionCanceled(result))
         else:
-            self._try_set_result(self.result, result)
+            try_set_future_result(self.result, result)
 
     async def get_result(self) -> _ResultT:
         """Backward-compatible alias for awaiting ``result``."""
@@ -622,7 +612,7 @@ class ActionClient(Generic[_GoalT, _FeedbackT, _ResultT]):
     @staticmethod
     async def _cancel_goal_safely(gh: ClientGoalHandle) -> None:
         with suppress(Exception):
-            await gh.cancel_goal()
+            await asyncio.wait_for(gh.cancel_goal(), timeout=1.0)
 
     @property
     def name(self) -> str:
