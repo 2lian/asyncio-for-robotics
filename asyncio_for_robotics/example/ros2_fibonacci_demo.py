@@ -106,13 +106,24 @@ async def demo_02_gather(c: afor.ActionClient) -> None:
 async def demo_03_lock(c: afor.ActionClient) -> None:
     print("[03 lock]  Lock serialises goals one-at-a-time")
     lock = asyncio.Lock()
+    active = 0
+    peak = 0
 
     async def locked_fib(order: int) -> list[int]:
+        nonlocal active, peak
         async with lock:
-            return await fibonacci(c, order)
+            active += 1
+            peak = max(peak, active)
+            print(f"    lock acquired: active={active}")
+            try:
+                return await fibonacci(c, order)
+            finally:
+                active -= 1
+                print(f"    lock released: active={active}")
 
     results = await asyncio.gather(locked_fib(5), locked_fib(5), locked_fib(5))
-    print(f"    PASS  3 goals ran one by one, results={[r[-1] for r in results]}\n")
+    assert peak == 1
+    print(f"    PASS  peak concurrent={peak}, results={[r[-1] for r in results]}\n")
 
 
 async def demo_04_wait_first(c: afor.ActionClient) -> None:
