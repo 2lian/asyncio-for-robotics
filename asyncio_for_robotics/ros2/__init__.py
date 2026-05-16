@@ -13,6 +13,7 @@ from .action import (
     ActionClient,
     ActionFeedbackDone,
     ActionGoalHandle,
+    ActionRejected,
     ActionServer,
     ClientGoalHandle,
 )
@@ -40,6 +41,7 @@ __all__ = [
     "scoped",
     "ActionAborted",
     "ActionCanceled",
+    "ActionRejected",
     "ActionFeedbackDone",
     "ActionServer",
     "ActionClient",

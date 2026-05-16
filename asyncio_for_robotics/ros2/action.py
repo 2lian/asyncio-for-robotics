@@ -73,6 +73,10 @@ class ActionCanceled(Exception):
         super().__init__(repr(result))
 
 
+class ActionRejected(Exception):
+    """Raised when the action server rejects a goal request."""
+
+
 # ── Server-side goal handle ───────────────────────────────────────────────────
 
 
@@ -281,7 +285,7 @@ class ClientGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
         if not ros_gh.accepted:
             try_set_future_exception(
                 self.result,
-                RuntimeError("goal was rejected by server"),
+                ActionRejected("goal was rejected by server"),
             )
             self.feedback.input_data(self.SENTINEL)
             return
@@ -583,7 +587,7 @@ class ActionClient(Generic[_GoalT, _FeedbackT, _ResultT]):
             The result message from the action server.
 
         Raises:
-            RuntimeError: If the server rejects the goal.
+            ActionRejected: If the server rejects the goal.
             asyncio.TimeoutError: If ``server_timeout`` or ``result_timeout`` expires.
         """
         if server_timeout is not None:
@@ -591,7 +595,7 @@ class ActionClient(Generic[_GoalT, _FeedbackT, _ResultT]):
 
         gh: ClientGoalHandle = self.send_goal(goal)
         if not await gh.accepted:
-            raise RuntimeError(f"{self.name}: goal was rejected by server")
+            raise ActionRejected(f"{self.name}: goal was rejected by server")
         if result_timeout is None:
             return await gh.result
         try:

@@ -14,7 +14,7 @@ from rclpy.executors import MultiThreadedExecutor
 
 import asyncio_for_robotics.ros2 as afor
 from asyncio_for_robotics.core._logger import setup_logger
-from asyncio_for_robotics.ros2.action import ActionAborted, ActionCanceled
+from asyncio_for_robotics.ros2.action import ActionAborted, ActionCanceled, ActionRejected
 from asyncio_for_robotics.ros2.session import ThreadedSession
 
 setup_logger(debug_path="tests")
@@ -203,9 +203,9 @@ async def test_reject(server: afor.ActionServer, client: afor.ActionClient):
 async def test_call_raises_on_reject(
     server: afor.ActionServer, client: afor.ActionClient
 ):
-    """call() raises RuntimeError when the goal is rejected."""
+    """call() raises ActionRejected when the goal is rejected."""
     await afor.soft_wait_for(client.wait_for_server(), 2)
-    with pytest.raises(RuntimeError):
+    with pytest.raises(ActionRejected):
         await client.call(Fibonacci.Goal(order=REJECT_ORDER))
 
 
