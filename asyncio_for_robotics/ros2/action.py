@@ -256,24 +256,42 @@ class ClientGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
             return
         fut.exception()
 
+    @staticmethod
+    def _try_cancel(fut: asyncio.Future) -> None:
+        if not fut.done():
+            fut.cancel()
+
+    @staticmethod
+    def _try_set_exception(fut: asyncio.Future, exc: BaseException) -> None:
+        if not fut.done():
+            fut.set_exception(exc)
+
+    @staticmethod
+    def _try_set_result(fut: asyncio.Future, result: object) -> None:
+        if not fut.done():
+            fut.set_result(result)
+
     def _on_goal_response(self, fut: asyncio.Future) -> None:
         if fut.cancelled():
-            self.accepted.cancel()
-            self.result.cancel()
+            self._try_cancel(self.accepted)
+            self._try_cancel(self.result)
             self.feedback.close()
             return
         exc = fut.exception()
         if exc is not None:
-            self.accepted.set_exception(exc)
-            self.result.set_exception(exc)
+            self._try_set_exception(self.accepted, exc)
+            self._try_set_exception(self.result, exc)
             self.feedback.close()
             return
 
         ros_gh: RosClientGoalHandle = fut.result()
         self._ros_gh = ros_gh
-        self.accepted.set_result(ros_gh.accepted)
+        self._try_set_result(self.accepted, ros_gh.accepted)
         if not ros_gh.accepted:
-            self.result.set_exception(RuntimeError("goal was rejected by server"))
+            self._try_set_exception(
+                self.result,
+                RuntimeError("goal was rejected by server"),
+            )
             self.feedback.input_data(self.SENTINEL)
             return
 
@@ -283,24 +301,24 @@ class ClientGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
     def _on_result(self, fut: asyncio.Future) -> None:
         self.feedback.input_data(self.SENTINEL)
         if fut.cancelled():
-            self.result.cancel()
+            self._try_cancel(self.result)
             return
         exc = fut.exception()
         if exc is not None:
-            self.result.set_exception(exc)
+            self._try_set_exception(self.result, exc)
             return
 
         ros_result = fut.result()
         status = ros_result.status
         result = ros_result.result
         if status == GoalStatus.STATUS_SUCCEEDED:
-            self.result.set_result(result)
+            self._try_set_result(self.result, result)
         elif status == GoalStatus.STATUS_ABORTED:
-            self.result.set_exception(ActionAborted(result))
+            self._try_set_exception(self.result, ActionAborted(result))
         elif status == GoalStatus.STATUS_CANCELED:
-            self.result.set_exception(ActionCanceled(result))
+            self._try_set_exception(self.result, ActionCanceled(result))
         else:
-            self.result.set_result(result)
+            self._try_set_result(self.result, result)
 
     async def get_result(self) -> _ResultT:
         """Backward-compatible alias for awaiting ``result``."""

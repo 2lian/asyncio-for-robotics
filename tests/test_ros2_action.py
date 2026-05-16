@@ -4,8 +4,10 @@ pytest.importorskip("rclpy")
 
 import asyncio
 import logging
+from types import SimpleNamespace
 from typing import Any, AsyncGenerator, Generator
 
+from action_msgs.msg import GoalStatus
 from example_interfaces.action import Fibonacci
 from rclpy.action import CancelResponse, GoalResponse
 from rclpy.executors import MultiThreadedExecutor
@@ -181,6 +183,24 @@ async def test_call_raises_on_reject(
     await afor.soft_wait_for(client.wait_for_server(), 2)
     with pytest.raises(RuntimeError):
         await client.call(Fibonacci.Goal(order=REJECT_ORDER))
+
+
+async def test_late_result_after_cancelled_future_is_ignored():
+    """A ROS result arriving after asyncio cancellation must not log InvalidStateError."""
+    loop = asyncio.get_running_loop()
+    gh = afor.ClientGoalHandle(loop, scope=None)
+    gh.result.cancel()
+
+    ros_result_future = loop.create_future()
+    ros_result_future.set_result(
+        SimpleNamespace(
+            status=GoalStatus.STATUS_SUCCEEDED,
+            result=Fibonacci.Result(sequence=[0, 1]),
+        )
+    )
+
+    gh._on_result(ros_result_future)
+    assert gh.result.cancelled()
 
 
 async def test_concurrent_goals(server: afor.ActionServer, client: afor.ActionClient):
