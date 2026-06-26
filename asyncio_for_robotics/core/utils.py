@@ -104,6 +104,8 @@ class Rate(BaseSub[int]):
             frequency: Tick frequency in Hz.
             time_source: Callable returning the current time in nanoseconds.
             scope: ``afor.Scope`` to attach to.
+            precise: If True, uses a precise timer with deviation below 2 ms.
+                Uses more CPU (busy-wait), but is stable at or above 500Hz.
         """
         self.period: int = int(1e9 / frequency)
         super().__init__(scope=scope)

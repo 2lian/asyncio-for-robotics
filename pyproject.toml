@@ -1,76 +1,68 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [ "setuptools>=58.2" ]
+
 [project]
-name = "asyncio_for_robotics"
-version = "1.4.0a6"
+name = "asyncio-for-robotics"
+version = "1.4.0"
 description = "Asyncio interface for ROS 2, Zenoh, and other robotic middlewares."
 readme = "README.md"
+keywords = [ "asyncio", "publisher", "robotics", "ros2", "subscriber", "zenoh" ]
 license = "MIT"
-authors = [
-  { name = "Elian NEPPEL", email = "elian.dev@posteo.com" }
-]
+authors = [ { name = "Elian NEPPEL", email = "elian.dev@posteo.com" } ]
 requires-python = ">=3.10,<3.15"
-keywords = ["asyncio", "robotics", "ros2", "zenoh", "publisher", "subscriber"]
-
 classifiers = [
   "Development Status :: 4 - Beta",
-  "Intended Audience :: Science/Research",
-  "Intended Audience :: Developers",
-  "Natural Language :: English",
   "Environment :: Console",
+  "Framework :: AsyncIO",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Natural Language :: English",
+  "Operating System :: MacOS",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX :: Linux",
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
-  "Operating System :: POSIX :: Linux",
-  "Operating System :: Microsoft :: Windows",
-  "Operating System :: MacOS",
   "Topic :: Scientific/Engineering",
   "Topic :: Software Development :: Embedded Systems",
   "Topic :: System :: Networking",
-  "Framework :: AsyncIO",
 ]
-
 dependencies = [
-"typing_extensions>=4.0; python_version<'3.11'",
-"async-timeout; python_version<'3.11'",
-"taskgroup; python_version<'3.11'",
-"exceptiongroup; python_version<'3.11'",
+  "async-timeout; python_version<'3.11'",
+  "exceptiongroup; python_version<'3.11'",
+  "taskgroup; python_version<'3.11'",
+  "typing-extensions>=4; python_version<'3.11'",
 ]
+optional-dependencies.benchmarks = [ "pyfiglet", "uvloop" ]
+optional-dependencies.build = [ "build", "twine" ]
+optional-dependencies.dev = [ "colorama", "pytest", "pytest-asyncio" ]
+optional-dependencies.zenoh = [ "eclipse-zenoh>=1" ]
+urls.Homepage = "https://github.com/2lian/asyncio-for-robotics"
+urls.Issues = "https://github.com/2lian/asyncio-for-robotics/issues"
+urls.Repository = "https://github.com/2lian/asyncio-for-robotics"
 
-[build-system]
-requires = ["setuptools >= 58.2.0"]
-build-backend = "setuptools.build_meta"
+[tool.setuptools]
+package-data.asyncio_for_robotics = [ "py.typed" ]
+packages.find.include = [ "asyncio_for_robotics", "asyncio_for_robotics.*" ]
 
-[tool.setuptools.packages.find]
-include = ["asyncio_for_robotics", "asyncio_for_robotics.*"]
-
-[project.optional-dependencies]
-zenoh = ["eclipse-zenoh>=1.0.0"]
-dev = ["colorama", "pytest", "pytest-asyncio"]
-benchmarks = ["pyfiglet", "uvloop"]
-build = ["build", "twine"]
-
-[project.urls]
-Homepage = "https://github.com/2lian/asyncio-for-robotics"
-Repository = "https://github.com/2lian/asyncio-for-robotics"
-Issues = "https://github.com/2lian/asyncio-for-robotics/issues"
-
-[tool.setuptools.package-data]
-"asyncio_for_robotics" = ["py.typed"]
-
-[tool.pytest.ini_options]
-asyncio_mode = "auto"
-testpaths = ["tests"]
-filterwarnings = [
-  "ignore::DeprecationWarning:pytest_asyncio.plugin",
-]
-markers = [
-  "only: only this test shall run",
-]
-
+[tool.uv]
 [[tool.uv.index]]
 name = "testpypi"
 url = "https://test.pypi.org/simple/"
 publish-url = "https://test.pypi.org/legacy/"
 explicit = true
+
+[tool.pytest]
+ini_options.asyncio_mode = "auto"
+ini_options.testpaths = [ "tests" ]
+ini_options.addopts = "-p no:launch_testing -p no:launch_ros" # ros, please stop
+ini_options.filterwarnings = [
+  "ignore::DeprecationWarning:pytest_asyncio.plugin",
+]
+ini_options.markers = [
+  "only: only this test shall run",
+]
