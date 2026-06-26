@@ -9,7 +9,7 @@ The Asyncio For Robotics (`afor`) library makes `asyncio` usable with ROS 2, Zen
 - Only native python: Better docs and support.
 - Simplifies testing.
 
-*Will this make my code slower?* [Likely not.](https://github.com/2lian/asyncio-for-robotics/tree/main/README.md#about-speed)
+*Will this make my code slower?* [Likely not.](#about-speed)
 
 *Will this make my code faster?* No. However, `asyncio` will help YOU write
 better, faster code.
