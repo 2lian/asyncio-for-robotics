@@ -89,9 +89,15 @@ class BaseSub(Generic[_MsgType]):
         self.lifetime.add_done_callback(lambda *_: self.close())
         self._scope: Scope | None = None
         if scope is AUTO_SCOPE:
+            # gets the autoscope
             scope = Scope.current(default=None)
         if scope is not None:
+            # applies the current scope
             self.attach(scope)
+        else:
+            # scope stays None, to be attached later
+            self._scope = None
+            pass
         logger.debug("created sub %s", self.name)
 
     @property

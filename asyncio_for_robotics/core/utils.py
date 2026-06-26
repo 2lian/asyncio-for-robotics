@@ -96,6 +96,7 @@ class Rate(BaseSub[int]):
         frequency: float,
         time_source: Callable[[], int] = time.time_ns,
         scope: Scope | None = AUTO_SCOPE,
+        precise=False,
     ) -> None:
         """Create a rate timer.
 
@@ -103,24 +104,50 @@ class Rate(BaseSub[int]):
             frequency: Tick frequency in Hz.
             time_source: Callable returning the current time in nanoseconds.
             scope: ``afor.Scope`` to attach to.
+            precise: If True, uses a precise timer with deviation below 2 ms.
+                Uses more CPU (busy-wait), but is stable at or above 500Hz.
         """
-        self.period: int= int(1e9 / frequency)
+        self.period: int = int(1e9 / frequency)
         super().__init__(scope=scope)
         self.time_source: Callable[[], int] = time_source
-        self.periodic_task: asyncio.Task=self._initialize_task()
 
-    def _initialize_task(self):
-        async def periodic_coro():
-            start_time = self.time_source()
-            count = 0
-            while 1:
-                count += 1
-                scheduled_time = start_time + count * (self.period)
+        if precise:
+            timer_coro = self._precise_timer
+        else:
+            timer_coro = self._standard_timer
+        if self._scope is not None:
+            self.periodic_task: asyncio.Task = self._scope.task_group.create_task(
+                timer_coro(), name=f"{self.name}"
+            )
+        else:
+            self.periodic_task: asyncio.Task = asyncio.create_task(
+                timer_coro(), name=f"{self.name}"
+            )
+
+    async def _standard_timer(self):
+        start_time = self.time_source()
+        count = 0
+        while 1:
+            count += 1
+            scheduled_time = start_time + count * (self.period)
+            dt = scheduled_time - self.time_source()
+            await asyncio.sleep(max(0, dt / 1e9))
+            self._periodic_cbk(scheduled_time)
+
+    async def _precise_timer(self):
+        start_time = self.time_source()
+        count = 0
+        while 1:
+            count += 1
+            scheduled_time = start_time + count * (self.period)
+            dt = scheduled_time - self.time_source()
+            while dt > 0:
+                if dt > 2_000_000:
+                    await asyncio.sleep(max(0, (dt / 1e9) * 0.98 - 0.001))
+                else:
+                    await asyncio.sleep(0)
                 dt = scheduled_time - self.time_source()
-                await asyncio.sleep(max(0, dt / 1e9))
-                self._periodic_cbk(scheduled_time)
-
-        return asyncio.create_task(periodic_coro())
+            self._periodic_cbk(scheduled_time)
 
     def _periodic_cbk(self, scheduled_time):
         self.input_data(scheduled_time)
