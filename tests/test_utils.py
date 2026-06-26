@@ -37,13 +37,28 @@ async def test_rate():
     async with afor.soft_timeout(1) as timeouted:
         count = 0
         start = time()
-        async for call_time in afor.Rate(100).listen_reliable():
+        async for _ in afor.Rate(100).listen_reliable():
             count += 1
             if count >= 10:
                 break
         end = time()
         dt = end - start
-        assert dt == approx(0.1, abs=0.1)
+        assert dt == approx(0.1, abs=0.05)
+
+    if timeouted() == True:
+        pytest.fail(f"test took too long")
+
+async def test_rate_precise():
+    async with afor.soft_timeout(1) as timeouted:
+        count = 0
+        start = time()
+        async for _ in afor.Rate(100, precise=True).listen_reliable():
+            count += 1
+            if count >= 10:
+                break
+        end = time()
+        dt = end - start
+        assert dt == approx(0.1, abs=0.05)
 
     if timeouted() == True:
         pytest.fail(f"test took too long")
