@@ -5,7 +5,6 @@ import pytest
 
 from asyncio_for_robotics.core._logger import setup_logger
 from asyncio_for_robotics.core.sub import BaseSub
-from asyncio_for_robotics.ros2_exp.service import Client, Responder, Server
 
 from .test_ros2_serv import (
     test_client_receives_response,
@@ -30,6 +29,7 @@ from rclpy.qos import QoSProfile
 from std_srvs.srv import SetBool
 
 import asyncio_for_robotics.ros2_exp as afor
+from asyncio_for_robotics.ros2_exp.service import Client, Responder, Server
 
 setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
