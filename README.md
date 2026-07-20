@@ -22,20 +22,16 @@ better, faster code.
 
 ### Barebone
 
-Compatible with ROS 2 (`jazzy`,`humble` and newer) out of the box. This library is pure python (>=3.10), so it installs easily.
+Out of the box support for ROS 2 (`jazzy`,`humble`, `lyrical`) and Zenoh. This library is pure python (>=3.10), so it installs easily.
 
 ```bash
 pip install asyncio_for_robotics
-```
-
-### Along with Zenoh
-
-```bash
-pip install asyncio_for_robotics eclipse-zenoh
+# if you use Zenoh: `pip install asyncio_for_robotics eclipse-zenoh`
 ```
 
 ## Read more
 
+- [Implement your own interface: UDP and DDS examples](https://github.com/2lian/asyncio-for-robotics/blob/main/own_proto_example.md)
 - [Detailed ROS 2 tutorial](https://github.com/2lian/asyncio-for-robotics/blob/main/using_with_ros.md)
 - [Lifetime with `afor.Scope`](https://github.com/2lian/asyncio-for-robotics/blob/main/using_scope.md) and [Backend's Sessions](https://github.com/2lian/asyncio-for-robotics/blob/main//using_session.md)
 - [Detailed examples](https://github.com/2lian/asyncio-for-robotics/blob/main/asyncio_for_robotics/example)
@@ -48,7 +44,6 @@ pip install asyncio_for_robotics eclipse-zenoh
 - **TextIO**: `stdout` lines of a `Popen` process (and other `TextIO` files). (native)
 - **ROS 2**: Subscriber, Service Client, Service Server.
 - **Zenoh**: Subscriber.
-- [Implement your own interface!](https://github.com/2lian/asyncio-for-robotics/blob/main/own_proto_example.md)
 
 ### Additional Projects and Interfaces
 - **[gogo_keyboard](https://github.com/2lian/gogo_keyboard)**: Subscribe to keyboard key presses and release.

@@ -1,7 +1,7 @@
 # Asyncio For Robotics Examples
 
 This directory contains runtime examples demonstrating the usage of
-`asyncio_for_robotics` with ROS 2, Zenoh and the `stdout` of a ping command.
+`asyncio_for_robotics` with ROS 2, Zenoh, UDP, and Cyclone DDS.
 
 The examples are intentionally verbose and well-documented in the code.  
 
@@ -101,11 +101,27 @@ python3 -m asyncio_for_robotics.example.ros2_event_callback
 ros2 topic pub /example std_msgs/msg/String "data: hey"
 ```
 
-### `custom_stdout.py`
+### `custom_udp.py`
 
-- Implements a custom subscriber capturing the `stdout` of `ping localhost`
+- Converts standard-library UDP callbacks into an `afor` subscriber.
 
 ```bash
 # Terminal #1
-python3 -m asyncio_for_robotics.example.custom_stdout
+python3 -m asyncio_for_robotics.example.custom_udp
+
+# Terminal #2
+printf '295.2' | nc -u -w1 localhost 9999
+```
+
+### `custom_cyclonedds.py`
+
+- Converts a Cyclone DDS `DataReader` callback into an `afor` subscriber.
+- Requires `pip install cyclonedds` or the Pixi `dds` environment.
+
+```bash
+# Terminal #1
+pixi run -e dds python -m asyncio_for_robotics.example.custom_cyclonedds subscribe
+
+# Terminal #2
+pixi run -e dds python -m asyncio_for_robotics.example.custom_cyclonedds publish
 ```

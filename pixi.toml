@@ -23,6 +23,7 @@ py312 = {features = ["zenoh", "dev", "py312"]}
 py313 = {features = ["zenoh", "dev", "py313"]}
 py314 = {features = ["zenoh", "dev", "py314"]}
 zenoh = { features = ["zenoh", "dev"] }
+dds = { features = ["dds", "dev"] }
 dev = { features = ["dev"] }
 
 [feature.py310.dependencies]
@@ -45,6 +46,12 @@ zenoh = "*"
 
 [feature.zenoh.pypi-dependencies]
 eclipse-zenoh = "*"
+
+[feature.dds.dependencies]
+python = ">=3.10,<3.14"
+
+[feature.dds.pypi-dependencies]
+cyclonedds = ">=11"
 
 [feature.dev.dependencies]
 colorama = "*"
