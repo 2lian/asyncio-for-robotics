@@ -42,7 +42,8 @@ pip install asyncio_for_robotics
 ## Available interfaces:
 - **Rate**: Every tick of a clock. (native)
 - **TextIO**: `stdout` lines of a `Popen` process (and other `TextIO` files). (native)
-- **ROS 2**: Subscriber, Service Client, Service Server. 
+- **ROS 2**: Subscriber, Service Client, Service Server.
+- **ROS 2 lyrical AsyncNode**: Subscriber, Service Client, Service Server.
 - **Zenoh**: Subscriber.
 
 ### Additional Projects and Interfaces
