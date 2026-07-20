@@ -47,6 +47,7 @@ pip install asyncio_for_robotics
 - **Zenoh**: Subscriber.
 
 ### Additional Projects and Interfaces
+- **[PyZeROS](https://github.com/2lian/pyzeros2)**: Alternative to ROS 2 rclpy, with minimal dependencies.
 - **[gogo_keyboard](https://github.com/2lian/gogo_keyboard)**: Subscribe to keyboard key presses and release.
 - **[asyncio_gazebo](https://github.com/2lian/asyncio-gazebo)**: Subscribe to Gazebo transport.
 
