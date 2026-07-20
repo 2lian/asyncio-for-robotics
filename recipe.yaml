@@ -1,6 +1,6 @@
 # run using `rattler-build build` then upload ./output/noarch/asyncio_for_robotics-1.2.5-pyh4616a5c_0.conda
 context:
-  version: 1.4.0a6
+  version: 1.5.0a0
 
 package:
   name: asyncio_for_robotics
@@ -34,7 +34,7 @@ tests:
     - asyncio_for_robotics.core.sub
     - asyncio_for_robotics.core.utils
     - asyncio_for_robotics.textio
-    - asyncio_for_robotics.example.custom_stdout
+    - asyncio_for_robotics.example.custom_udp
     pip_check: true
     python_version: [
       "3.11.*",

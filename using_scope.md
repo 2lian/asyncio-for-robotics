@@ -11,6 +11,7 @@ Inside a scope block:
 - new `afor` objects join the current scope automatically
 - leaving the block closes them
 - internal failures propagate out of the block
+- `afor.Scope.current()` returns the current, active scope.
 - `raise afor.ScopeBreak()` exits the current scope now
 - `scope.cancel()` requests teardown of a scope without changing local control flow
 - `scope.finished` reports how a scope ended once teardown is done
@@ -26,7 +27,8 @@ import asyncio_for_robotics as afor
 async with afor.Scope():
     sub = afor.ros2.Sub(String, "/chatter")
     client = afor.ros2.Client(MySrv, "/compute")
-    timer = afor.Rate(10)
+    current_scope = afor.Scope.current()
+    timer = afor.Rate(10, scope=current_scope)
 ```
 
 All three objects belong to the same lexical lifetime. Leaving the block closes
@@ -44,8 +46,7 @@ client, server; Zenoh sub ...).
 
 ## `@afor.scoped`
 
-Use `@afor.scoped` when you want scope ownership without writing the
-`async with` block yourself.
+Use `@afor.scoped` to quicly scope a function.
 
 ```python
 import asyncio
@@ -62,27 +63,6 @@ async def main():
 asyncio.run(main())
 ```
 
-If you need direct access to the current scope object:
-
-```python
-import asyncio
-import asyncio_for_robotics as afor
-
-
-@afor.scoped
-async def main():
-    scope = afor.Scope.current()
-    sub = afor.BaseSub[str](scope=scope)
-    sub.input_data("hello")
-    print(await sub.wait_for_value())
-
-
-asyncio.run(main())
-```
-
-This is often the cleanest way to give one whole async function a single,
-explicit lifetime.
-
 ## Different from `asyncio.TaskGroup`
 
 `afor.Scope` is lexical lifetime ownership, not a task nursery.
@@ -90,14 +70,8 @@ explicit lifetime.
 When execution reaches the end of the `async with afor.Scope():` block, the
 scope exits normally and closes the objects it owns, even if those objects are
 designed to run forever.
-
 This is different from `TaskGroup`, where normal block exit means "wait for
 child tasks to complete".
-
-With `Scope`, the meaning is:
-
-- while execution is inside the block, the owned objects are alive
-- when execution leaves the block, the owned objects are closed
 
 If you want a scope to stay alive until something else stops it, write that
 explicitly:
@@ -109,26 +83,7 @@ async def main():
         await asyncio.Future()
 ```
 
-## Many objects in one scope
-
-```python
-import asyncio
-import asyncio_for_robotics as afor
-
-
-async def main():
-    async with afor.Scope():
-        subs = [afor.BaseSub[str]() for _ in range(3)]
-
-        for idx, sub in enumerate(subs):
-            sub.input_data(f"value-{idx}")
-
-        values = [await sub.wait_for_value() for sub in subs]
-        print(values)
-
-
-asyncio.run(main())
-```
+# Advanced use:
 
 ## Deferred attach
 
@@ -166,6 +121,7 @@ async def main():
         sub = afor.BaseSub[str]()
         sub.input_data("hello")
         raise afor.ScopeBreak()
+        print("I won't print")
 
     print("continues here")
 
@@ -177,7 +133,11 @@ This is the closest thing to a `break` for a scope.
 
 ## Cancelling a scope
 
-`scope.cancel()` requests early stop of the scope. This is useful when your subscriptions are long-lived and you want the scope to tear down instead of waiting for a natural end condition.
+`scope.cancel()` requests early stop of the scope. This is useful when your
+subscriptions are long-lived and you want the scope to tear down instead of
+waiting for a natural end condition. `scope.cancel()` does not change the local
+control flow of the current block. It requests teardown of that scope, but it
+does not mean "leave this block right now".
 
 ```python
 import asyncio
@@ -189,7 +149,7 @@ async def main():
         sub = afor.BaseSub[str]()
         scope.cancel()
         await asyncio.sleep(0)
-        print("cleanup was requested")
+        print("I will print")
 
     await sub.lifetime
     print("scope stopped cleanly")
@@ -198,17 +158,6 @@ async def main():
 asyncio.run(main())
 ```
 
-`scope.cancel()` does not change the local control flow of the current block.
-It requests teardown of that scope, but it does not mean "leave this block right now".
-
-If you want to stop the current scope and also leave the block immediately, use `raise afor.ScopeBreak()`:
-
-```python
-async def main():
-    async with afor.Scope() as scope:
-        sub = afor.BaseSub[str]()
-        raise afor.ScopeBreak()
-```
 
 ## Observing scope end
 

@@ -36,8 +36,12 @@ logger = logging.getLogger("asyncio_for_robotics.test")
 @pytest.fixture(scope="function", autouse=True)
 async def session() -> AsyncGenerator[afor.BaseSession, Any]:
     logger.info("Starting session")
-    with afor.session_context(SynchronousSession()) as ses:
-        yield ses
+    session = SynchronousSession()
+    try:
+        with afor.auto_context(session) as active_session:
+            yield active_session
+    finally:
+        session.close()
     logger.info("closing session")
 
 

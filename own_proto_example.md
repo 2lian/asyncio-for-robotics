@@ -1,114 +1,143 @@
-# Implement your own interface
+# Implement a callback-based interface
 
-If you have a stream of data, you can use it through `afor`!
+`BaseSub.input_data()` is thread-safe. Use it from a callback exposed by any
+event source (driver, middleware, or server) to create an `afor` data stream.
+Callbacks already running in the asyncio thread can use
+`BaseSub._input_data_guarded()`.
 
-This quick tutorial will implement a `afor` subscriber getting data from `stdout` of a process. So every line the process printed to the terminal will be available as a string.
+```python
+afor_sub = afor.BaseSub()
 
-> [!NOTE]
-> Such subscriber is already implemented by [`asyncio_for_robotics.textio.from_proc_stdout`](./asyncio_for_robotics/textio/sub.py). We will redo it because it's simple, and fully native python.
+def callback(data) -> None:
+    afor_sub.input_data(data)
 
-## Code
+event_source.register_callback(callback)
+```
 
-The following runs `ping localhost` and gets the process `stdout` to a `BaseSub` of asyncio_for_robotics.
+## Native Python: UDP datagrams
 
-> [!TIP]
-> The final code is available in the examples: [asyncio_for_robotics.example.custom_stdout](./asyncio_for_robotics/example/custom_stdout.py). Run it with `python3 -m asyncio_for_robotics.example.custom_stdout`.
+Let's implement a simple UDP server that is natively available in python. Execution is simply:
+
+1. `UDPServer` receives a datagram in its background thread.
+2. `handle()` calls the thread-safe `input_data()` method.
+3. `listen_reliable()` yields the bytes in the asyncio thread.
 
 ```python
 import asyncio
-from contextlib import suppress
-import subprocess
-from typing import IO
+import socketserver
+from threading import Thread
 
-from asyncio_for_robotics.core.sub import BaseSub
-
-def make_afor_stdout_monitor(process: subprocess.Popen[str]) -> BaseSub[str]:
-    """Creates an afor subscriber that returns every line of stdout of the given process."""
-    loop = asyncio.get_running_loop()
-    assert process.stdout is not None
-    stdout: IO[str] = process.stdout
-    afor_sub: BaseSub[str] = BaseSub()
-
-    def reader():
-        line = stdout.readline()
-        healthy = True
-        if line:
-            healthy = afor_sub.input_data(line)
-        proc_ended = process.poll() is not None
-        if proc_ended or not healthy:  # process ended
-            loop.remove_reader(stdout.fileno())
-
-    loop.add_reader(stdout.fileno(), reader)
-    return afor_sub
-
-async def main():
-    proc = subprocess.Popen(
-        ["ping", "google.com"],
-        stdout=subprocess.PIPE,
-        text=True,
-    )
-    stdout_sub = make_afor_stdout_monitor(proc)
-    async for line in stdout_sub.listen_reliable():
-        print(f"I heard: \n   {line}")
+import asyncio_for_robotics as afor
 
 
-if __name__ == "__main__":
-    with suppress(KeyboardInterrupt):
-        asyncio.run(main())
+@afor.scoped
+async def main() -> None:
+    samples = afor.BaseSub[bytes]()
+
+    class Handler(socketserver.BaseRequestHandler):
+        def handle(self) -> None:
+            data, _socket = self.request
+            samples.input_data(data)
+
+    server = socketserver.UDPServer(("127.0.0.1", 9999), Handler)
+    Thread(target=server.serve_forever, daemon=True).start()
+    try:
+        async for sample in samples.listen_reliable():
+            print(sample)
+    finally:
+        server.shutdown()
+        server.server_close()
+
+
+asyncio.run(main())
 ```
 
-## Analyse the code
+Run the example:
 
-`main` is very straight forward. The process is started using python's `Popen` with it's `stdout` captured. `make_afor_stdout_monitor` creates an `afor` subscriber from it then every line is printed.
+```bash
+python3 -m asyncio_for_robotics.example.custom_udp
+```
+Send a sample from another terminal:
+
+```bash
+printf 'Hello World' | nc -u -w1 localhost 9999
+```
+
+## Cyclone DDS
+
+Let's implement an interface to Cyclone DDS. Install it with
+`pip install cyclonedds`, or use the repository's `dds` Pixi environment.
+
+The code does the following:
+
+1. `CycloneSub[MsgT]` creates a listener and `DataReader` for the supplied topic.
+2. Cyclone DDS calls `_dds_callback()` from a DDS receive thread when data is available.
+3. The thread-safe `input_data()` transfers the sample to the asyncio `afor` data stream.
+4. Additionally here, the active `afor` scope calls `close()` on exit, cleaning the DDS subscriber.
+
+
 
 ```python
-async def main():
-    proc = subprocess.Popen(
-        ["ping", "localhost"],
-        stdout=subprocess.PIPE,
-        text=True,
-    )
-    stdout_sub = make_afor_stdout_monitor(proc)
-    async for line in stdout_sub.listen_reliable():
-        print(f"I heard: \n   {line}")
+from dataclasses import dataclass
+from typing import TypeVar
+
+import asyncio_for_robotics as afor
+from cyclonedds.core import Listener
+from cyclonedds.domain import DomainParticipant
+from cyclonedds.idl import IdlStruct
+from cyclonedds.sub import DataReader
+from cyclonedds.topic import Topic
 
 
-if __name__ == "__main__":
-    with suppress(KeyboardInterrupt):
-        asyncio.run(main())
+MsgT = TypeVar("MsgT")
+
+
+@dataclass
+class MyString(IdlStruct, typename="AforTutorial.MyString"):
+    data: str
+
+
+class CycloneSub(afor.BaseSub[MsgT]):
+    def __init__(
+        self,
+        topic: Topic[MsgT],
+    ) -> None:
+        super().__init__()
+        self._listener = Listener(on_data_available=self._dds_callback)
+        self._reader = DataReader(topic.participant, topic, listener=self._listener)
+
+    def _dds_callback(self, reader: DataReader[MsgT]) -> None:
+        sample = reader.take_next()
+        if sample is not None:
+            self.input_data(sample)
+
+    def close(self) -> None:
+        try:
+            if not self._closed.is_set():
+                self._reader.set_listener(None)
+        finally:
+            super().close()
 ```
 
-`make_afor_stdout_monitor` is where everything happens. First a few objects are initialized.
+Create and consume it like any other `afor` subscriber:
 
 ```python
-def make_afor_stdout_monitor(process: subprocess.Popen[str]) -> BaseSub[str]:
-    """Creates an afor subscriber that returns every line of stdout of the given process."""
-    loop = asyncio.get_running_loop()
-    assert process.stdout is not None
-    stdout: IO[str] = process.stdout
-    afor_sub: BaseSub[str] = BaseSub()
+@afor.scoped
+async def my_func():
+    participant = DomainParticipant()
+    topic = Topic(participant, "MyString", MyString)
+    afor_sub = CycloneSub(topic)
+
+    async for sample in afor_sub.listen_reliable():
+        print(sample.data)
 ```
 
-We define a callback function. In this function, `line = stdout.readline()` reads the next line of `stdout`, then `afor_sub.input_data(line)` inputs it into our subscriber. That's it, our job here is done. We just do a little cleanup to stop the reader when the process is closed.
+Run the complete example in two terminals:
 
-```python
-    def reader():
-        line = stdout.readline()
-        healthy = True
-        if line:
-            healthy = afor_sub.input_data(line)
-        proc_ended = process.poll() is not None
-        if proc_ended or not healthy:
-            loop.remove_reader(stdout.fileno())
+```bash
+# Terminal 1
+pixi run -e dds python -m asyncio_for_robotics.example.custom_cyclonedds subscribe
+
+# Terminal 2
+pixi run -e dds python -m asyncio_for_robotics.example.custom_cyclonedds publish
 ```
-
-The following method from asyncio will call our `reader` callback every time something happens onto `stdout`.
-
-```python
-    loop.add_reader(stdout.fileno(), reader)
-```
-
-> [!CAUTION]
-> *Be careful to not miss data!*
->
-> In this example `.readline()` reads the next line on each call, and `reader()` is called on every line change. So we cannot miss a line.

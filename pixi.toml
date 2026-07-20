@@ -16,12 +16,14 @@ default = { features = ["jazzy", "dev", "zenoh"] }
 humble = { features = ["humble", "dev", "zenoh"] }
 jazzy = { features = ["jazzy", "dev", "zenoh"] }
 kilted = { features = ["kilted", "dev", "zenoh"] }
+lyrical = { features = ["lyrical", "dev", "zenoh"] }
 py310 = {features = ["zenoh", "dev", "py310"]}
 py311 = {features = ["zenoh", "dev", "py311"]}
 py312 = {features = ["zenoh", "dev", "py312"]}
 py313 = {features = ["zenoh", "dev", "py313"]}
 py314 = {features = ["zenoh", "dev", "py314"]}
 zenoh = { features = ["zenoh", "dev"] }
+dds = { features = ["dds", "dev"] }
 dev = { features = ["dev"] }
 
 [feature.py310.dependencies]
@@ -45,6 +47,12 @@ zenoh = "*"
 [feature.zenoh.pypi-dependencies]
 eclipse-zenoh = "*"
 
+[feature.dds.dependencies]
+python = ">=3.10,<3.14"
+
+[feature.dds.pypi-dependencies]
+cyclonedds = ">=11"
+
 [feature.dev.dependencies]
 colorama = "*"
 pytest = "*"
@@ -61,7 +69,10 @@ channels = ["https://prefix.dev/robostack-humble"]
 [feature.humble.dependencies]
 ros-humble-ros-core = "*"
 ros-humble-demo-nodes-py = "*"
-ros-humble-rmw-zenoh-cpp = "*"
+ros-humble-rmw-fastrtps-cpp = "*"
+
+[feature.humble.activation.env]
+RMW_IMPLEMENTATION = "rmw_fastrtps_cpp"
 
 ### ROS Jazzy ####
 [feature.jazzy]
@@ -70,7 +81,10 @@ channels = ["https://prefix.dev/robostack-jazzy"]
 [feature.jazzy.dependencies]
 ros-jazzy-ros-core = "*"
 ros-jazzy-demo-nodes-py = "*"
-ros-jazzy-rmw-zenoh-cpp = "*"
+ros-jazzy-rmw-fastrtps-cpp = "*"
+
+[feature.jazzy.activation.env]
+RMW_IMPLEMENTATION = "rmw_fastrtps_cpp"
 
 ### ROS Kilted ####
 [feature.kilted]
@@ -79,7 +93,22 @@ channels = ["https://prefix.dev/robostack-kilted"]
 [feature.kilted.dependencies]
 ros-kilted-ros-core = "*"
 ros-kilted-demo-nodes-py = "*"
-ros-kilted-rmw-zenoh-cpp = "*"
+ros-kilted-rmw-fastrtps-cpp = "*"
+
+[feature.kilted.activation.env]
+RMW_IMPLEMENTATION = "rmw_fastrtps_cpp"
+
+### ROS Lyrical ####
+[feature.lyrical]
+channels = ["https://prefix.dev/robostack-lyrical"]
+
+[feature.lyrical.dependencies]
+ros-lyrical-ros-core = "*"
+ros-lyrical-demo-nodes-py = "*"
+ros-lyrical-rmw-fastrtps-cpp = "*"
+
+[feature.lyrical.activation.env]
+RMW_IMPLEMENTATION = "rmw_fastrtps_cpp"
 
 [package] 
 name = "asyncio_for_robotics"

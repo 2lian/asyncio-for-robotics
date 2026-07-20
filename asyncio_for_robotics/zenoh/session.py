@@ -1,57 +1,22 @@
 import contextvars
-import logging
 from contextlib import contextmanager
 from os import environ
-from typing import Any, Generator, Optional, TypeVar
+from typing import Any, Generator
 from warnings import warn
 
 import zenoh
 
-GLOBAL_SESSION: Optional[zenoh.Session] = None
-_MISSING = object()
 _CURRENT_SESSION: contextvars.ContextVar[zenoh.Session | None] = contextvars.ContextVar(
     "afor_zenoh_current_session",
     default=None,
 )
 
-logger = logging.getLogger(__name__)
-
-
-_T = TypeVar("_T")
-
-
-def current_session(default: _T = _MISSING) -> _T | zenoh.Session:
-    """Return the current lexical Zenoh session.
-
-    Args:
-        default:
-            Value returned when no lexical session context is active.
-            If omitted, a RuntimeError is raised instead.
-    """
+def current_session() -> zenoh.Session:
+    """Return the current lexical Zenoh session."""
     session = _CURRENT_SESSION.get()
     if session is None:
-        if default is _MISSING:
-            raise RuntimeError("No active Zenoh session context")
-        return default
+        raise RuntimeError("No active Zenoh session context")
     return session
-
-
-@contextmanager
-def session_context(
-    session: zenoh.Session, close_on_exit: bool = True
-) -> Generator[zenoh.Session, Any, Any]:
-    """Bind a Zenoh session lexically for this block and close it on exit.
-
-    Inside this block, ``auto_session()`` resolves to this session unless an
-    explicit session is passed directly.
-    """
-    token = _CURRENT_SESSION.set(session)
-    try:
-        yield session
-    finally:
-        _CURRENT_SESSION.reset(token)
-        if close_on_exit:
-            session.close()
 
 
 def _open_default_session() -> zenoh.Session:
@@ -70,44 +35,64 @@ def _open_default_session() -> zenoh.Session:
 
 
 @contextmanager
-def auto_context() -> Generator[zenoh.Session, Any, Any]:
-    """Bind `auto_session()` lexically for this block.
+def auto_context(
+    session: zenoh.Session | None = None,
+) -> Generator[zenoh.Session, Any, Any]:
+    """Bind the default Zenoh session for this block.
 
-    This is a convenience helper over ``with session_context(auto_session())``.
-
-    If a lexical Zenoh session is already active, this reuses it and does not
-    close it on exit. Otherwise, it resolves the normal auto session and closes
-    it when leaving the block.
+    Passing no session opens one from ``$ZENOH_SESSION_CONFIG_URI`` or Zenoh's
+    default config and closes it on exit. An explicit session is bound but
+    remains owned by the caller.
     """
-    cur = current_session(None)
-    if cur is not None:
-        yield cur
-        return
-    with session_context(auto_session()) as session:
+    close_on_exit = session is None
+    if session is None:
+        session = _open_default_session()
+
+    token = _CURRENT_SESSION.set(session)
+    try:
         yield session
+    finally:
+        _CURRENT_SESSION.reset(token)
+        if close_on_exit:
+            session.close()
 
 
-def auto_session(session: Optional[zenoh.Session] = None) -> zenoh.Session:
-    """Resolve a Zenoh session, creating a global one as a last resort.
+@contextmanager
+def session_context(
+    session: zenoh.Session,
+    close_on_exit: bool = True,
+) -> Generator[zenoh.Session, Any, Any]:
+    """Deprecated compatibility wrapper for binding an explicit session."""
+    warn(
+        "session_context() is deprecated; use auto_context(session) instead.",
+        DeprecationWarning,
+        stacklevel=3,
+    )
+    try:
+        with auto_context(session) as active_session:
+            yield active_session
+    finally:
+        if close_on_exit:
+            session.close()
+
+
+def auto_session(session: zenoh.Session | None = None) -> zenoh.Session:
+    """Use an explicit or current session, creating a warned fallback.
 
     Resolution order:
-        1. Explicit *session* argument (pass-through).
-        2. Current ``session_context`` (lexical).
-        3. ``GLOBAL_SESSION`` module-level singleton.
-        4. Auto-create ``GLOBAL_SESSION`` from ``$ZENOH_SESSION_CONFIG_URI``
-           or the Zenoh default config.
+        1. Explicit ``session`` argument.
+        2. Current lexical session context.
+        3. Create a context-local fallback session.
     """
-    global GLOBAL_SESSION
     if session is not None:
         return session
-    session = current_session(default=None)
-    if session is not None:
+    try:
+        return current_session()
+    except RuntimeError:
+        warn(
+            "An `afor.zenoh` session was never declared. A fallback one is now "
+            "instantiated. Prefer entering a context using `with auto_context(...)`"
+        )
+        session = _open_default_session()
+        _CURRENT_SESSION.set(session)
         return session
-    if GLOBAL_SESSION is not None and not GLOBAL_SESSION.is_closed():
-        return GLOBAL_SESSION
-
-    logger.info("Global zenoh session: Starting")
-    ses = _open_default_session()
-    GLOBAL_SESSION = ses
-    logger.info("Global zenoh session: Running")
-    return ses

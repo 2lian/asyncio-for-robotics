@@ -1,5 +1,4 @@
 from .session import (
-    GLOBAL_SESSION,
     auto_session,
     auto_context,
     current_session,
@@ -23,11 +22,10 @@ __all__ = [
     "Scope",
     "ScopeBreak",
     "scoped",
-    "session_context",
     "auto_context",
+    "session_context",
     "current_session",
     "auto_session",
-    "GLOBAL_SESSION",
     "Sub",
     "ConverterSub",
 ]

@@ -1,10 +1,9 @@
 import asyncio
 import logging
 from asyncio import AbstractEventLoop, Future
-from typing import Generic, Optional, Protocol, TypeVar
+from typing import Callable, Generic, Optional, Protocol, TypeVar
 
 from rclpy.client import Client as RosClient
-from rclpy.impl.implementation_singleton import rclpy_implementation as _rclpy
 from rclpy.qos import QoSProfile
 from rclpy.service import Service as RosService
 from rclpy.task import Future as RosFuture
@@ -37,6 +36,7 @@ class Responder(Generic[_ReqT, _ResT]):
         response: _ResT,
         srv: RosService,
         event_loop: AbstractEventLoop,
+        original_send_response: Callable[..., None],
     ) -> None:
         """Sends a response to a request.
 
@@ -55,6 +55,7 @@ class Responder(Generic[_ReqT, _ResT]):
         self.response: _ResT = response
         self._srv: RosService = srv
         self._event_loop = event_loop
+        self._original_send_response = original_send_response
         self._header_ready: Future = Future(loop=event_loop)
 
     def _set_header(self, header) -> None:
@@ -80,14 +81,7 @@ class Responder(Generic[_ReqT, _ResT]):
             raise TypeError(
                 f"Response is of the wrong type: \n  - {type(response)=}\n  - {self._srv.srv_type.Response=}"
             )
-        with self._srv.handle:
-            c_implementation = self._srv._Service__service  # type: ignore
-            if isinstance(header, _rclpy.rmw_service_info_t):
-                c_implementation.service_send_response(response, header.request_id)
-            elif isinstance(header, _rclpy.rmw_request_id_t):
-                c_implementation.service_send_response(response, header)
-            else:
-                raise TypeError(f"Header is of the wrong type: {type(header)=}")
+        self._original_send_response(response, header)
 
 
 def response_overide(response: Responder, header) -> None:
@@ -155,6 +149,8 @@ class Server(BaseSub[Responder[_ReqT, _ResT]]):
             )
             ### VVV IMPORTANT VVV ###
             ###                   ###
+            # Preserve rclpy's public, bound sender before intercepting it.
+            self._original_send_response = serv_modified.send_response
             serv_modified.send_response = response_overide
             ###                   ###
             ### ^^^           ^^^ ###
@@ -167,7 +163,11 @@ class Server(BaseSub[Responder[_ReqT, _ResT]]):
         header to be later set.
         """
         responder_for_user: Responder[_ReqT, _ResT] = Responder(
-            request, response, self.srv, self._event_loop
+            request,
+            response,
+            self.srv,
+            self._event_loop,
+            self._original_send_response,
         )
 
         def execute_in_asyncio_thread():

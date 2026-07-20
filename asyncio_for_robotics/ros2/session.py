@@ -1,4 +1,5 @@
 import contextvars
+import warnings
 from contextlib import contextmanager
 from typing import Any, Generator, Optional, TypeVar
 
@@ -6,19 +7,12 @@ from rclpy.node import Node
 
 from .session_types import BaseSession, SynchronousSession, ThreadedSession
 
-_MISSING = object()
-_T = TypeVar("_T")
 _CURRENT_SESSION: contextvars.ContextVar[BaseSession | None] = contextvars.ContextVar(
     "afor_ros2_current_session",
     default=None,
 )
 
-
-#: global share session (singleton)
-GLOBAL_SESSION: Optional[BaseSession] = None
-
-
-def current_session(default: _T = _MISSING) -> BaseSession | _T:
+def current_session() -> BaseSession:
     """Return the current lexical ROS session.
 
     Args:
@@ -28,21 +22,32 @@ def current_session(default: _T = _MISSING) -> BaseSession | _T:
     """
     session = _CURRENT_SESSION.get()
     if session is None:
-        if default is _MISSING:
-            raise RuntimeError("No active ROS session context")
-        return default
+        raise RuntimeError("No active ROS session context")
     return session
 
 
 @contextmanager
-def session_context(
-    session: BaseSession, close_on_exit: bool = True
+def auto_context(
+    node: None | str | Node | BaseSession = None,
 ) -> Generator[BaseSession, Any, Any]:
-    """Bind a ROS session lexically for this block and optionally close it on exit.
+    """Async context manager inside which the default afor.ros2 session (Node) is set.
 
-    Inside this block, ``auto_session()`` resolves to this session unless an
-    explicit session is passed directly.
+    Passing nothing or a string will create the node and initialize/shutdown rclpy.
+    If a session is passed, it will be started but not closed when exiting the context.
+
+    Args:
+        node: Name of the node the create, or an existing node to use in a new
+            ThreadedSession, or an existing afor.ros2.session
+
+    Yields:
+        The node
     """
+    if isinstance(node, BaseSession):
+        session = node
+        close_on_exit = False
+    else:
+        session = ThreadedSession(node=node)
+        close_on_exit = True
     session.start()
     token = _CURRENT_SESSION.set(session)
     try:
@@ -54,53 +59,41 @@ def session_context(
 
 
 @contextmanager
-def auto_context(
-    node: None | str | Node = None,
+def session_context(
+    session: BaseSession,
+    close_on_exit: bool = True,
 ) -> Generator[BaseSession, Any, Any]:
-    """Bind `auto_session()` lexically for this block.
-
-    This is a convenience helper for the normal ROS path.
-
-    If a lexical ROS session is already active, this reuses it and does not
-    close it on exit. Otherwise, it creates the default ROS session for this
-    block and closes it when leaving.
-
-    Args:
-        node:
-            Optional node object or node name used when creating the default
-            session.
-    """
-    cur = current_session(None)
-    if cur is not None:
-        yield cur
-        return
-    session = ThreadedSession(node=node)
-    with session_context(session) as active_session:
-        yield active_session
+    """Deprecated compatibility wrapper for binding an explicit session."""
+    warnings.warn(
+        "session_context() is deprecated; use auto_context(session) instead.",
+        DeprecationWarning,
+        stacklevel=3,
+    )
+    try:
+        with auto_context(session) as active_session:
+            yield active_session
+    finally:
+        if close_on_exit:
+            session.close()
 
 
 def auto_session(session: Optional[BaseSession] = None) -> BaseSession:
-    """Return a ROS session using explicit, lexical, then global resolution.
+    """Uses the provided session or get the current default or creates a session.
 
     Resolution order:
     - explicit ``session`` argument
     - current lexical session context
-    - global singleton fallback
-
-    If no explicit or lexical session exists, a global shared
-    ``ThreadedSession`` with a ``SingleThreadedExecutor`` is created on first
-    use and returned.
+    - creates a lexical session context
     """
-    global GLOBAL_SESSION
     if session is not None:
         return session
-    session = current_session(default=None)
-    if session is not None:
+    try:
+        return current_session()
+    except RuntimeError:
+        warnings.warn(
+            "An `afor.ros2.session` was never declared. A global one is now instanciated. Prefere entering a context using `with auto_context(node=...)`"
+        )
+        session = ThreadedSession()
+        session.start()
+        _CURRENT_SESSION.set(session)
         return session
-    if GLOBAL_SESSION is None or GLOBAL_SESSION._closed:
-        ses = ThreadedSession(node=None)
-        GLOBAL_SESSION = ses
-    else:
-        ses = GLOBAL_SESSION
-    ses.start()
-    return ses

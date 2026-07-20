@@ -14,7 +14,9 @@ import zenoh
 from asyncio_for_robotics.core import BaseSub
 from asyncio_for_robotics.zenoh import (
     Sub,
+    auto_context,
     auto_session,
+    current_session,
     session_context,
     soft_timeout,
     soft_wait_for,
@@ -39,8 +41,54 @@ logger = logging.getLogger("asyncio_for_robotics.test")
 
 @pytest.fixture(scope="module", autouse=True)
 def session() -> Generator[zenoh.Session, Any, Any]:
-    with session_context(zenoh.open(zenoh.Config())) as ses:
-        yield ses
+    session = zenoh.open(zenoh.Config())
+    try:
+        with auto_context(session) as active_session:
+            yield active_session
+    finally:
+        session.close()
+
+
+def test_auto_context_binds_explicit_session_without_closing() -> None:
+    outer_session = current_session()
+    explicit_session = zenoh.open(zenoh.Config())
+    try:
+        with auto_context(explicit_session) as active_session:
+            assert active_session is explicit_session
+            assert current_session() is explicit_session
+            assert auto_session() is explicit_session
+
+        assert current_session() is outer_session
+        assert not explicit_session.is_closed()
+    finally:
+        explicit_session.close()
+
+
+def test_auto_context_closes_created_session() -> None:
+    outer_session = current_session()
+    with auto_context() as owned_session:
+        assert current_session() is owned_session
+
+    assert owned_session.is_closed()
+    assert current_session() is outer_session
+
+
+def test_session_context_compatibility() -> None:
+    outer_session = current_session()
+    explicit_session = zenoh.open(zenoh.Config())
+    try:
+        with pytest.warns(DeprecationWarning, match="session_context.*deprecated"):
+            with session_context(
+                explicit_session,
+                close_on_exit=False,
+            ) as active_session:
+                assert active_session is explicit_session
+                assert current_session() is explicit_session
+
+        assert current_session() is outer_session
+        assert not explicit_session.is_closed()
+    finally:
+        explicit_session.close()
 
 
 @pytest.fixture
