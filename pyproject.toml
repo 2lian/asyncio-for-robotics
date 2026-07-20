@@ -4,7 +4,7 @@ requires = [ "setuptools>=58.2" ]
 
 [project]
 name = "asyncio-for-robotics"
-version = "1.5.0a0"
+version = "1.5.0"
 description = "Asyncio interface for ROS 2, Zenoh, and other robotic middlewares."
 readme = "README.md"
 keywords = [ "asyncio", "publisher", "robotics", "ros2", "subscriber", "zenoh" ]
