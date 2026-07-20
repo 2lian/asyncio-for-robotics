@@ -1,19 +1,20 @@
 # Using Sessions
 
-`afor` sessions own the transport runtime, you usually use only one per process. Session are synchronous thus do not require asyncio. Hence, sessions are more lenient than scopes, and a global session is created if you do not create one.
+`afor` sessions are simply a shortcut. When a session is active, `afor` uses it as default, so you do need to provide it every time.
 
 - ROS sessions are composed of:
   - `rclpy`
   - node
   - executor
+- ROS experimental sessions are exactly a `rclpy.experimental.AsyncNode`.
 - Zenoh sessions are exactly a `zenoh.Session`.
 
 ## Main idea
 
-Use a session context outside your `afor.Scope`:
+Use a session context outside your `afor.Scope`. If you provide a session it will be set as default, else one will be created.
 
 ```python
-with backend.session_context(...):
+with backend.auto_context(...):
     async with afor.Scope():
         ...
 ```
@@ -23,20 +24,23 @@ This means:
 - leaving `Scope` destroys subscriptions, clients, servers, timers
 - leaving the session context closes the transport session itself
 
+> [!NOTE]
+> For `afor.ros2_exp`, the session binds itself to the asyncio event loop, so you need to enter it from inside a async coroutine with `async with async_context(...):`.
+
 ## Resolution order
 
-1. explicit `session=...` on a class constructor
-2. current `session_context` context
-3. global fallback
+Every `afor` class, when instantiated, will look for the session to use in this order:
 
-So lexical session context is the normal non-global way to work. Global is usually set automatically if the user does not enter a `session_context`.
+1. explicit `session=...` on a class constructor (most precise)
+2. current session context (easiest)
+3. create a global session (not recommended fallback)
 
 ## ROS
 
 Convenience session: when the normal default session behavior is enough. It handles `rclpy.init`, `rclpy.Executor`, `rclpy.Node` and their shutdown.
 
 > [!NOTE]
-> Calling `auto_context` inside an already existing afor session context does nothing.
+> Calling `auto_context` inside an already existing afor session context will create a new one (executor and node).
 
 ```python
 import asyncio_for_robotics.ros2 as afor
@@ -47,7 +51,7 @@ with afor.auto_context(node="my_node"):
         sub = afor.Sub(String, "/chatter")
 ```
 
-Explicit session: when you want to build the session yourself. It handles only the shutdown of the provided session if `close_on_exit=True`, else you are in charge.
+Explicit session: when you want to build the session (node or executor) yourself and set it as default. It does not handle the shutdown of the provided session.
 
 ```python
 import asyncio_for_robotics.ros2 as afor
@@ -57,7 +61,7 @@ rclpy.init()
 my_node = Node(name="my_node")
 my_session = afor.ThreadedSession(node=my_node)
 
-with afor.session_context(my_session, close_on_exit=False):
+with afor.auto_context(my_session):
     async with afor.Scope():
         sub = afor.Sub(String, "/chatter")
         client = afor.Client(MySrv, "/compute")
@@ -68,32 +72,18 @@ rclpy.shutdown()
 
 ## Zenoh (similar to ROS 2)
 
-Convenience session:
-
-```python
-import asyncio_for_robotics.zenoh as afor
-
-
-with afor.auto_context():
-    async with afor.Scope():
-        sub = afor.Sub("demo/**")
-        ...
-```
-
-Explicit session:
-
 ```python
 import zenoh
 import asyncio_for_robotics.zenoh as afor
 
 my_session = zenoh.open(zenoh.Config())
+# or
+# my_session = None
 
-with afor.session_context(my_session, close_on_exit=False):
+with afor.auto_context(my_session):
     async with afor.Scope():
         sub = afor.Sub("demo/**")
         ...
-
-my_session.undeclare()
 ```
 
 ## Getting the current active node / session to use it yourself
@@ -109,6 +99,14 @@ with my_session.lock() as node:
     pub = node.create_publisher(String, "/chatter", 10)
 ```
 
+ROS experimental example:
+
+```python
+my_session = afor.auto_session()  # creates a session if resolution fails
+my_session = afor.current_session()  # raises Exception is resolution fails
+pub = node.create_publisher(String, "/chatter", 10)
+```
+
 Zenoh example:
 
 ```python
@@ -117,30 +115,9 @@ my_session = afor.current_session()  # raises Exception is resolution fails
 pub = session.declare_publisher("demo/chatter")
 ```
 
-## About globals
-
-Global fallback exists for convenience, but it is no longer the recommended
-usage.
-
-Prefer:
-
-- `with session_context(...)`
-- `with auto_context(...)`
-
 ## Relation with `Scope`
 
 Session and scope solve different problems:
 
-- Session owns the transport runtime and is synchronous
-- Scope owns `afor` asynchronous objects and tasks registered on -- possibly
-  multiple -- different transports/sessions
-
-That is why the recommended nesting is:
-
-```python
-with backend.auto_context():
-    async with afor.Scope():
-        ...
-```
-
-For scope-specific behavior, see [using_scope.md](./using_scope.md).
+- Session owns the transport runtime and is (potentially) synchronous
+- Scope manage objects whose lifetimes are bound to a task, and cannot be garbage collected.

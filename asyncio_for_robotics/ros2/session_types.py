@@ -66,11 +66,11 @@ class BaseSession(ABC):
         """Deprecated.
 
         Session objects should not mutate module-global fallback state.
-        Use lexical ``session_context(...)`` / ``auto_context(...)`` instead.
+        Use lexical ``auto_context(...)`` instead.
         """
         warnings.warn(
             "BaseSession.set_global_session() is deprecated and does nothing. "
-            "Use session_context(...) or auto_context(...) instead.",
+            "Use auto_context(...) instead.",
             DeprecationWarning,
             stacklevel=2,
         )

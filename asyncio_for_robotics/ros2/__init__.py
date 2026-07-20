@@ -9,7 +9,6 @@ from .. import (
 )
 from .service import Client, Server
 from .session import (
-    GLOBAL_SESSION,
     BaseSession,
     SynchronousSession,
     ThreadedSession,
@@ -31,11 +30,10 @@ __all__ = [
     "scoped",
     "Server",
     "Client",
-    "session_context",
     "auto_context",
+    "session_context",
     "current_session",
     "auto_session",
-    "GLOBAL_SESSION",
     "ThreadedSession",
     "SynchronousSession",
     "BaseSession",

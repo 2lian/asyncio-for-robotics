@@ -19,8 +19,6 @@ import asyncio_for_robotics.ros2 as afor
 from asyncio_for_robotics.core._logger import setup_logger
 from asyncio_for_robotics.core.sub import BaseSub
 from asyncio_for_robotics.ros2.service import Client, Responder, Server
-from asyncio_for_robotics.ros2.session import ThreadedSession
-
 setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
 
@@ -28,7 +26,7 @@ logger = logging.getLogger("asyncio_for_robotics.test")
 @pytest.fixture(scope="module", autouse=True)
 def session() -> Generator[afor.BaseSession, Any, Any]:
     logger.info("Starting rclpy and session")
-    with afor.session_context(ThreadedSession()) as ses:
+    with afor.auto_context() as ses:
         yield ses
     logger.info("closing rclpy and session")
 

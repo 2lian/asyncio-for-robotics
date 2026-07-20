@@ -14,8 +14,6 @@ from std_msgs.msg import String
 import asyncio_for_robotics.ros2 as afor
 from asyncio_for_robotics.core import BaseSub
 from asyncio_for_robotics.core._logger import setup_logger
-from asyncio_for_robotics.ros2.session import ThreadedSession
-
 from .base_tests import (
     test_freshness,
     test_listen_one_by_one,
@@ -37,9 +35,18 @@ logger = logging.getLogger("asyncio_for_robotics.test")
 @pytest.fixture(scope="module")
 def session() -> Generator[afor.BaseSession, Any, Any]:
     logger.info("Starting rclpy and session")
-    with afor.session_context(ThreadedSession()) as ses:
+    with afor.auto_context() as ses:
         yield ses
     logger.info("closing rclpy and session")
+
+
+def test_session_context_compatibility(session: afor.BaseSession) -> None:
+    with pytest.warns(DeprecationWarning, match="session_context.*deprecated"):
+        with afor.session_context(session, close_on_exit=False) as active_session:
+            assert active_session is session
+            assert afor.current_session() is session
+
+    assert not session._closed
 
 
 topic = afor.TopicInfo(

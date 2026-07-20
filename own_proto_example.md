@@ -8,10 +8,10 @@ Callbacks already running in the asyncio thread can use
 ```python
 afor_sub = afor.BaseSub()
 
-def callback(data: Any) -> None:
+def callback(data) -> None:
     afor_sub.input_data(data)
 
-even_source.register_callback(callback)
+event_source.register_callback(callback)
 ```
 
 ## Native Python: UDP datagrams

@@ -40,7 +40,7 @@ Those belong to `Scope`.
 Recommended ownership stack:
 
 ```python
-with backend.session_context(...):
+with backend.auto_context(...):
     async with afor.Scope():
         ...
 ```
@@ -67,11 +67,11 @@ The current design adds a middle layer:
 
 - explicit `session=...`
 - lexical session context
-- global fallback
+- backend fallback
 
 This gives us:
 
-- convenience without global-only behavior
+- convenience without fallback-only behavior
 - explicit ownership in code
 - no hidden wrapper around the real session object
 
@@ -82,13 +82,13 @@ This gives us:
 
 1. explicit `session`
 2. current lexical session context
-3. global singleton fallback
+3. backend fallback, when supported
 
 This order is intentional.
 
 Explicit argument must always win.
-Lexical context must beat global state.
-Global fallback exists only for compatibility and simple legacy code.
+Lexical context must beat fallback state.
+Fallback creation exists only for compatibility and simple legacy code.
 
 
 ## Why sessions stay visible
@@ -98,7 +98,7 @@ The user must still be able to access the real session object.
 For ROS, that means:
 
 ```python
-with afor.session_context(afor.ThreadedSession()) as session:
+with afor.auto_context() as session:
     with session.lock() as node:
         pub = node.create_publisher(...)
 ```
@@ -106,7 +106,7 @@ with afor.session_context(afor.ThreadedSession()) as session:
 For Zenoh, that means:
 
 ```python
-with afor.session_context(zenoh.open(...)) as session:
+with afor.auto_context() as session:
     pub = session.declare_publisher(...)
 ```
 
@@ -114,27 +114,26 @@ We do not hide sessions behind a custom façade because that would reduce
 clarity and remove transport-specific power from advanced users.
 
 
-## Why session objects are passive about globals
+## Why session objects are passive about fallback policy
 
-Session objects themselves do **not** mutate `GLOBAL_SESSION` when they are
-closed.
+Session objects themselves do **not** mutate helper-layer fallback state when
+they are closed.
 
 This is deliberate.
 
 Reasons:
 
-- a session object should own its own transport resources, not module-global policy
+- a session object should own its own transport resources, not resolution policy
 - a session does not know whether it was used:
   - explicitly
   - lexically
-  - as the global fallback
-- automatic global mutation is confusing once lexical contexts exist
+  - as a fallback
+- automatic fallback mutation is confusing once lexical contexts exist
 
 This is also why `BaseSession.set_global_session()` is deprecated.
 
-Global fallback, when needed, is owned by the helper layer in
-`ros2/session.py` and `zenoh/session.py`, not by the session objects
-themselves.
+Fallback creation, when needed, is owned by the helper layer in
+`ros2/session.py` and `zenoh/session.py`, not by session objects themselves.
 
 
 ## Why `set_auto_session()` was removed
@@ -151,14 +150,15 @@ confusing afterward:
 
 The current position is:
 
-- use `session_context(...)` / `auto_context(...)` for normal ownership
-- use `GLOBAL_SESSION` only as legacy fallback state managed by the helper layer
+- use ROS `auto_context(...)` for normal ownership
+- use Zenoh `auto_context(...)` for normal ownership
+- keep fallback state managed by the helper layer
 
 
 ## Why `auto_context()` exists
 
-`session_context(session)` is the explicit API.
-`auto_context()` is the convenience API.
+For both ROS and Zenoh, `auto_context()` handles explicit sessions and
+convenient session creation.
 
 It exists because many users do not want to think about session construction at
 all in the common case.
@@ -175,29 +175,20 @@ with afor.auto_context():
     ...
 ```
 
-Important semantic rule:
-
-- if a lexical session already exists, `auto_context()` reuses it and does not
-  take ownership away from the outer context
-
-This keeps nesting predictable.
+Nested contexts restore the outer lexical session when the inner context exits.
+Zenoh may directly reuse an already-active session.
 
 
-## Why `close_on_exit` exists
+## Explicit-session ownership
 
-`session_context(session, close_on_exit=True)` owns the session by default.
-
-That is the normal case.
-
-But sometimes the user provides a session they do **not** want closed by the
-context. For example:
+ROS `auto_context(session)` binds an explicit session without closing it. This
+supports:
 
 - integrating with an externally owned transport runtime
 - temporarily rebinding an already-managed session lexically
 
-That is why `close_on_exit` exists.
-
-It is a small escape hatch, not the main path.
+The caller remains responsible for closing an explicit session. The context
+closes sessions that it creates itself.
 
 
 ## ROS-specific decisions
@@ -218,7 +209,7 @@ someone else.
 
 ### Default ROS session shape
 
-The default global fallback is intentionally simple:
+The default ROS fallback is intentionally simple:
 
 - `ThreadedSession`
 - `SingleThreadedExecutor`
@@ -258,7 +249,7 @@ ROS has more machinery than Zenoh, so the code is split into:
 - `ros2/session.py`
   - current lexical session
   - context managers
-  - global fallback
+  - fallback resolution
   - `auto_session()`
 
 This keeps the class implementations separate from resolution policy.
@@ -271,8 +262,8 @@ The session structure is built around a few strong rules:
 - session owns transport runtime
 - scope owns `afor` objects
 - explicit beats lexical
-- lexical beats global
-- session objects do not mutate global fallback policy
+- lexical beats fallback
+- session objects do not mutate fallback policy
 - helper modules own fallback policy
 - convenience APIs must remain thin
 

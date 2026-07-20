@@ -24,7 +24,22 @@ class Sub(BaseSub[_MsgType]):
         *,
         scope: Scope | None = AUTO_SCOPE,
     ) -> None:
-        self.session: AsyncNode = auto_session(session)
+        """
+        Implementation of a asyncio ROS2 subscriber using ROS' experimental AsyncNode.
+
+        Refere to the base class (BaseSub) for details.
+
+        When created inside ``afor.Scope()``, leaving that scope automatically
+        destroys the underlying ROS 2 subscription.
+
+        Args:
+            msg_type: The type of ROS messages the subscription will subscribe to.
+            topic: The name of the topic the subscription will subscribe to.
+            qos: A QoSProfile to apply to the subscription.
+            session: The ROS 2 node to use. If not provided, will use
+                auto_session to create/get one.
+        """
+        self.session: AsyncNode = self._resolve_session(session)
         self.topic_info: TopicInfo = TopicInfo(
             topic=topic, msg_type=msg_type, qos=qos_profile
         )

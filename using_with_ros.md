@@ -404,7 +404,7 @@ class MinimalPublisher(Node):
 def main():
     rclpy.init()
     try:
-        with afor.session_context(afor.ThreadedSession(node=MinimalPublisher())):
+        with afor.auto_context(node=MinimalPublisher()):
             asyncio.run(hello_world_subscriber())
     finally:
         rclpy.shutdown()
