@@ -9,7 +9,8 @@ The Asyncio For Robotics (`afor`) library makes `asyncio` usable with ROS 2, Zen
 - One single code base, many transport backend.
 - Testable scheduling behavior, independent from the backend.
 
-<img width="400" height="216" alt="asyncio_for_robotics flow chart" src="https://github.com/user-attachments/assets/2a9b5515-93f8-42ac-82ff-c2481abdc700" />
+<img width="400" height="216" alt="afor flow" src="https://github.com/user-attachments/assets/084edf6f-60b5-488a-88d6-bc1c9e8d14f5" />
+
 
 *Will this make my code faster?* [Yes and no.](#about-speed). `afor` has 5~100 μs of overhead, but we personaly observed 4x latency and CPU improvements by having access to better scheduling methods.
 
