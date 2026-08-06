@@ -2,7 +2,7 @@
 
 Shows three usage patterns:
   1. call()      — fire and wait for the final result
-  2. send_goal() — stream feedback with ``async for``
+  2. send_goal() — stream feedback with ``feedback_until_result()``
   3. cancel      — cancel a long-running goal mid-flight
 
 Run alongside ros2_action_server.py:
@@ -34,14 +34,15 @@ async def fib_client():
 
     # ── 2. send_goal() : stream feedback while waiting for the result ─────────
     print("[2] send_goal(order=8) with feedback streaming")
-    goal_handle = await client.send_goal(Fibonacci.Goal(order=8))
-    async for feedback in goal_handle:
+    goal_handle = client.send_goal(Fibonacci.Goal(order=8))
+    async for feedback in goal_handle.feedback_until_result():
         print(f"    feedback: {list(feedback.sequence)}")
-    print(f"    result:   {list(goal_handle.result.sequence)}\n")
+    result = await goal_handle.result
+    print(f"    result:   {list(result.sequence)}\n")
 
     # ── 3. cancel : cancel a goal mid-flight ──────────────────────────────────
     print("[3] send_goal(order=30) then cancel after 0.3s")
-    goal_handle = await client.send_goal(Fibonacci.Goal(order=30))
+    goal_handle = client.send_goal(Fibonacci.Goal(order=30))
 
     async def cancel_later():
         await asyncio.sleep(0.3)
@@ -50,8 +51,9 @@ async def fib_client():
     asyncio.create_task(cancel_later())
 
     try:
-        async for feedback in goal_handle:
+        async for feedback in goal_handle.feedback_until_result():
             print(f"    feedback: {list(feedback.sequence)}")
+        await goal_handle.result
     except afor.ActionCanceled as e:
         print(f"    cancelled — partial result: {list(e.result.sequence)}\n")
 
