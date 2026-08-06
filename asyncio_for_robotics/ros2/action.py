@@ -77,6 +77,37 @@ class ActionRejected(Exception):
     """Raised when the action server rejects a goal request."""
 
 
+class ActionResultUnknown(Exception):
+    """Raised when awaiting ``goal_handle.result`` and the server returns
+    ``STATUS_UNKNOWN``.
+
+    This happens when the server no longer knows the goal at result-fetch time:
+    the result expired from the server's cache (``result_timeout``), the server
+    restarted, or the result was otherwise lost.  rclpy documents this exact
+    behaviour — ``ActionServer._execute_get_result_request`` replies with
+    ``STATUS_UNKNOWN`` when no matching goal exists.  The outcome is genuinely
+    unknown — it must NOT be treated as success.  Callers that drive durable
+    state (e.g. marking a job done) should treat it like a transient transport
+    failure and retry / re-dispatch rather than committing a terminal result.
+
+    Attributes:
+        result: The (typically default-constructed) result object returned by
+            the server alongside the unknown status.
+
+    Example::
+
+        try:
+            result = await goal_handle.result
+        except ActionResultUnknown:
+            # server forgot the goal; do not commit success — let it re-run
+            ...
+    """
+
+    def __init__(self, result) -> None:
+        self.result = result
+        super().__init__(repr(result))
+
+
 # ── Server-side goal handle ───────────────────────────────────────────────────
 
 
@@ -290,7 +321,18 @@ class ClientGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
             self.feedback.input_data(self.SENTINEL)
             return
 
-        result_future = asyncify_future(ros_gh.get_result_async(), self._event_loop)
+        # get_result_async() may raise synchronously (e.g. client torn down).
+        # This runs as an asyncio done-callback, so an escaping exception would be
+        # swallowed by the loop's default handler and leave self.result pending
+        # forever (accepted already resolved True). Route it to self.result.
+        try:
+            result_future = asyncify_future(
+                ros_gh.get_result_async(), self._event_loop
+            )
+        except Exception as exc:  # noqa: BLE001 - surface as a catchable result error
+            try_set_future_exception(self.result, exc)
+            self.feedback.input_data(self.SENTINEL)
+            return
         result_future.add_done_callback(self._on_result)
 
     def _on_result(self, fut: asyncio.Future) -> None:
@@ -313,7 +355,11 @@ class ClientGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
         elif status == GoalStatus.STATUS_CANCELED:
             try_set_future_exception(self.result, ActionCanceled(result))
         else:
-            try_set_future_result(self.result, result)
+            # STATUS_UNKNOWN (and any other non-success terminal): the server no
+            # longer knows the goal (expired / restarted / lost). The outcome is
+            # unknown, so surface it as an exception — never as a (default) result,
+            # which callers would mistake for success.
+            try_set_future_exception(self.result, ActionResultUnknown(result))
 
     async def get_result(self) -> _ResultT:
         """Backward-compatible alias for awaiting ``result``."""
@@ -340,7 +386,11 @@ class ClientGoalHandle(Generic[_GoalT, _FeedbackT, _ResultT]):
             requests.  Without this, ``goals_canceling`` will always be empty and
             ``is_cancel_requested`` will never be set on the server side.
         """
-        await self.accepted
+        # Don't await a cancelled accepted-future: that would raise CancelledError
+        # out of a best-effort cancel path (the goal response was itself cancelled,
+        # so there is nothing to cancel). Fall through to the RuntimeError instead.
+        if not self.accepted.cancelled():
+            await self.accepted
         if self._ros_gh is None:
             raise RuntimeError("goal handle is not available")
         return await asyncify_future(self._ros_gh.cancel_goal_async(), self._event_loop)
@@ -498,7 +548,13 @@ class ActionClient(Generic[_GoalT, _FeedbackT, _ResultT]):
         scope: Optional[Scope] = AUTO_SCOPE,
     ) -> None:
         self._session: BaseSession = auto_session(session)
-        self._event_loop: AbstractEventLoop = asyncio.get_event_loop()
+        # Prefer the running loop (matches BaseSub._get_loop). Falling back to
+        # get_event_loop() here risks binding ClientGoalHandle futures to a loop
+        # other than the one they're awaited on ("attached to a different loop").
+        try:
+            self._event_loop: AbstractEventLoop = asyncio.get_running_loop()
+        except RuntimeError:
+            self._event_loop = asyncio.get_event_loop()
         self._action_type = action_type
         self._action_name = action_name
         self._ros_client: RosActionClient = self._create_ros_client()

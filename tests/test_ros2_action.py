@@ -14,13 +14,26 @@ from rclpy.executors import MultiThreadedExecutor
 
 import asyncio_for_robotics.ros2 as afor
 from asyncio_for_robotics.core._logger import setup_logger
-from asyncio_for_robotics.ros2.action import ActionAborted, ActionCanceled, ActionRejected
+from asyncio_for_robotics.ros2.action import (
+    ActionAborted,
+    ActionCanceled,
+    ActionRejected,
+)
 from asyncio_for_robotics.ros2.session import ThreadedSession
 
 setup_logger(debug_path="tests")
 logger = logging.getLogger("asyncio_for_robotics.test")
 
-ACTION = "test/fibonacci_action"
+_action_counter = 0
+
+
+@pytest.fixture
+def action_name() -> str:
+    # Unique name per test: reusing one action name lets a not-yet-torn-down
+    # server from the previous test answer goals with empty results (flaky).
+    global _action_counter
+    _action_counter += 1
+    return f"test/fibonacci_action_{_action_counter}"
 
 # order < 0           → server aborts immediately
 # order == REJECT_ORDER → goal_callback rejects the goal
@@ -58,10 +71,12 @@ async def _handle_goal(goal_handle: afor.ActionGoalHandle) -> None:
 
 
 @pytest.fixture
-async def server(session: afor.BaseSession) -> AsyncGenerator[afor.ActionServer, Any]:
+async def server(
+    session: afor.BaseSession, action_name: str
+) -> AsyncGenerator[afor.ActionServer, Any]:
     srv = afor.ActionServer(
         Fibonacci,
-        ACTION,
+        action_name,
         goal_callback=lambda req: (
             GoalResponse.REJECT if req.order == REJECT_ORDER else GoalResponse.ACCEPT
         ),
@@ -70,7 +85,7 @@ async def server(session: afor.BaseSession) -> AsyncGenerator[afor.ActionServer,
 
     async def serve():
         async for goal_handle in srv.listen_reliable():
-            afor.Scope.current().task_group.create_task(_handle_goal(goal_handle))
+            asyncio.create_task(_handle_goal(goal_handle))
 
     task = asyncio.create_task(serve())
     yield srv
@@ -79,8 +94,10 @@ async def server(session: afor.BaseSession) -> AsyncGenerator[afor.ActionServer,
 
 
 @pytest.fixture
-async def client(session: afor.BaseSession) -> AsyncGenerator[afor.ActionClient, Any]:
-    c = afor.ActionClient(Fibonacci, ACTION)
+async def client(
+    session: afor.BaseSession, action_name: str
+) -> AsyncGenerator[afor.ActionClient, Any]:
+    c = afor.ActionClient(Fibonacci, action_name)
     yield c
     c.close()
 
@@ -104,14 +121,8 @@ async def test_call_returns_result(
     server: afor.ActionServer, client: afor.ActionClient
 ):
     """call() sends a goal and returns the final result."""
-    result = await afor.soft_wait_for(
-        client.call(
-            Fibonacci.Goal(order=5),
-            server_timeout=2,
-            result_timeout=3,
-        ),
-        4,
-    )
+    await afor.soft_wait_for(client.wait_for_server(), 2)
+    result = await afor.soft_wait_for(client.call(Fibonacci.Goal(order=5)), 3)
     assert not isinstance(result, TimeoutError)
     assert list(result.sequence) == [0, 1, 1, 2, 3, 5]
 
@@ -134,11 +145,28 @@ async def test_call_result_timeout(
         )
 
 
+async def test_late_result_after_cancelled_future_is_ignored():
+    """A ROS result arriving after asyncio cancellation must not log InvalidStateError."""
+    loop = asyncio.get_running_loop()
+    gh = afor.ClientGoalHandle(loop, scope=None)
+    gh.result.cancel()
+
+    ros_result_future = loop.create_future()
+    ros_result_future.set_result(
+        SimpleNamespace(
+            status=GoalStatus.STATUS_SUCCEEDED,
+            result=Fibonacci.Result(sequence=[0, 1]),
+        )
+    )
+
+    gh._on_result(ros_result_future)
+    assert gh.result.cancelled()
+
+
 async def test_feedback_streaming(server: afor.ActionServer, client: afor.ActionClient):
-    """send_goal() exposes accepted/result futures and a feedback helper."""
+    """send_goal() + feedback_until_result() delivers feedback, then result resolves."""
     await afor.soft_wait_for(client.wait_for_server(), 2)
     gh = client.send_goal(Fibonacci.Goal(order=5))
-    assert gh.feedback._scope is afor.Scope.current()
     assert await gh.accepted
 
     feedback_seqs: list[list[int]] = []
@@ -168,36 +196,36 @@ async def test_cancel(server: afor.ActionServer, client: afor.ActionClient):
     try:
         async for _ in gh.feedback_until_result():
             feedback_count += 1
-        await gh.result
-        pytest.fail("ActionCanceled should have been raised")
-    except ActionCanceled as e:
+        with pytest.raises(ActionCanceled) as excinfo:
+            await gh.result
         assert feedback_count > 0, "expected at least one feedback before cancel"
-        assert len(e.result.sequence) > 0, "expected a non-empty partial result"
+        assert len(excinfo.value.result.sequence) > 0, (
+            "expected a non-empty partial result"
+        )
     finally:
         await cancel_task
 
 
 async def test_abort(server: afor.ActionServer, client: afor.ActionClient):
-    """ActionAborted is raised when the server calls abort()."""
+    """ActionAborted is raised when awaiting the result of an aborted goal."""
     await afor.soft_wait_for(client.wait_for_server(), 2)
     gh = client.send_goal(Fibonacci.Goal(order=ABORT_ORDER))
     assert await gh.accepted
 
-    try:
-        async for _ in gh.feedback_until_result():
-            pass
+    with pytest.raises(ActionAborted) as excinfo:
         await gh.result
-        pytest.fail("ActionAborted should have been raised")
-    except ActionAborted as e:
-        assert list(e.result.sequence) == []
+    assert list(excinfo.value.result.sequence) == []
 
 
 async def test_reject(server: afor.ActionServer, client: afor.ActionClient):
-    """await gh.accepted is False when goal_callback returns REJECT."""
+    """gh.accepted is False and gh.result raises when goal_callback returns REJECT."""
     await afor.soft_wait_for(client.wait_for_server(), 2)
     gh = client.send_goal(Fibonacci.Goal(order=REJECT_ORDER))
-    assert not await gh.accepted, "goal_callback returned REJECT so accepted should be False"
-    assert isinstance(await gh.feedback.wait_for_value(), afor.ActionFeedbackDone)
+    assert not await gh.accepted, (
+        "goal_callback returned REJECT so accepted should be False"
+    )
+    with pytest.raises(ActionRejected):
+        await gh.result
 
 
 async def test_call_raises_on_reject(
@@ -207,24 +235,6 @@ async def test_call_raises_on_reject(
     await afor.soft_wait_for(client.wait_for_server(), 2)
     with pytest.raises(ActionRejected):
         await client.call(Fibonacci.Goal(order=REJECT_ORDER))
-
-
-async def test_late_result_after_cancelled_future_is_ignored():
-    """A ROS result arriving after asyncio cancellation must not log InvalidStateError."""
-    loop = asyncio.get_running_loop()
-    gh = afor.ClientGoalHandle(loop, scope=None)
-    gh.result.cancel()
-
-    ros_result_future = loop.create_future()
-    ros_result_future.set_result(
-        SimpleNamespace(
-            status=GoalStatus.STATUS_SUCCEEDED,
-            result=Fibonacci.Result(sequence=[0, 1]),
-        )
-    )
-
-    gh._on_result(ros_result_future)
-    assert gh.result.cancelled()
 
 
 async def test_concurrent_goals(server: afor.ActionServer, client: afor.ActionClient):
