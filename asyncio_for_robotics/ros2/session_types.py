@@ -126,7 +126,7 @@ class ThreadedSession(BaseSession):
     def __init__(
         self,
         node: Union[None, str, Node] = None,
-        executor: Union[None, SingleThreadedExecutor, MultiThreadedExecutor] = None,
+        executor: Union[None, SingleThreadedExecutor, MultiThreadedExecutor, type] = None,
     ) -> None:
         """Ros2 node spinning in its own background thread.
         ROS2 Callbacks are therefor short and never-blocking.
@@ -249,7 +249,7 @@ class SynchronousSession(BaseSession):
     def __init__(
         self,
         node: Union[None, str, Node] = None,
-        executor: Union[None, SingleThreadedExecutor, MultiThreadedExecutor] = None,
+        executor: Union[None, SingleThreadedExecutor, MultiThreadedExecutor, type] = None,
     ) -> None:
         """Ros2 node spinning in as periodic asyncio task.
 

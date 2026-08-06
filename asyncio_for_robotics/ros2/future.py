@@ -9,6 +9,24 @@ from rclpy.task import Future as RosFuture
 logger = logging.getLogger(__name__)
 
 
+def try_cancel_future(future: Future) -> None:
+    """Cancel *future* if it has not already completed."""
+    with suppress(asyncio.InvalidStateError):
+        future.cancel()
+
+
+def try_set_future_exception(future: Future, exc: BaseException) -> None:
+    """Set *future* exception, ignoring late completions."""
+    with suppress(asyncio.InvalidStateError):
+        future.set_exception(exc)
+
+
+def try_set_future_result(future: Future, result: object) -> None:
+    """Set *future* result, ignoring late completions."""
+    with suppress(asyncio.InvalidStateError):
+        future.set_result(result)
+
+
 def asyncify_future(
     ros_future: RosFuture,
     event_loop: Optional[AbstractEventLoop] = None,
@@ -33,29 +51,19 @@ def asyncify_future(
     if event_loop is None:
         event_loop = asyncio.get_event_loop()
 
-    def _try_cancel() -> None:
-        with suppress(asyncio.InvalidStateError):
-            ao_future.cancel()
-
-    def _try_set_exception(exc: BaseException) -> None:
-        with suppress(asyncio.InvalidStateError):
-            ao_future.set_exception(exc)
-
-    def _try_set_result(res: object) -> None:
-        with suppress(asyncio.InvalidStateError):
-            ao_future.set_result(res)
-
     def ros_cbk(fut: RosFuture) -> None:
         if fut.cancelled():
-            event_loop.call_soon_threadsafe(_try_cancel)
+            event_loop.call_soon_threadsafe(try_cancel_future, ao_future)
             return
         if fut.done():
             exc = fut.exception()
             if exc is not None:
-                event_loop.call_soon_threadsafe(_try_set_exception, exc)
+                event_loop.call_soon_threadsafe(
+                    try_set_future_exception, ao_future, exc
+                )
             else:
                 res = fut.result()  # type: ignore
-                event_loop.call_soon_threadsafe(_try_set_result, res)
+                event_loop.call_soon_threadsafe(try_set_future_result, ao_future, res)
 
     # lock not necessary, ros seems safe
     ros_future.add_done_callback(ros_cbk)
