@@ -9,8 +9,6 @@ Jazzy.  In return, normal :class:`rclpy.node.Node` objects retain rclpy's
 entity-taking, callback-group, waitable, future, and task machinery.
 """
 
-from __future__ import annotations
-
 import asyncio
 import inspect
 import threading
@@ -36,15 +34,17 @@ ReadyCallback = tuple[Any, Any, Node | None]
 
 
 class BatchAsyncioExecutor(Executor):
-    """Execute batches of normal rclpy callbacks on an asyncio event loop.
+    """Execute rclpy callbacks on an asyncio event loop.
 
     ``start()`` is the long-lived lifecycle coroutine. It waits for ROS work on
-    a worker thread and owns the task group which executes callback batches.
-    Cancelling ``start()`` shuts down the worker and its callback tasks.
+    a worker thread running the wait_set. Once the waitset has some work,
+    asyncio executes it. SO there is a single cross-thread asyncio wakeup call
+    per wait_set wake, instead of one per callback.
 
-    The complete ready batch is one asyncio coroutine, and its rclpy handler
-    coroutines are awaited one by one. The ROS worker does not construct the
-    next wait set until that batch has completed.
+    ROS callback can now all be coroutines executing in the asyncio event-loop,
+    HOWEVER not returning from the coroutine will block the ROS thread and
+    message collection. So we recommand returning as early as possible from the
+    callbacks.
     """
 
     def __init__(
