@@ -12,7 +12,7 @@ The Asyncio For Robotics (`afor`) library makes `asyncio` usable with ROS 2, Zen
 <img width="400" height="216" alt="afor flow" src="https://github.com/user-attachments/assets/084edf6f-60b5-488a-88d6-bc1c9e8d14f5" />
 
 
-*Will this make my code faster?* [Yes and no.](#about-speed). `afor` has 4~100 μs of latency overhead, but on end-to-end applications we observed CPU, RAM and responsiveness improvements by making proper scheduling syntax available to developpers.
+*Will this make my code faster?* [Yes and no.](#about-speed). `afor` has 4~100 μs of latency overhead, but on end-to-end applications we observed CPU, RAM and responsiveness improvements by making proper scheduling syntax available to developers.
 
 > [!TIP]
 > `asyncio_for_robotics` interfaces do not replace their primary interfaces! We add capabilities, giving you more choices, not less.
@@ -31,13 +31,13 @@ pip install asyncio_for_robotics
 
 ## Read more
 
-- [Implement your own interface: UDP and DDS examples](https://github.com/2lian/asyncio-for-robotics/blob/main/own_proto_example.md)
-- [Detailed ROS 2 tutorial](https://github.com/2lian/asyncio-for-robotics/blob/main/using_with_ros.md)
-- [Lifetime with `afor.Scope`](https://github.com/2lian/asyncio-for-robotics/blob/main/using_scope.md) and [Backend's Sessions](https://github.com/2lian/asyncio-for-robotics/blob/main//using_session.md)
-- [Detailed examples](https://github.com/2lian/asyncio-for-robotics/blob/main/asyncio_for_robotics/example)
-  - [no talking 🦍 show me code 🦍](https://github.com/2lian/asyncio-for-robotics/blob/main/asyncio_for_robotics/example/ros2_pubsub.py)
-- [Cross-Platform deployment even with ROS](https://github.com/2lian/asyncio-for-robotics/blob/main/cross_platform.md) [![Pixi Badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/prefix-dev/pixi/main/assets/badge/v0.json)](https://pixi.sh)
-- [Usage for software testing](https://github.com/2lian/asyncio-for-robotics/blob/main/tests)
+- [Implement your own interface: UDP and DDS examples](./own_proto_example.md)
+- [Detailed ROS 2 tutorial](./using_with_ros.md)
+- [Lifetime with `afor.Scope`](./using_scope.md) and [Backend's Sessions](.//using_session.md)
+- [Detailed examples](./asyncio_for_robotics/example/README.md)
+  - [no talking 🦍 show me code 🦍](./asyncio_for_robotics/example/ros2_pubsub.py)
+- [Cross-Platform deployment even with ROS](./cross_platform.md) [![Pixi Badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/prefix-dev/pixi/main/assets/badge/v0.json)](https://pixi.sh)
+- [Usage for software testing](./tests)
 
 ## Available interfaces:
 - **Rate**: Every tick of a clock. (native)
@@ -216,7 +216,7 @@ In this benchmark, the answer is: a little on ROS 2, very little on Zenoh.
 
 | Backend         | Interface     | Latency (μs) |
 | :---------      | :------------ | -----------: | 
-| No-backend      | `afor`        |            4 |
+| No-backend      | `afor`        |            2 |
 | Zenoh           | *native*      |            3 |
 | Zenoh           | `afor`        |           10 |
 | ROS Single Thrd | *native*      |           70 |
