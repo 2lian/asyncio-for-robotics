@@ -2,9 +2,10 @@ import asyncio
 import threading
 from contextlib import ExitStack, suppress
 from queue import Empty, Queue
-from typing import Any, Callable
+from typing import Any, Callable, Literal, Union
 
 import rclpy
+from rclpy.context import Context
 from rclpy.impl.implementation_singleton import rclpy_implementation as _rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_default
@@ -25,24 +26,44 @@ _ENTITY_TYPES = (
     (_rclpy.EventHandle, "event", "add_event"),
 )
 
+RosEntity = Union[
+    _rclpy.Subscription,
+    _rclpy.GuardCondition,
+    _rclpy.Timer,
+    _rclpy.Client,
+    _rclpy.Service,
+    _rclpy.EventHandle,
+]
+
 
 class WaitSetReactor:
-    def __init__(self, node_ctx, loop: asyncio.AbstractEventLoop):
+    def __init__(self, node_ctx: Context, loop: asyncio.AbstractEventLoop):
+        #: asyncio event loop in which callbacks are executed
         self.loop = loop
-        self.entity_update_q = Queue()
+        #: Queue of entities to update
+        self.entity_update_q: Queue[tuple[Literal["add", "remove"], RosEntity]] = (
+            Queue()
+        )
+        #: Callbacks when the entity wakes up. Does not manipulate data.
         self.callbacks: dict[Any, Callable[[], None]] = {}
 
         self._node_ctx = node_ctx
+        #: entities on this wait_set
         self._entities = set()
+        #: entities awake?
         self._wait_indices = {}
+        #: entities being processed
         self._in_flight = set()
         self._in_flight_lock = threading.Lock()
+        #: event signlaing shutdown
         self._stopping = threading.Event()
+        #: the waitset executor
         self._wait_set = None
+        #: background thread running the waitset
         self._thread_task: asyncio.Task[None] | None = None
 
-        with node_ctx.handle:
-            self._wake_guard = _rclpy.GuardCondition(node_ctx.handle)
+        with self._node_ctx.handle:
+            self._wake_guard = _rclpy.GuardCondition(self._node_ctx.handle)
         self.entity_update_q.put(("add", self._wake_guard))
 
     @staticmethod
@@ -110,8 +131,7 @@ class WaitSetReactor:
         return [
             entity
             for entity, (ready_kind, index) in self._wait_indices.items()
-            if self._wait_set.is_ready(ready_kind, index)
-            and entity in self.callbacks
+            if self._wait_set.is_ready(ready_kind, index) and entity in self.callbacks
         ]
 
     def wakeup(self):
@@ -193,7 +213,7 @@ async def main():
 
         afor_sub: BaseSub[tuple[String, MessageInfo]] = BaseSub()
 
-        def consume_one():
+        def consume():
             data = ros_sub.take_message(String, False)
             while data is not None:
                 afor_sub._input_data_guarded(data)
@@ -201,7 +221,7 @@ async def main():
 
         reactor = WaitSetReactor(node.context, asyncio.get_running_loop())
         reactor.entity_update_q.put(("add", ros_sub))
-        reactor.callbacks[ros_sub] = consume_one
+        reactor.callbacks[ros_sub] = consume
         reactor.start()
         try:
             await display(afor_sub)
