@@ -23,7 +23,7 @@ class BaseSession(ABC):
     def __init__(
         self,
         node: Union[None, str, Node] = None,
-        executor: None | SingleThreadedExecutor | MultiThreadedExecutor = None,
+        executor: None | SingleThreadedExecutor | MultiThreadedExecutor | type = None,
     ) -> None:
         """ROS 2 session owning node, executor, and optional rclpy lifecycle.
 
@@ -32,8 +32,11 @@ class BaseSession(ABC):
 
         Args:
             name: name of the node, None will give it a UUID
-            executor: executor used by this session. Defaults to
-                ``SingleThreadedExecutor()``.
+            executor: executor used by this session.  Accepts either an executor
+                *instance* or an executor *class* (e.g. ``MultiThreadedExecutor``).
+                When a class is passed it is instantiated **after** ``rclpy.init()``
+                so that creation order is always correct.
+                Defaults to ``SingleThreadedExecutor``.
 
         Important:
             If ROS is not already initialized, this session calls
@@ -57,6 +60,8 @@ class BaseSession(ABC):
         self._node: Node = node
         if executor is None:
             executor = SingleThreadedExecutor()
+        elif isinstance(executor, type):
+            executor = executor()
         self._executor: Union[SingleThreadedExecutor, MultiThreadedExecutor] = executor
         self._executor.add_node(self._node)
         self._lock = threading.RLock()
@@ -121,7 +126,7 @@ class ThreadedSession(BaseSession):
     def __init__(
         self,
         node: Union[None, str, Node] = None,
-        executor: Union[None, SingleThreadedExecutor, MultiThreadedExecutor] = None,
+        executor: Union[None, SingleThreadedExecutor, MultiThreadedExecutor, type] = None,
     ) -> None:
         """Ros2 node spinning in its own background thread.
         ROS2 Callbacks are therefor short and never-blocking.
@@ -244,7 +249,7 @@ class SynchronousSession(BaseSession):
     def __init__(
         self,
         node: Union[None, str, Node] = None,
-        executor: Union[None, SingleThreadedExecutor, MultiThreadedExecutor] = None,
+        executor: Union[None, SingleThreadedExecutor, MultiThreadedExecutor, type] = None,
     ) -> None:
         """Ros2 node spinning in as periodic asyncio task.
 

@@ -7,6 +7,17 @@ from .. import (
     soft_timeout,
     soft_wait_for,
 )
+from .action import (
+    ActionAborted,
+    ActionCanceled,
+    ActionClient,
+    ActionFeedbackDone,
+    ActionGoalHandle,
+    ActionRejected,
+    ActionResultUnknown,
+    ActionServer,
+    ClientGoalHandle,
+)
 from .service import Client, Server
 from .session import (
     BaseSession,
@@ -28,6 +39,15 @@ __all__ = [
     "Scope",
     "ScopeBreak",
     "scoped",
+    "ActionAborted",
+    "ActionCanceled",
+    "ActionRejected",
+    "ActionResultUnknown",
+    "ActionFeedbackDone",
+    "ActionServer",
+    "ActionClient",
+    "ActionGoalHandle",
+    "ClientGoalHandle",
     "Server",
     "Client",
     "auto_context",
