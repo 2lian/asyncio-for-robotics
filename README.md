@@ -199,33 +199,38 @@ sub: BaseSub[str] = afor.ConverterSub(sub=inner_sub, convert_func=ros2str_func)
 
 The obvious question is whether this adds latency compared to native ROS 2.
 
-In this benchmark, the answer is: a little on ROS 2, very little on Zenoh.
+In this benchmark on a Raspberry Pi 5, the answer is: It depends.
 
-- On ROS 2 Jazzy with `SingleThreadedExecutor` and `rmw_zenoh_cpp`, trip
-  duration increases from 70 μs to 140 μs when using afor, for an added
-  overhead of about 70 μs.
-- On Zenoh, `afor` adds only about 7 μs over the native path.
-  This suggests that most of the ROS 2 cost comes from cross-thread operations
+- On ROS 2 Lyrical with `SingleThreadedExecutor` and `rmw_zenoh_cpp`, median
+  half-trip duration increases from 229 μs to 352 μs when using afor.
+- On Zenoh, `afor` adds about 20 μs over the native path.
+  This suggests that most of the ROS 2 overhead comes from cross-thread operations
   with the `rclpy` machinery.
-- Even with this added overhead, Zenoh + `afor` remains about an order of
-  magnitude faster than ROS 2 + `rclpy` in this benchmark.
-- For many Python robotics applications, an extra few dozen microseconds is
-  negligible relative to the benefits of a uniform `asyncio` interface.
-- This benchmark measures latency; it **does not measure throughput**. A *2x*
-  latency increase, does not imply a *2x* throughput decrease.
+- Native asyncio execution avoids that cross-thread handoff: ROS 2 AsyncNode
+  measures 85 μs natively and 96 μs with afor, while the afor-native PyZeROS
+  client measures 72 μs.
+- For many Python robotics applications, this delivery cost may be acceptable
+  relative to the benefits of a uniform `asyncio` interface.
+- This benchmark measures latency; it **does not measure throughput**.
 
-| Backend         | Interface     | Latency (μs) |
-| :---------      | :------------ | -----------: | 
-| No-backend      | `afor`        |            2 |
-| Zenoh           | *native*      |            3 |
-| Zenoh           | `afor`        |           10 |
-| ROS Single Thrd | *native*      |           70 |
-| ROS Single Thrd | `afor`        |          136 |
-| ROS Multi Thrd  | *native*      |          125 |
-| ROS Multi Thrd  | `afor`        |          217 |
-| [`ros_loop` Method](https://github.com/m2-farzan/ros2-asyncio)  | [`afor`](https://github.com/2lian/asyncio-for-robotics/blob/main/asyncio_for_robotics/ros2/session.py#L211C7-L211C25)        |          280 |
+| Backend          | Interface                 | Median HTD (μs) |
+| :--------------- | :------------------------ | --------------: |
+| No backend       | `afor.asap_callback`      |           0.574 |
+| No backend       | `afor.listen`             |           5.111 |
+| Zenoh            | *native*                  |          21.574 |
+| Zenoh            | `afor`                    |          41.556 |
+| ROS [PyZeROS](https://github.com/2lian/pyzeros2)      | `afor`-native             |          71.814 |
+| ROS AsyncNode    | *native*                  |          84.648 |
+| ROS AsyncNode    | `afor`                    |          96.091 |
+| ROS Multi Thrd   | *native*                  |         330.964 |
+| ROS Multi Thrd   | `afor`                    |         363.056 |
+| ROS Single Thrd  | *native*                  |         229.002 |
+| ROS Single Thrd  | `afor`                    |         351.593 |
 
 Benchmark code is available at
 [https://github.com/2lian/afor_benchmarks](https://github.com/2lian/afor_benchmarks).
-The benchmark uses two pub/sub pairs that continuously echo messages on
-localhost, with a single participant and a local Zenoh router.
+The transported configurations ran for two minutes on an 8-GB
+Raspberry Pi 5. The benchmark uses two pub/sub pairs that continuously echo
+12-joint ROS `sensor_msgs/msg/JointState` messages on localhost, with a single
+participant and a local Zenoh router. The table reports median half-trip
+duration (HTD), measured between successive receptions.
