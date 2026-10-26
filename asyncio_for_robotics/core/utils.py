@@ -131,7 +131,9 @@ class Rate(BaseSub[int]):
             count += 1
             scheduled_time = start_time + count * (self.period)
             dt = scheduled_time - self.time_source()
-            await asyncio.sleep(max(0, dt / 1e9))
+            while dt > 0:
+                await asyncio.sleep(max(0, dt / 1e9))
+                dt = scheduled_time - self.time_source()
             self._periodic_cbk(scheduled_time)
 
     async def _precise_timer(self):
